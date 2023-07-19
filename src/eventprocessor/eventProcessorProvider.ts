@@ -1,8 +1,10 @@
 import {EventProcessor} from "./eventProcessor";
 import {MarketCreatedEventProcessor} from "./marketCreatedEventProcessor";
+import {OrderCreatedEventProcessor} from "./orderCreatedEventProcessor";
 
 const processors: EventProcessor[] = [
-    new MarketCreatedEventProcessor()
+    new MarketCreatedEventProcessor(),
+    new OrderCreatedEventProcessor()
 ];
 
 export class EventProcessorProvider {

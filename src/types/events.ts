@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {Chain, ChainContext, EventContext, Event, Result, Option} from './support'
+import {Chain, ChainContext, EventContext, Event, Result} from './support'
 import * as v1 from './v1'
 
 export class BalancesBalanceSetEvent {
@@ -1204,6 +1204,7 @@ export class MarketOrderCreatedEvent {
      */
     get asV1(): {price: bigint, side: v1.OrderSide, quantity: number, who: Uint8Array, orderId: bigint} {
         assert(this.isV1)
+        console.log(this._chain.decodeEvent(this.event))
         return this._chain.decodeEvent(this.event)
     }
 }

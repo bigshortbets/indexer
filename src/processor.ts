@@ -1,4 +1,3 @@
-import {lookupArchive} from '@subsquid/archive-registry'
 import {
     BatchContext,
     BatchProcessorCallItem,
@@ -13,6 +12,17 @@ export const processor = new SubstrateBatchProcessor()
         archive: 'http://localhost:8888/graphql'
     })
     .addEvent('Market.MarketCreated', {
+        data: {
+            event: {
+                args: true,
+                extrinsic: {
+                    hash: true,
+                    fee: true,
+                },
+            },
+        },
+    } as const)
+    .addEvent('Market.OrderCreated', {
         data: {
             event: {
                 args: true,

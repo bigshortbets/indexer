@@ -7,3 +7,12 @@ type Market @entity {
   maintananceMargin: BigInt
   contractUnit: BigInt
 }
+
+type Order @entity {
+    id: ID!
+    market: Market!
+    price: BigInt!
+    quantity: BigInt!
+    side: String
+    who: String
+}
