@@ -1,4 +1,5 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
+import * as marshal from "./marshal"
 
 @Entity_()
 export class Market {
@@ -11,4 +12,19 @@ export class Market {
 
     @Column_("text", {nullable: true})
     ticker!: string | undefined | null
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    tickSize!: bigint | undefined | null
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    lifetime!: bigint | undefined | null
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    initialMargin!: bigint | undefined | null
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    maintananceMargin!: bigint | undefined | null
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    contractUnit!: bigint | undefined | null
 }

@@ -1,4 +1,9 @@
 type Market @entity {
   id: ID!
   ticker: String
+  tickSize: BigInt
+  lifetime: BigInt
+  initialMargin: BigInt
+  maintananceMargin: BigInt
+  contractUnit: BigInt
 }
