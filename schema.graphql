@@ -16,3 +16,12 @@ type Order @entity {
     side: String
     who: String
 }
+
+type Position @entity {
+    id: ID!
+    market: Market!
+    price: BigInt!
+    quantity: BigInt!
+    long: String
+    short: String
+}

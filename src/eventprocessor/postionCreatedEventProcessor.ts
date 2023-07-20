@@ -2,27 +2,26 @@ import {EventProcessor} from "./eventProcessor";
 import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
 import {BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
-import {MarketOrderCreatedEvent} from "../types/events";
-import {Market, Order} from "../model";
+import {MarketPositionCreatedEvent} from "../types/events";
+import {Market, Position} from "../model";
 import * as ss58 from '@subsquid/ss58'
 
-export class OrderCreatedEventProcessor implements EventProcessor{
+export class PositionCreatedEventProcessor implements EventProcessor{
     getHandledItemName(): string {
-        return "Market.OrderCreated";
+        return "Market.PositionCreated";
     }
 
     async process(ctx: BatchContext<Store, AddEventItem<any, any>>, item: AddEventItem<any, any>) {
-        let e = new MarketOrderCreatedEvent(ctx, item.event)
+        let e = new MarketPositionCreatedEvent(ctx, item.event)
         if (e.isV1) {
-            const parsedEvent = e.asV1
-            const market = ctx.store.get(Market, parsedEvent.market.toString());
-            await ctx.store.save(new Order({
-                id: parsedEvent.orderId.toString(),
-                market: await market,
+            let parsedEvent = e.asV1
+            await ctx.store.save(new Position({
+                id: parsedEvent.positionId.toString(),
+                market: await ctx.store.get(Market, parsedEvent.market.toString()),
                 price: parsedEvent.price,
-                side: parsedEvent.side.__kind,
                 quantity: BigInt(parsedEvent.quantity),
-                who: ss58.codec(42).encode(parsedEvent.who)
+                long: ss58.codec(42).encode(parsedEvent.long),
+                short: ss58.codec(42).encode(parsedEvent.short)
             }));
         } else {
             throw new Error('Unsupported spec')

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {Chain, ChainContext, EventContext, Event, Result, Option} from './support'
+import {Chain, ChainContext, EventContext, Event, Result} from './support'
 import * as v1 from './v1'
 
 export class BalancesBalanceSetEvent {
@@ -1167,13 +1167,13 @@ export class MarketOrderCanceledEvent {
      * Order has been canceled
      */
     get isV1(): boolean {
-        return this._chain.getEventHash('Market.OrderCanceled') === '50314d1c82a956ddbef7ba636e75cbaa2d49f507e7ddc5fa55af4161d55db178'
+        return this._chain.getEventHash('Market.OrderCanceled') === '6ccf945ce09f653fa328250629cb4ec621b3b9b5069a9c5ff07426ba9215a5b8'
     }
 
     /**
      * Order has been canceled
      */
-    get asV1(): {orderId: bigint} {
+    get asV1(): {market: bigint, orderId: bigint} {
         assert(this.isV1)
         return this._chain.decodeEvent(this.event)
     }
@@ -1196,13 +1196,71 @@ export class MarketOrderCreatedEvent {
      * New Order settled
      */
     get isV1(): boolean {
-        return this._chain.getEventHash('Market.OrderCreated') === '2f8c0ceb73e92642f454f27a5778a64dec0a143940ba315e66fd81ee54ffb0bc'
+        return this._chain.getEventHash('Market.OrderCreated') === 'f0bd604ab7977ac1b14b02e7d14161a3dee6f05fd55504dba7eeb8417415795e'
     }
 
     /**
      * New Order settled
      */
-    get asV1(): {price: bigint, side: v1.OrderSide, quantity: number, who: Uint8Array, orderId: bigint} {
+    get asV1(): {market: bigint, price: bigint, side: v1.OrderSide, quantity: number, who: Uint8Array, orderId: bigint} {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class MarketOrderFilledEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'Market.OrderFilled')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * Entire order has been realized
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('Market.OrderFilled') === '6ccf945ce09f653fa328250629cb4ec621b3b9b5069a9c5ff07426ba9215a5b8'
+    }
+
+    /**
+     * Entire order has been realized
+     */
+    get asV1(): {market: bigint, orderId: bigint} {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class MarketOrderReducedEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'Market.OrderReduced')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * Status of the order changed
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('Market.OrderReduced') === '743cb0920922ee4b5f1472c42b7315b5cf161e19024ebe6ebe597e292786ca27'
+    }
+
+    /**
+     * Status of the order changed
+     */
+    get asV1(): {market: bigint, orderId: bigint, quantity: number} {
         assert(this.isV1)
         return this._chain.decodeEvent(this.event)
     }
@@ -1225,13 +1283,13 @@ export class MarketPositionClosedEvent {
      * Position closed
      */
     get isV1(): boolean {
-        return this._chain.getEventHash('Market.PositionClosed') === '938065f26dfe06938a58938dde2a37414c3940c5a89e8e3c92b56a9a96ffec68'
+        return this._chain.getEventHash('Market.PositionClosed') === '4cf1f1755207987e281e72f52db4ec18d33dfaa27c59e595d95223bcbdd85aa6'
     }
 
     /**
      * Position closed
      */
-    get asV1(): {positionId: bigint} {
+    get asV1(): {market: bigint, positionId: bigint} {
         assert(this.isV1)
         return this._chain.decodeEvent(this.event)
     }
@@ -1254,13 +1312,13 @@ export class MarketPositionCreatedEvent {
      * New position created
      */
     get isV1(): boolean {
-        return this._chain.getEventHash('Market.PositionCreated') === 'b456ab026ad18296ac0701378ec2716f795778c7268d8d803e6e136a6528d0ec'
+        return this._chain.getEventHash('Market.PositionCreated') === '9919de926f589e92e7212664e68addb52203ae122eeed81545e9ce102600bcc6'
     }
 
     /**
      * New position created
      */
-    get asV1(): {market: bigint, positionId: bigint, price: bigint, quantity: number, long: Uint8Array, buyerId: bigint, short: Uint8Array, sellerId: bigint} {
+    get asV1(): {market: bigint, positionId: bigint, price: bigint, quantity: number, long: Uint8Array, short: Uint8Array} {
         assert(this.isV1)
         return this._chain.decodeEvent(this.event)
     }
@@ -1283,13 +1341,13 @@ export class MarketPositionReducedEvent {
      * Position reduced
      */
     get isV1(): boolean {
-        return this._chain.getEventHash('Market.PositionReduced') === '0d5f92cffd9c7b850a83877c39c7d3bcf0781aced867e996b01fe2ade20939ef'
+        return this._chain.getEventHash('Market.PositionReduced') === '0f3c009d72f91579cb439fd701dcd161043a7b52e3569761a815293468788524'
     }
 
     /**
      * Position reduced
      */
-    get asV1(): {positionId: bigint, quantity: number} {
+    get asV1(): {market: bigint, positionId: bigint, quantity: number} {
         assert(this.isV1)
         return this._chain.decodeEvent(this.event)
     }
