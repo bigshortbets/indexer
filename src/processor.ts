@@ -15,6 +15,7 @@ export const processor = new SubstrateBatchProcessor()
         data: {
             event: {
                 args: true,
+                call: true,
                 extrinsic: {
                     hash: true,
                     fee: true,
@@ -26,6 +27,7 @@ export const processor = new SubstrateBatchProcessor()
         data: {
             event: {
                 args: true,
+                call: true,
                 extrinsic: {
                     hash: true,
                     fee: true,
