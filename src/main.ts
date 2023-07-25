@@ -7,7 +7,7 @@ processor.run(new TypeormDatabase(), async (ctx) => {
     for (let block of ctx.blocks) {
         for (let item of block.items) {
             let processor = processorProvider.getProcessorByName(item.name);
-            await processor?.process(ctx, item);
+            await processor?.process(ctx, block, item);
         }
     }
 })

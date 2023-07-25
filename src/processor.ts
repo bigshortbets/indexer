@@ -5,6 +5,7 @@ import {
     BatchProcessorItem,
     SubstrateBatchProcessor,
 } from '@subsquid/substrate-processor'
+import { EventProcessorProvider } from "./eventprocessor/eventProcessorProvider";
 const eventData =
     {
         data: {
@@ -12,20 +13,23 @@ const eventData =
                 args: true,
                     call: true,
                     extrinsic: {
-                    hash: true,
+                    	hash: true,
                         fee: true,
+                        indexInBlock: true
                 },
             },
         },
     }
+console.log(process.env.DATA_SOURCE_ARCHIVE)
 export const processor = new SubstrateBatchProcessor()
     .setDataSource({
-        chain: '127.0.0.1:9944',
-        archive: 'http://localhost:8888/graphql'
+        chain: process.env.DATA_SOURCE_CHAIN,
+        archive: process.env.DATA_SOURCE_ARCHIVE + '/graphql'
     })
-    .addEvent('Market.MarketCreated', eventData)
-    .addEvent('Market.OrderCreated', eventData)
-    .addEvent('Market.PositionCreated', eventData)
+const provider = new EventProcessorProvider();
+provider
+    .getEventProcessors()
+    .forEach(p => processor.addEvent(p.getHandledItemName(), eventData));
 
 export type Item = BatchProcessorItem<typeof processor>
 export type EventItem = BatchProcessorEventItem<typeof processor>

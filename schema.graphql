@@ -1,5 +1,5 @@
 type Market @entity {
-  id: ID!
+  id: ID! @unique @index
   ticker: String
   tickSize: BigInt
   lifetime: BigInt
@@ -9,7 +9,7 @@ type Market @entity {
 }
 
 type Order @entity {
-    id: ID!
+    id: ID! @unique @index
     market: Market!
     price: BigInt!
     quantity: BigInt!
@@ -25,3 +25,12 @@ type Position @entity {
     long: String
     short: String
 }
+
+type OraclePrice @entity {
+	id: ID!
+    market: Market!
+    price: BigInt!
+    blockHeight: BigInt!
+    timestamp: DateTime!
+}
+
