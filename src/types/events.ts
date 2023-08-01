@@ -1080,13 +1080,13 @@ export class MarketMarketCreatedEvent {
      * New Market created
      */
     get isV1(): boolean {
-        return this._chain.getEventHash('Market.MarketCreated') === '2a116691599ed7502d04fd6350a92f10c8724536bdba03b40f31a4590eb2cbdc'
+        return this._chain.getEventHash('Market.MarketCreated') === 'dcf79dc103c0aa344acad24131197f800429c2ecb1fed6a64e836128aabfea2a'
     }
 
     /**
      * New Market created
      */
-    get asV1(): {marketId: bigint, ticker: Uint8Array, tickSize: bigint, lifetime: number, initialMargin: number, maintananceMargin: number, contractUnit: number} {
+    get asV1(): {marketId: bigint, ticker: Uint8Array, tickSize: bigint, lifetime: number, initialMargin: number, maintenanceMargin: number, contractUnit: number} {
         assert(this.isV1)
         return this._chain.decodeEvent(this.event)
     }
@@ -1319,6 +1319,35 @@ export class MarketPositionCreatedEvent {
      * New position created
      */
     get asV1(): {market: bigint, positionId: bigint, price: bigint, quantity: number, long: Uint8Array, short: Uint8Array} {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class MarketPositionMarkedToMarketEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'Market.PositionMarkedToMarket')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * Position marked to market with oracle price
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('Market.PositionMarkedToMarket') === '4cf1f1755207987e281e72f52db4ec18d33dfaa27c59e595d95223bcbdd85aa6'
+    }
+
+    /**
+     * Position marked to market with oracle price
+     */
+    get asV1(): {market: bigint, positionId: bigint} {
         assert(this.isV1)
         return this._chain.decodeEvent(this.event)
     }

@@ -1,11 +1,14 @@
 import {EventProcessor} from "./eventProcessor";
-import {MarketCreatedEventProcessor} from "./marketCreatedEventProcessor";
-import {OrderCreatedEventProcessor} from "./orderCreatedEventProcessor";
-import {PositionCreatedEventProcessor} from "./postionCreatedEventProcessor";
-import {OraclePriceEventProcessor} from "./oraclePriceEventProcessor";
-import {OrderCanceledEventProcessor} from "./orderCanceledEventProcessor";
-import {OrderFilledEventProcessor} from "./orderFilledEventProcessor";
-import {OrderReducedEventProcessor} from "./orderReducedEventProcessor";
+import {MarketCreatedEventProcessor} from "./market/marketCreatedEventProcessor";
+import {OrderCreatedEventProcessor} from "./market/orderCreatedEventProcessor";
+import {PositionCreatedEventProcessor} from "./market/postionCreatedEventProcessor";
+import {OraclePriceEventProcessor} from "./market/oraclePriceEventProcessor";
+import {OrderCanceledEventProcessor} from "./market/orderCanceledEventProcessor";
+import {OrderFilledEventProcessor} from "./market/orderFilledEventProcessor";
+import {OrderReducedEventProcessor} from "./market/orderReducedEventProcessor";
+import {MarketRemovedEventProcessor} from "./market/marketRemovedEventProcessor";
+import {PositionMarkedToMarketEventProcessor} from "./market/positionMarkedToMarketEventProcessor";
+import {PositionClosedEventProcessor} from "./market/positionClosedEventProcessor";
 
 const processors: EventProcessor[] = [
     new MarketCreatedEventProcessor(),
@@ -15,6 +18,9 @@ const processors: EventProcessor[] = [
     new OrderCanceledEventProcessor(),
     new OrderFilledEventProcessor(),
     new OrderReducedEventProcessor(),
+    new MarketRemovedEventProcessor(),
+    new PositionMarkedToMarketEventProcessor(),
+    new PositionClosedEventProcessor()
 ];
 
 export class EventProcessorProvider {

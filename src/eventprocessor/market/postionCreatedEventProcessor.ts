@@ -1,11 +1,11 @@
-import {EventProcessor} from "./eventProcessor";
+import {EventProcessor} from "../eventProcessor";
 import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
-import {MarketPositionCreatedEvent} from "../types/events";
-import {Market, Position} from "../model";
+import {MarketPositionCreatedEvent} from "../../types/events";
+import {Market, Position} from "../../model";
 import * as ss58 from '@subsquid/ss58'
-import {Item} from "../processor";
+import {Item} from "../../processor";
 
 export class PositionCreatedEventProcessor implements EventProcessor{
     getHandledItemName(): string {
@@ -13,6 +13,7 @@ export class PositionCreatedEventProcessor implements EventProcessor{
     }
 
     async process(ctx: BatchContext<Store, AddEventItem<any, any>>, block: BatchBlock<Item>, item: AddEventItem<any, any>) {
+        console.log('Position created event')
         let e = new MarketPositionCreatedEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1

@@ -1,11 +1,11 @@
-import {EventProcessor} from "./eventProcessor";
+import {EventProcessor} from "../eventProcessor";
 import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
-import {MarketOrderCreatedEvent} from "../types/events";
-import {Market, Order} from "../model";
+import {MarketOrderCreatedEvent} from "../../types/events";
+import {Market, Order} from "../../model";
 import * as ss58 from '@subsquid/ss58'
-import {Item} from "../processor";
+import {Item} from "../../processor";
 
 export class OrderCreatedEventProcessor implements EventProcessor{
     getHandledItemName(): string {
@@ -13,6 +13,7 @@ export class OrderCreatedEventProcessor implements EventProcessor{
     }
 
     async process(ctx: BatchContext<Store, AddEventItem<any, any>>, block: BatchBlock<Item>, item: AddEventItem<any, any>) {
+        console.log('Order created event')
         let e = new MarketOrderCreatedEvent(ctx, item.event)
         if (e.isV1) {
             const parsedEvent = e.asV1
