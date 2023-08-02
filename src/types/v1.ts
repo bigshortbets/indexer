@@ -1,3 +1,5 @@
+import type {Result, Option} from './support'
+
 export type BalanceStatus = BalanceStatus_Free | BalanceStatus_Reserved
 
 export interface BalanceStatus_Free {
