@@ -3,7 +3,7 @@ import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSel
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
 import {MarketMarketRemovedEvent} from "../../types/events";
-import {Market} from "../../model";
+import {Market, Order} from "../../model";
 import {Item} from "../../processor";
 
 export class MarketRemovedEventProcessor implements EventProcessor{
@@ -16,6 +16,13 @@ export class MarketRemovedEventProcessor implements EventProcessor{
         let e = new MarketMarketRemovedEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
+            let marketOrders = await ctx.store.find(
+                Order,
+        {where: { market: {id: parsedEvent.marketId.toString()}}}
+            ) as Order[]
+            if(marketOrders.length > 0) {
+                throw new Error('There are still orders assigned to the market')
+            }
             await ctx.store.remove(Market, parsedEvent.marketId.toString());
         } else {
             throw new Error('Unsupported spec')

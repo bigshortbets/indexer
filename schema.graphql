@@ -24,6 +24,8 @@ type Position @entity {
     quantity: BigInt!
     long: String
     short: String
+    blockHeight: BigInt
+    timestamp: DateTime!
 }
 
 type OraclePrice @entity {

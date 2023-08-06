@@ -26,4 +26,10 @@ export class Position {
 
     @Column_("text", {nullable: true})
     short!: string | undefined | null
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
+    blockHeight!: bigint | undefined | null
+
+    @Column_("timestamp with time zone", {nullable: false})
+    timestamp!: Date
 }

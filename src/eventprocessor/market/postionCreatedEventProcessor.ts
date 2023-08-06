@@ -23,7 +23,9 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                 price: parsedEvent.price,
                 quantity: BigInt(parsedEvent.quantity),
                 long: ss58.codec(42).encode(parsedEvent.long),
-                short: ss58.codec(42).encode(parsedEvent.short)
+                short: ss58.codec(42).encode(parsedEvent.short),
+                blockHeight: BigInt(block.header.height),
+                timestamp: new Date(block.header.timestamp)
             }));
         } else {
             throw new Error('Unsupported spec')
