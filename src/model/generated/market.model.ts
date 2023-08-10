@@ -27,4 +27,10 @@ export class Market {
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
     contractUnit!: bigint | undefined | null
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    blockHeight!: bigint
+
+    @Column_("timestamp with time zone", {nullable: false})
+    timestamp!: Date
 }

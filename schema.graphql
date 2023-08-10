@@ -1,11 +1,13 @@
 type Market @entity {
-  id: ID! @unique @index
-  ticker: String
-  tickSize: BigInt
-  lifetime: BigInt
-  initialMargin: BigInt
-  maintananceMargin: BigInt
-  contractUnit: BigInt
+    id: ID! @unique @index
+    ticker: String
+    tickSize: BigInt
+    lifetime: BigInt
+    initialMargin: BigInt
+    maintananceMargin: BigInt
+    contractUnit: BigInt
+    blockHeight: BigInt!
+    timestamp: DateTime!
 }
 
 type Order @entity {
@@ -15,6 +17,8 @@ type Order @entity {
     quantity: BigInt!
     side: String
     who: String
+    blockHeight: BigInt!
+    timestamp: DateTime!
 }
 
 type Position @entity {
@@ -24,7 +28,7 @@ type Position @entity {
     quantity: BigInt!
     long: String
     short: String
-    blockHeight: BigInt
+    blockHeight: BigInt!
     timestamp: DateTime!
 }
 

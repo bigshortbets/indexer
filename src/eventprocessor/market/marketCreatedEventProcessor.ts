@@ -24,6 +24,8 @@ export class MarketCreatedEventProcessor implements EventProcessor{
                 initialMargin: BigInt(parsedEvent.marketId),
                 maintananceMargin: BigInt(parsedEvent.marketId),
                 contractUnit: BigInt(parsedEvent.marketId),
+                blockHeight: BigInt(block.header.height),
+                timestamp: new Date(block.header.timestamp)
             }));
         } else {
             throw new Error('Unsupported spec')

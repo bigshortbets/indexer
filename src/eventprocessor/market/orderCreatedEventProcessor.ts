@@ -25,6 +25,8 @@ export class OrderCreatedEventProcessor implements EventProcessor{
                 side: parsedEvent.side.__kind,
                 quantity: BigInt(parsedEvent.quantity),
                 who: ss58.codec(42).encode(parsedEvent.who),
+                blockHeight: BigInt(block.header.height),
+                timestamp: new Date(block.header.timestamp)
             }));
         } else {
             throw new Error('Unsupported spec')

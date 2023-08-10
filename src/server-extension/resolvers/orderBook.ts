@@ -22,7 +22,7 @@ export class OrderBookResolver {
     constructor(private tx: () => Promise<EntityManager>) {}
 
     @Query(() => [GroupedOrder])
-    async orderBook(
+    async orderBookQuery(
         @Arg("side") side: string,
         @Arg("marketId") marketId: string,
         @Arg("limit") limit: number)
@@ -36,7 +36,7 @@ export class OrderBookResolver {
             priceOrder = 'ASC'
         }
 
-        let query = `select price, COALESCE(SUM(quantity),0) as quantity
+        let query = `select price, SUM(quantity) as quantity
              from "order"
              where "order".side = '${side}' 
              and "order".market_id = '${marketId}'

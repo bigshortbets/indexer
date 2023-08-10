@@ -26,4 +26,10 @@ export class Order {
 
     @Column_("text", {nullable: true})
     who!: string | undefined | null
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    blockHeight!: bigint
+
+    @Column_("timestamp with time zone", {nullable: false})
+    timestamp!: Date
 }
