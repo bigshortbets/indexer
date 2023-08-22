@@ -5,9 +5,9 @@ enum PositionStatus {
 
 enum OrderStatus {
     ACTIVE
-    FINALIZED
+    COMPLETED
     CANCELLED
-    LACK_OF_FOUNDS
+    OUT_OF_FOUNDS
 }
 
 type Market @entity {

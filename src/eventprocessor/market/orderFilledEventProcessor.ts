@@ -20,7 +20,7 @@ export class OrderFilledEventProcessor implements EventProcessor{
             let order = await ctx.store.findOne(Order, {where: {id: parsedEvent.orderId.toString()}, relations: {market: true}});
             if(order) {
                 await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(ctx.store, order)
-                order.status = OrderStatus.FINALIZED
+                order.status = OrderStatus.COMPLETED
                 await ctx.store.save(order);
             }
         } else {

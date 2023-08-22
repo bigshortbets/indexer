@@ -37,6 +37,6 @@ export class Order {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     initialQuantity!: bigint
 
-    @Column_("varchar", {length: 14, nullable: false})
+    @Column_("varchar", {length: 13, nullable: false})
     status!: OrderStatus
 }
