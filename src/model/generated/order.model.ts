@@ -1,6 +1,7 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
 import * as marshal from "./marshal"
 import {Market} from "./market.model"
+import {OrderStatus} from "./_orderStatus"
 
 @Entity_()
 export class Order {
@@ -32,4 +33,10 @@ export class Order {
 
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    initialQuantity!: bigint
+
+    @Column_("varchar", {length: 14, nullable: false})
+    status!: OrderStatus
 }

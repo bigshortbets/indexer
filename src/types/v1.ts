@@ -152,6 +152,12 @@ export interface DispatchInfo {
     paysFee: Pays
 }
 
+export type CurrencyId = CurrencyId_USDC
+
+export interface CurrencyId_USDC {
+    __kind: 'USDC'
+}
+
 export interface PostDispatchInfo {
     actualWeight: (Weight | undefined)
     paysFee: Pays

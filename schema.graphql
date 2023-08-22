@@ -1,3 +1,15 @@
+enum PositionStatus {
+    OPEN
+    CLOSED
+}
+
+enum OrderStatus {
+    ACTIVE
+    FINALIZED
+    CANCELLED
+    LACK_OF_FOUNDS
+}
+
 type Market @entity {
     id: ID! @unique @index
     ticker: String
@@ -19,6 +31,8 @@ type Order @entity {
     who: String
     blockHeight: BigInt!
     timestamp: DateTime!
+    initialQuantity: BigInt!
+    status: OrderStatus!
 }
 
 type Position @entity {
@@ -26,17 +40,35 @@ type Position @entity {
     market: Market!
     price: BigInt!
     quantity: BigInt!
+    quantityLeft: BigInt!
     long: String
     short: String
     blockHeight: BigInt!
     timestamp: DateTime!
+    initialPrice: BigInt!
+    status: PositionStatus
+
 }
 
 type OraclePrice @entity {
-	id: ID!
+    id: ID!
     market: Market!
     price: BigInt!
     blockHeight: BigInt!
     timestamp: DateTime!
 }
+
+type AggregatedOrdersByPrice @entity {
+    id: ID!
+    price: BigInt!
+    quantity: BigInt!
+    market: Market!
+    side: String!
+}
+
+type DailyVolume @entity {
+    id: ID!
+    volume: BigInt!
+}
+
 

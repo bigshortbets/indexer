@@ -1,6 +1,7 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
 import * as marshal from "./marshal"
 import {Market} from "./market.model"
+import {PositionStatus} from "./_positionStatus"
 
 @Entity_()
 export class Position {
@@ -21,6 +22,9 @@ export class Position {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     quantity!: bigint
 
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    quantityLeft!: bigint
+
     @Column_("text", {nullable: true})
     long!: string | undefined | null
 
@@ -32,4 +36,10 @@ export class Position {
 
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    initialPrice!: bigint
+
+    @Column_("varchar", {length: 6, nullable: true})
+    status!: PositionStatus | undefined | null
 }

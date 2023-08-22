@@ -3,8 +3,9 @@ import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSel
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
 import {MarketOrderFilledEvent} from "../../types/events";
-import {Order} from "../../model";
+import {Order, OrderStatus} from "../../model";
 import {Item} from "../../processor";
+import {AggregatedOrdersHandler} from "./aggregatedOrdersHandler";
 
 export class OrderFilledEventProcessor implements EventProcessor{
     getHandledItemName(): string {
@@ -16,7 +17,12 @@ export class OrderFilledEventProcessor implements EventProcessor{
         let e = new MarketOrderFilledEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-            await ctx.store.remove(Order, parsedEvent.orderId.toString());
+            let order = await ctx.store.findOne(Order, {where: {id: parsedEvent.orderId.toString()}, relations: {market: true}});
+            if(order) {
+                await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(ctx.store, order)
+                order.status = OrderStatus.FINALIZED
+                await ctx.store.save(order);
+            }
         } else {
             throw new Error('Unsupported spec')
         }
