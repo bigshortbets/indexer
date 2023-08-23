@@ -9,6 +9,10 @@ enum OrderStatus {
     CANCELLED
     OUT_OF_FOUNDS
 }
+enum OrderSide {
+    SHORT
+    LONG
+}
 
 type Market @entity {
     id: ID! @unique @index
@@ -27,7 +31,7 @@ type Order @entity {
     market: Market!
     price: BigInt!
     quantity: BigInt!
-    side: String
+    side: OrderSide!
     who: String
     blockHeight: BigInt!
     timestamp: DateTime!
@@ -41,8 +45,8 @@ type Position @entity {
     price: BigInt!
     quantity: BigInt!
     quantityLeft: BigInt!
-    long: String
-    short: String
+    long: String!
+    short: String!
     blockHeight: BigInt!
     timestamp: DateTime!
     initialPrice: BigInt!
@@ -69,6 +73,13 @@ type AggregatedOrdersByPrice @entity {
 type DailyVolume @entity {
     id: ID!
     volume: BigInt!
+}
+
+type UnrealizedProfitLose @entity {
+    id: ID!
+    value: BigInt!
+    market: Market!
+    user: String!
 }
 
 
