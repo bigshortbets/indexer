@@ -6,6 +6,7 @@ import {MarketPositionCreatedEvent} from "../../types/events";
 import {Market, Position, PositionStatus} from "../../model";
 import * as ss58 from '@subsquid/ss58'
 import {Item} from "../../processor";
+import {UnrealizedPLNet} from "./unrealizedPLNet";
 
 export class PositionCreatedEventProcessor implements EventProcessor{
     getHandledItemName(): string {
@@ -22,7 +23,7 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                 throw new Error('Market not found')
             } else {
                 const positionTimestamp = new Date(block.header.timestamp)
-                await ctx.store.save(new Position({
+                let position = new Position({
                     id: parsedEvent.positionId.toString(),
                     market: market,
                     initialPrice: parsedEvent.price,
@@ -34,7 +35,9 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                     status: PositionStatus.OPEN,
                     quantityLeft: BigInt(parsedEvent.quantity),
                     price: parsedEvent.price
-                }));
+                })
+                UnrealizedPLNet.updateAfterPositionCreation(ctx.store, position)
+                await ctx.store.save(position);
             }
         } else {
             throw new Error('Unsupported spec')

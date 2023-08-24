@@ -5,6 +5,7 @@ import {Store} from "@subsquid/typeorm-store";
 import {MarketPositionMarkedToMarketEvent} from "../../types/events";
 import {OraclePrice, Position} from "../../model";
 import {Item} from "../../processor";
+import {UnrealizedPLNet} from "./unrealizedPLNet";
 
 export class PositionMarkedToMarketEventProcessor implements EventProcessor{
     getHandledItemName(): string {
@@ -32,6 +33,7 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor{
             if(!position) {
                 throw new Error('Position not found')
             }
+            UnrealizedPLNet.updateAfterMarkedToMarket(ctx.store, position, latestOraclePrice)
             position.price = latestOraclePrice.price
             await ctx.store.save(position)
         } else {

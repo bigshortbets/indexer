@@ -16,14 +16,15 @@ export class OraclePriceEventProcessor implements EventProcessor{
         let e = new MarketOraclePriceEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-
-            await ctx.store.save(new OraclePrice({
+            let oraclePrice = new OraclePrice({
                 id: item.event.id,
                 market: await ctx.store.get(Market, parsedEvent.market.toString()),
                 price: parsedEvent.price,
                 blockHeight: BigInt(block.header.height),
                 timestamp: new Date(block.header.timestamp)
-            }));
+            })
+            //UnrealizedPLNet.updateAfterOraclePriceChange(ctx.store, oraclePrice) // One or another: OraclePrice change or MarkedToMarket change
+            await ctx.store.save(oraclePrice);
         } else {
             throw new Error('Unsupported spec')
         }
