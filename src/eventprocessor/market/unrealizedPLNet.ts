@@ -95,7 +95,7 @@ export class UnrealizedPLNet{
             const delta = (position.price - oraclePrice.price) * position.quantityLeft
             unrealizedPLNetShort.value += delta
             unrealizedPLNetLong.value -= delta
-            store.save([unrealizedPLNetLong, unrealizedPLNetShort])
+            await store.save([unrealizedPLNetLong, unrealizedPLNetShort])
         } else {
             throw new Error('Position sides do not match entries in Unrealized Profit/Lose table')
         }
@@ -116,13 +116,13 @@ export class UnrealizedPLNet{
     private static async processPositionRemoval(unrealizedPLNet: UnrealizedProfitLose, store: Store, delta: bigint) {
         unrealizedPLNet.value -= delta
         if(unrealizedPLNet.value === BigInt(0)) {
-            store.remove(unrealizedPLNet)
+            await store.remove(unrealizedPLNet)
         } else {
-            store.save(unrealizedPLNet)
+            await store.save(unrealizedPLNet)
         }
     }
 
-    private static async getUnrealisedPLNet(store: Store, id: string, user: string){
-        return await store.findOne(UnrealizedProfitLose, { where: { market: { id: id }, user: user }})
+    private static async getUnrealisedPLNet(store: Store, marketId: string, user: string){
+        return await store.findOne(UnrealizedProfitLose, { where: { market: { id: marketId }, user: user }, relations: {market: true}})
     }
 }

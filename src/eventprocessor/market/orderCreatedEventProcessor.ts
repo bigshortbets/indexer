@@ -3,7 +3,7 @@ import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSel
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
 import {MarketOrderCreatedEvent} from "../../types/events";
-import {Market, Order, OrderStatus} from "../../model";
+import {Market, Order, OrderSide, OrderStatus} from "../../model";
 import * as ss58 from '@subsquid/ss58'
 import {Item} from "../../processor";
 import {AggregatedOrdersHandler} from "./aggregatedOrdersHandler";
@@ -26,7 +26,7 @@ export class OrderCreatedEventProcessor implements EventProcessor{
                 id: parsedEvent.orderId.toString(),
                 market: market,
                 price: parsedEvent.price,
-                side: parsedEvent.side.__kind,
+                side: parsedEvent.side.__kind === 'Long' ? OrderSide.LONG : OrderSide.SHORT,
                 quantity: quantity,
                 initialQuantity: quantity,
                 who: ss58.codec(42).encode(parsedEvent.who),

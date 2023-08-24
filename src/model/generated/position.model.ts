@@ -25,11 +25,11 @@ export class Position {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     quantityLeft!: bigint
 
-    @Column_("text", {nullable: true})
-    long!: string | undefined | null
+    @Column_("text", {nullable: false})
+    long!: string
 
-    @Column_("text", {nullable: true})
-    short!: string | undefined | null
+    @Column_("text", {nullable: false})
+    short!: string
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     blockHeight!: bigint
