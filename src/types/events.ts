@@ -1498,6 +1498,209 @@ export class MultisigNewMultisigEvent {
     }
 }
 
+export class OracleNewFeedDataEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'Oracle.NewFeedData')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * New feed data is submitted.
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('Oracle.NewFeedData') === '7ef4ddbde564e62f9855ff4722c3e3700259538faee9f3d1ecb5bdc198325015'
+    }
+
+    /**
+     * New feed data is submitted.
+     */
+    get asV1(): {sender: Uint8Array, values: [Uint8Array, bigint][]} {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class OracleMembershipDummyEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'OracleMembership.Dummy')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * Phantom member, never used.
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('OracleMembership.Dummy') === '01f2f9c28aa1d4d36a81ff042620b6677d25bf07c2bf4acc37b58658778a4fca'
+    }
+
+    /**
+     * Phantom member, never used.
+     */
+    get asV1(): null {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class OracleMembershipKeyChangedEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'OracleMembership.KeyChanged')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * One of the members' keys changed.
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('OracleMembership.KeyChanged') === '01f2f9c28aa1d4d36a81ff042620b6677d25bf07c2bf4acc37b58658778a4fca'
+    }
+
+    /**
+     * One of the members' keys changed.
+     */
+    get asV1(): null {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class OracleMembershipMemberAddedEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'OracleMembership.MemberAdded')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * The given member was added; see the transaction for who.
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('OracleMembership.MemberAdded') === '01f2f9c28aa1d4d36a81ff042620b6677d25bf07c2bf4acc37b58658778a4fca'
+    }
+
+    /**
+     * The given member was added; see the transaction for who.
+     */
+    get asV1(): null {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class OracleMembershipMemberRemovedEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'OracleMembership.MemberRemoved')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * The given member was removed; see the transaction for who.
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('OracleMembership.MemberRemoved') === '01f2f9c28aa1d4d36a81ff042620b6677d25bf07c2bf4acc37b58658778a4fca'
+    }
+
+    /**
+     * The given member was removed; see the transaction for who.
+     */
+    get asV1(): null {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class OracleMembershipMembersResetEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'OracleMembership.MembersReset')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * The membership was reset; see the transaction for who the new set is.
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('OracleMembership.MembersReset') === '01f2f9c28aa1d4d36a81ff042620b6677d25bf07c2bf4acc37b58658778a4fca'
+    }
+
+    /**
+     * The membership was reset; see the transaction for who the new set is.
+     */
+    get asV1(): null {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
+export class OracleMembershipMembersSwappedEvent {
+    private readonly _chain: Chain
+    private readonly event: Event
+
+    constructor(ctx: EventContext)
+    constructor(ctx: ChainContext, event: Event)
+    constructor(ctx: EventContext, event?: Event) {
+        event = event || ctx.event
+        assert(event.name === 'OracleMembership.MembersSwapped')
+        this._chain = ctx._chain
+        this.event = event
+    }
+
+    /**
+     * Two members were swapped; see the transaction for who.
+     */
+    get isV1(): boolean {
+        return this._chain.getEventHash('OracleMembership.MembersSwapped') === '01f2f9c28aa1d4d36a81ff042620b6677d25bf07c2bf4acc37b58658778a4fca'
+    }
+
+    /**
+     * Two members were swapped; see the transaction for who.
+     */
+    get asV1(): null {
+        assert(this.isV1)
+        return this._chain.decodeEvent(this.event)
+    }
+}
+
 export class PreimageClearedEvent {
     private readonly _chain: Chain
     private readonly event: Event

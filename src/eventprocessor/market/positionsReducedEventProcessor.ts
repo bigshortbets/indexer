@@ -5,7 +5,7 @@ import {Store} from "@subsquid/typeorm-store";
 import {MarketPositionReducedEvent} from "../../types/events";
 import {Position} from "../../model";
 import {Item} from "../../processor";
-import {UnrealizedPLNet} from "./unrealizedPLNet";
+import {LiquidationPriceCalculator} from "./liquidationPriceCalculator";
 
 export class PositionsReducedEventProcessor implements EventProcessor{
     getHandledItemName(): string {
@@ -19,7 +19,8 @@ export class PositionsReducedEventProcessor implements EventProcessor{
             let parsedEvent = e.asV1
             let position = await ctx.store.get(Position ,parsedEvent.positionId.toString())
             if(position) {
-                UnrealizedPLNet.updateAfterPositionChange(ctx.store, position, BigInt(parsedEvent.quantity))
+                const delta = BigInt(parsedEvent.quantity) - position.quantityLeft
+                await LiquidationPriceCalculator.calculateLiquidationPrice(position, ctx.store, delta)
                 position.quantityLeft = BigInt(parsedEvent.quantity)
                 await ctx.store.save(position)
             } else {

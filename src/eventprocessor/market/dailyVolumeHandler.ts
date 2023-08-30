@@ -6,18 +6,19 @@ export class DailyVolumeHandler {
      public static async calculate24hVolume(store: Store) : Promise<void> {
           console.log('24h volume calculation scheduled event')
           const dailyPositions = await this.getAllDailyPositions(store);
-          const volumeByMarketId = this.calculateVolumePerMarket(dailyPositions)
+
+          const volumeByMarketId = await this.calculateVolumePerMarket(dailyPositions)
           let volumesPerMarket =
               Array.from(volumeByMarketId.entries())
                   .map(entry => new DailyVolume({id: entry[0], volume: entry[1]}))
           await store.save(volumesPerMarket);
      }
-     private static calculateVolumePerMarket(positions: Position[]) : Map<string, bigint>{
+     private static async calculateVolumePerMarket(positions: Position[]) : Promise<Map<string, bigint>> {
          let volumePerMarketIdMap = new Map<string, bigint>()
          positions.forEach(position => {
              const id = position.market.id;
              const volume = volumePerMarketIdMap.get(id) ?? BigInt(0);
-             volumePerMarketIdMap.set(id, BigInt(position.price * position.quantityLeft) + volume)
+             volumePerMarketIdMap.set(id, position.price * position.quantity * BigInt(position.market.contractUnit) + volume)
          })
          return volumePerMarketIdMap;
      }

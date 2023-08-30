@@ -10,23 +10,23 @@ export class Market {
     @PrimaryColumn_()
     id!: string
 
-    @Column_("text", {nullable: true})
-    ticker!: string | undefined | null
+    @Column_("text", {nullable: false})
+    ticker!: string
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-    tickSize!: bigint | undefined | null
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    tickSize!: bigint
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-    lifetime!: bigint | undefined | null
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    lifetime!: bigint
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-    initialMargin!: bigint | undefined | null
+    @Column_("int4", {nullable: false})
+    initialMargin!: number
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-    maintananceMargin!: bigint | undefined | null
+    @Column_("int4", {nullable: false})
+    maintenanceMargin!: number
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-    contractUnit!: bigint | undefined | null
+    @Column_("int4", {nullable: false})
+    contractUnit!: number
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     blockHeight!: bigint

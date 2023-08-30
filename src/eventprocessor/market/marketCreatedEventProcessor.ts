@@ -16,14 +16,15 @@ export class MarketCreatedEventProcessor implements EventProcessor{
         let e = new MarketMarketCreatedEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
+            console.log(parsedEvent)
             await ctx.store.save(new Market({
                 id: parsedEvent.marketId.toString(),
                 ticker: parsedEvent.ticker.toString(),
-                tickSize: parsedEvent.tickSize,
+                tickSize: BigInt(parsedEvent.tickSize),
                 lifetime: BigInt(parsedEvent.lifetime),
-                initialMargin: BigInt(parsedEvent.marketId),
-                maintananceMargin: BigInt(parsedEvent.marketId),
-                contractUnit: BigInt(parsedEvent.marketId),
+                initialMargin: parsedEvent.initialMargin,
+                maintenanceMargin: parsedEvent.maintenanceMargin,
+                contractUnit: parsedEvent.contractUnit,
                 blockHeight: BigInt(block.header.height),
                 timestamp: new Date(block.header.timestamp)
             }));

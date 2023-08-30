@@ -18,7 +18,7 @@ export class OrderCanceledEventProcessor implements EventProcessor{
 
         if (e.isV1) {
             let parsedEvent = e.asV1
-            let order = await ctx.store.get(Order, parsedEvent.orderId.toString())
+            let order = await ctx.store.findOne(Order, {where: {id: parsedEvent.orderId.toString()}, relations: {market: true}})
             if(order) {
                 order.status = OrderStatus.CANCELLED
                 await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(ctx.store, order);

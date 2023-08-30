@@ -3,7 +3,7 @@ import {Store} from "@subsquid/typeorm-store";
 
 export class AggregatedOrdersHandler {
     public static async addNewOrderToTheAggregatedOrders(store: Store, order: Order) {
-        let orderSide = order.side as string;
+        let orderSide = order.side
         let aggregatedOrder = await store.findOne(
             AggregatedOrdersByPrice,
             { where: {
@@ -26,7 +26,7 @@ export class AggregatedOrdersHandler {
     }
 
     public static async removeOrderFromAggregatedOrders(store: Store, order: Order) {
-        const orderSide = order?.side as string;
+        const orderSide = order?.side
         let aggregatedOrder = await store.findOne(
             AggregatedOrdersByPrice,
             { where: {
@@ -51,7 +51,7 @@ export class AggregatedOrdersHandler {
 
     }
     public static async removeQuantityFromAggregatedOrders(store: Store, order: Order, quantity: bigint) {
-        const orderSide = order?.side as string;
+        const orderSide = order?.side
         let aggregatedOrder = await store.findOne(
             AggregatedOrdersByPrice,
             { where: {

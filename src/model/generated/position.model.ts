@@ -37,9 +37,6 @@ export class Position {
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    initialPrice!: bigint
-
     @Column_("varchar", {length: 6, nullable: true})
     status!: PositionStatus | undefined | null
 }

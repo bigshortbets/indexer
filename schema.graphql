@@ -17,12 +17,12 @@ enum OrderSide {
 
 type Market @entity {
     id: ID! @unique @index
-    ticker: String
-    tickSize: BigInt
-    lifetime: BigInt
-    initialMargin: BigInt
-    maintananceMargin: BigInt
-    contractUnit: BigInt
+    ticker: String!
+    tickSize: BigInt!
+    lifetime: BigInt!
+    initialMargin: Int!
+    maintenanceMargin: Int!
+    contractUnit: Int!
     blockHeight: BigInt!
     timestamp: DateTime!
 }
@@ -50,9 +50,7 @@ type Position @entity {
     short: String!
     blockHeight: BigInt!
     timestamp: DateTime!
-    initialPrice: BigInt!
     status: PositionStatus
-
 }
 
 type OraclePrice @entity {
@@ -68,7 +66,7 @@ type AggregatedOrdersByPrice @entity {
     price: BigInt!
     quantity: BigInt!
     market: Market!
-    side: String!
+    side: OrderSide!
 }
 
 type DailyVolume @entity {
@@ -76,11 +74,21 @@ type DailyVolume @entity {
     volume: BigInt!
 }
 
-type UnrealizedProfitLose @entity {
+type LatestOraclePrice @entity {
     id: ID!
-    value: BigInt!
-    market: Market!
-    user: String!
+    price: BigInt!
 }
+
+type LiquidationPrice @entity {
+    id: ID!
+    user: String!
+    side: OrderSide!
+    cumulativeValue: BigInt!
+    cumulativeQuantity: BigInt!
+    liquidationPrice: BigInt!
+    market: Market!
+}
+
+
 
 
