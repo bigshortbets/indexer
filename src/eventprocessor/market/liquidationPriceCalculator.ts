@@ -3,6 +3,7 @@ import {LiquidationPrice, OrderSide, Position} from "../../model";
 
 export class LiquidationPriceCalculator {
     public static async calculateLiquidationPrice(position: Position, store: Store, quantityDelta: bigint) {
+        const scale : bigint = BigInt(10000);
         let shortsideLiquidationPrice = await store.findOne(LiquidationPrice,
             { where: {
                         market: {id: position.market.id},
@@ -11,39 +12,46 @@ export class LiquidationPriceCalculator {
                 },
                 relations: {market: true}
             })
-        let longsideLiquidationPrice = await store.get(LiquidationPrice, position.market.id)
+        let longsideLiquidationPrice = await store.findOne(LiquidationPrice,
+            { where: {
+                    market: {id: position.market.id},
+                    user: position.long,
+                    side: OrderSide.LONG
+                },
+                relations: {market: true}
+            })
         if(shortsideLiquidationPrice) {
             shortsideLiquidationPrice.cumulativeValue += quantityDelta * position.price
             shortsideLiquidationPrice.cumulativeQuantity += quantityDelta
-            shortsideLiquidationPrice.liquidationPrice =
-                shortsideLiquidationPrice.cumulativeValue / shortsideLiquidationPrice.cumulativeQuantity * BigInt((1 - position.market.initialMargin / 100) * (1 - position.market.maintenanceMargin / 100))
         } else {
             shortsideLiquidationPrice = new LiquidationPrice({
                 id: position.id + position.short,
                 user: position.short,
                 side: OrderSide.SHORT,
                 cumulativeValue: quantityDelta * position.price,
-                cumulativeQuantity: quantityDelta
+                cumulativeQuantity: quantityDelta,
+                market: position.market
             })
-            shortsideLiquidationPrice.liquidationPrice =
-                shortsideLiquidationPrice.cumulativeValue / shortsideLiquidationPrice.cumulativeQuantity
         }
+        shortsideLiquidationPrice.liquidationPrice =
+            shortsideLiquidationPrice.cumulativeValue / shortsideLiquidationPrice.cumulativeQuantity *
+            BigInt(Math.round((1 - position.market.initialMargin / 100) * (1 - position.market.maintenanceMargin / 100) * Number(scale))) / scale
         if(longsideLiquidationPrice) {
             longsideLiquidationPrice.cumulativeValue += quantityDelta * position.price
             longsideLiquidationPrice.cumulativeQuantity += quantityDelta
-            longsideLiquidationPrice.liquidationPrice =
-                longsideLiquidationPrice.cumulativeValue / longsideLiquidationPrice.cumulativeQuantity * BigInt((1 - position.market.initialMargin / 100) * (1 - position.market.maintenanceMargin / 100))
         } else {
             longsideLiquidationPrice = new LiquidationPrice({
                 id: position.id + position.long,
                 user: position.long,
                 side: OrderSide.LONG,
                 cumulativeValue: quantityDelta * position.price,
-                cumulativeQuantity: quantityDelta
+                cumulativeQuantity: quantityDelta,
+                market: position.market
             })
-            longsideLiquidationPrice.liquidationPrice =
-                longsideLiquidationPrice.cumulativeValue / longsideLiquidationPrice.cumulativeQuantity
         }
+        longsideLiquidationPrice.liquidationPrice =
+            longsideLiquidationPrice.cumulativeValue / longsideLiquidationPrice.cumulativeQuantity *
+            BigInt(Math.round((1 - position.market.initialMargin / 100) * (1 - position.market.maintenanceMargin / 100) * Number(scale))) / scale
         return await store.save([longsideLiquidationPrice, shortsideLiquidationPrice])
     }
 }
