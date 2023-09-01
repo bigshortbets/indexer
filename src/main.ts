@@ -1,7 +1,7 @@
-import {TypeormDatabase} from '@subsquid/typeorm-store'
+import {Store, TypeormDatabase} from '@subsquid/typeorm-store'
 import {processor} from './processor'
 import {EventProcessorProvider} from "./eventprocessor/eventProcessorProvider";
-import {DailyVolumeHandler} from "./eventprocessor/market/dailyVolumeHandler";
+import {EntityManager} from "typeorm";
 
 const processorProvider = new EventProcessorProvider();
 let lastUpdateTime = -1;
@@ -15,9 +15,22 @@ processor.run(new TypeormDatabase(), async (ctx) => {
 
     if(ctx.isHead) {
         const now = Date.now();
-        if(now - lastUpdateTime >= 1000 * 15) { // TODO: set some manageable value
-            await DailyVolumeHandler.calculate24hVolume(ctx.store)
-            lastUpdateTime = now;
+        if(now - lastUpdateTime >= 1000 * 15) { // do envów
+            lastUpdateTime = now
+            await update24Volume(ctx.store);
         }
     }
 })
+
+async function update24Volume(store: Store) {
+    console.log("24h volume update")
+    const em = (store as unknown as {em: () => EntityManager}).em
+    await (await em()).query(`UPDATE "market" AS m
+                    SET "daily_volume" = (
+                        SELECT COALESCE(SUM(p."price" * p."quantity" * m."contract_unit"), 0)
+                        FROM "position" AS p
+                        WHERE p."market_id" = m."id"
+                            AND p."timestamp" >= NOW() - interval '1 day'
+                    )
+                    RETURNING m;`)
+}

@@ -3,7 +3,7 @@ import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSel
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
 import {MarketPositionCreatedEvent} from "../../types/events";
-import {LatestOraclePrice, Market, Position, PositionStatus} from "../../model";
+import {Market, Position, PositionStatus} from "../../model";
 import * as ss58 from '@subsquid/ss58'
 import {Item} from "../../processor";
 import {LiquidationPriceCalculator} from "./liquidationPriceCalculator";
@@ -20,8 +20,7 @@ export class PositionCreatedEventProcessor implements EventProcessor{
             let parsedEvent = e.asV1
             console.log(parsedEvent)
             let market = await ctx.store.get(Market, parsedEvent.market.toString())
-            let oraclePrice = await ctx.store.get(LatestOraclePrice, parsedEvent.market.toString())
-            if(market && oraclePrice) {
+            if(market) {
                 const positionTimestamp = new Date(block.header.timestamp)
                 let position = new Position({
                     id: parsedEvent.positionId.toString(),
@@ -33,7 +32,7 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                     timestamp: positionTimestamp,
                     status: PositionStatus.OPEN,
                     quantityLeft: BigInt(parsedEvent.quantity),
-                    price: oraclePrice.price
+                    price: market.latestOraclePrice
                 })
                 const delta = position.quantityLeft
                 await LiquidationPriceCalculator.calculateLiquidationPrice(position, ctx.store, delta)

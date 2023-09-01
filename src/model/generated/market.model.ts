@@ -33,4 +33,10 @@ export class Market {
 
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    dailyVolume!: bigint
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    latestOraclePrice!: bigint
 }

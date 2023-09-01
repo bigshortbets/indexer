@@ -1,6 +1,6 @@
 import {Arg, Field, ObjectType, Query, Resolver} from 'type-graphql'
 import type { EntityManager } from 'typeorm'
-import {LatestOraclePrice, Market, Position} from "../../model";
+import {Market, Position} from "../../model";
 
 @ObjectType()
 export class UnrealisedProfitLoseNetResult {
@@ -20,20 +20,18 @@ export class UnrealisedProfitLoseNetResolver {
                                         @Arg('marketId', {nullable: false}) marketId: string)
       : Promise<UnrealisedProfitLoseNetResult> {
       const manager = await this.tx()
-      const latestOraclePrice = await manager.getRepository(LatestOraclePrice).findOneBy({id: marketId})
+      const market = await manager.getRepository(Market).findOneBy({id: marketId})
 
-      const marketContractUnit = await manager.getRepository(Market).findOneBy({id: marketId})
-
-      if(latestOraclePrice && marketContractUnit) {
+      if(market) {
           let allShortsPerUser = await manager.getRepository(Position).query(`
-           SELECT SUM(p.quantity * (${latestOraclePrice.price} - p.price) * ${marketContractUnit.contractUnit}) AS short_sum
+           SELECT SUM(p.quantity * (${market.latestOraclePrice} - p.price) * ${market.contractUnit}) AS short_sum
            FROM position AS p
            WHERE p.market_id = '${marketId}'
              AND p.short = '${who}'
              AND p.status = 'OPEN';
           `)
           let allLongsPerUser = await manager.getRepository(Position).query(
-              `SELECT SUM(p.quantity * (p.price - ${latestOraclePrice.price}) * ${marketContractUnit.contractUnit}) AS long_sum
+              `SELECT SUM(p.quantity * (p.price - ${market.latestOraclePrice}) * ${market.contractUnit}) AS long_sum
            FROM position AS p
            WHERE p.market_id = '${marketId}'
              AND p.long = '${who}'

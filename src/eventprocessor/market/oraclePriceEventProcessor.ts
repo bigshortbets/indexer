@@ -3,7 +3,7 @@ import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSel
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
 import {MarketOraclePriceEvent} from "../../types/events";
-import {LatestOraclePrice, Market, OraclePrice} from "../../model";
+import {Market, OraclePrice} from "../../model";
 import {Item} from "../../processor";
 
 export class OraclePriceEventProcessor implements EventProcessor{
@@ -17,17 +17,20 @@ export class OraclePriceEventProcessor implements EventProcessor{
         if (e.isV1) {
             const parsedEvent = e.asV1
             console.log(parsedEvent)
-            await ctx.store.save(new OraclePrice({
-                id: item.event.id,
-                market: await ctx.store.get(Market, parsedEvent.market.toString()),
-                price: parsedEvent.price,
-                blockHeight: BigInt(block.header.height),
-                timestamp: new Date(block.header.timestamp)
-            }));
-            await ctx.store.save(new LatestOraclePrice({
-                id: parsedEvent.market.toString(),
-                price: parsedEvent.price,
-            }))
+            let market = await ctx.store.get(Market, parsedEvent.market.toString())
+            if(market) {
+                market.latestOraclePrice = parsedEvent.price
+                await ctx.store.save(new OraclePrice({
+                    id: item.event.id,
+                    market: market,
+                    price: parsedEvent.price,
+                    blockHeight: BigInt(block.header.height),
+                    timestamp: new Date(block.header.timestamp)
+                }));
+                await ctx.store.save(market)
+            } else {
+                throw new Error('Market is not defined, event: oralce price')
+            }
         } else {
             throw new Error('Unsupported spec')
         }

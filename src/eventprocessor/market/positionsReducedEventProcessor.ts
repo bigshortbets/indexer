@@ -24,7 +24,7 @@ export class PositionsReducedEventProcessor implements EventProcessor{
                 position.quantityLeft = BigInt(parsedEvent.quantity)
                 await ctx.store.save(position)
             } else {
-                throw new Error('Postion not found')
+                throw new Error('Position not found')
             }
         } else {
             throw new Error('Unsupported spec')

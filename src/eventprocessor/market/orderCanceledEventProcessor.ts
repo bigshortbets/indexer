@@ -20,8 +20,9 @@ export class OrderCanceledEventProcessor implements EventProcessor{
             let parsedEvent = e.asV1
             let order = await ctx.store.findOne(Order, {where: {id: parsedEvent.orderId.toString()}, relations: {market: true}})
             if(order) {
-                order.status = OrderStatus.CANCELLED
                 await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(ctx.store, order);
+                order.status = OrderStatus.CANCELLED
+                order.quantity = BigInt(0)
                 await ctx.store.save(order)
             } else {
               throw new Error('No order found')

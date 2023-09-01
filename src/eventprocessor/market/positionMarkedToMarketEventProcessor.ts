@@ -3,7 +3,7 @@ import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSel
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
 import {MarketPositionMarkedToMarketEvent} from "../../types/events";
-import {OraclePrice, Position} from "../../model";
+import {Position} from "../../model";
 import {Item} from "../../processor";
 
 export class PositionMarkedToMarketEventProcessor implements EventProcessor{
@@ -17,26 +17,12 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor{
         if (e.isV1) {
             let parsedEvent = e.asV1
             console.log(parsedEvent)
-            let latestOraclePrice = await ctx.store.findOne(OraclePrice,
-                {
-                    where: {
-                        market: {id: parsedEvent.market.toString()}
-                    },
-                    order: {
-                        blockHeight: "DESC"
-                    },
-                    relations: {
-                        market: true
-                    }
-                })
-            if(!latestOraclePrice) {
-                throw new Error('Oracle price not found')
-            }
+
             let position = await ctx.store.findOne(Position, {where: {id: parsedEvent.positionId.toString()}, relations: {market: true}})
             if(!position) {
                 throw new Error('Position not found')
             }
-            position.price = latestOraclePrice.price
+            position.price = position.market.latestOraclePrice
             await ctx.store.save(position)
         } else {
             throw new Error('Unsupported spec')

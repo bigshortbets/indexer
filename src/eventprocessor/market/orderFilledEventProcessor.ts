@@ -22,6 +22,7 @@ export class OrderFilledEventProcessor implements EventProcessor{
             if(order) {
                 await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(ctx.store, order)
                 order.status = OrderStatus.COMPLETED
+                order.quantity = BigInt(0)
                 await ctx.store.save(order);
             }
         } else {

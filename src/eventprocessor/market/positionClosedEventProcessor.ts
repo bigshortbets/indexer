@@ -21,6 +21,7 @@ export class PositionClosedEventProcessor implements EventProcessor{
             if(position) {
                 const delta = - position.quantityLeft
                 await LiquidationPriceCalculator.calculateLiquidationPrice(position, ctx.store, delta)
+                position.quantityLeft = BigInt(0)
                 position.status = PositionStatus.CLOSED;
                 await ctx.store.save(position);
             } else {

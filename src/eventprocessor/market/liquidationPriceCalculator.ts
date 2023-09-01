@@ -35,7 +35,7 @@ export class LiquidationPriceCalculator {
         }
         shortsideLiquidationPrice.liquidationPrice =
             shortsideLiquidationPrice.cumulativeValue / shortsideLiquidationPrice.cumulativeQuantity *
-            BigInt(Math.round((1 - position.market.initialMargin / 100) * (1 - position.market.maintenanceMargin / 100) * Number(scale))) / scale
+            BigInt(Math.round((1 + position.market.initialMargin / 100) * (1 + position.market.maintenanceMargin / 100) * Number(scale))) / scale
         if(longsideLiquidationPrice) {
             longsideLiquidationPrice.cumulativeValue += quantityDelta * position.price
             longsideLiquidationPrice.cumulativeQuantity += quantityDelta
@@ -51,7 +51,7 @@ export class LiquidationPriceCalculator {
         }
         longsideLiquidationPrice.liquidationPrice =
             longsideLiquidationPrice.cumulativeValue / longsideLiquidationPrice.cumulativeQuantity *
-            BigInt(Math.round((1 - position.market.initialMargin / 100) * (1 - position.market.maintenanceMargin / 100) * Number(scale))) / scale
+            BigInt(Math.round((1.0 - position.market.initialMargin / 100) * (1.0 - position.market.maintenanceMargin / 100) * Number(scale))) / scale
         return await store.save([longsideLiquidationPrice, shortsideLiquidationPrice])
     }
 }

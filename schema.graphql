@@ -25,6 +25,8 @@ type Market @entity {
     contractUnit: Int!
     blockHeight: BigInt!
     timestamp: DateTime!
+    dailyVolume: BigInt!
+    latestOraclePrice: BigInt!
 }
 
 type Order @entity {
@@ -67,16 +69,6 @@ type AggregatedOrdersByPrice @entity {
     quantity: BigInt!
     market: Market!
     side: OrderSide!
-}
-
-type DailyVolume @entity {
-    id: ID!
-    volume: BigInt!
-}
-
-type LatestOraclePrice @entity {
-    id: ID!
-    price: BigInt!
 }
 
 type LiquidationPrice @entity {

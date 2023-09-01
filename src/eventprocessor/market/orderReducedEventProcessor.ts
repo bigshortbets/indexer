@@ -25,10 +25,10 @@ export class OrderReducedEventProcessor implements EventProcessor{
                 let quantityDelta = persistedOrder.quantity - BigInt(parsedEvent.quantity)
                 await AggregatedOrdersHandler.removeQuantityFromAggregatedOrders(ctx.store, persistedOrder, quantityDelta)
                 persistedOrder.quantity = BigInt(parsedEvent.quantity);
+                await ctx.store.save(persistedOrder);
             } else {
                 throw  new Error("Order doesn't exist");
             }
-            await ctx.store.save(persistedOrder);
         } else {
             throw new Error('Unsupported spec')
         }
