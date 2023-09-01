@@ -13,11 +13,17 @@ export class PositionsReducedEventProcessor implements EventProcessor{
     }
 
     async process(ctx: BatchContext<Store, AddEventItem<any, any>>, block: BatchBlock<Item>, item: AddEventItem<any, any>) {
-        console.log('Position closed event')
+        console.log('Position reduced event')
         let e = new MarketPositionReducedEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-            let position = await ctx.store.get(Position ,parsedEvent.positionId.toString())
+            let position = await ctx.store.findOne(Position,
+                {
+                    where: {
+                        id: parsedEvent.positionId.toString()
+                    },
+                    relations: {market: true}
+                })
             if(position) {
                 const delta = BigInt(parsedEvent.quantity) - position.quantityLeft
                 await LiquidationPriceCalculator.calculateLiquidationPrice(position, ctx.store, delta)

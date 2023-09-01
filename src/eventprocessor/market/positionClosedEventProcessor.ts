@@ -17,7 +17,13 @@ export class PositionClosedEventProcessor implements EventProcessor{
         let e = new MarketPositionClosedEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-            let position = await ctx.store.get(Position, parsedEvent.positionId.toString());
+            let position = await ctx.store.findOne(Position,
+                {
+                    where: {
+                        id: parsedEvent.positionId.toString()
+                    },
+                    relations: {market: true}
+                })
             if(position) {
                 const delta = - position.quantityLeft
                 await LiquidationPriceCalculator.calculateLiquidationPrice(position, ctx.store, delta)
