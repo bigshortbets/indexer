@@ -9,6 +9,10 @@ enum OrderStatus {
     CANCELLED
     OUT_OF_FOUNDS
 }
+enum OrderSide {
+    SHORT
+    LONG
+}
 
 enum OrderSide {
     LONG
@@ -79,6 +83,13 @@ type LiquidationPrice @entity {
     cumulativeQuantity: BigInt!
     liquidationPrice: BigInt!
     market: Market!
+}
+
+type UnrealizedProfitLose @entity {
+    id: ID!
+    value: BigInt!
+    market: Market!
+    user: String!
 }
 
 
