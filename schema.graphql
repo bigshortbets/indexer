@@ -14,11 +14,6 @@ enum OrderSide {
     LONG
 }
 
-enum OrderSide {
-    LONG
-    SHORT
-}
-
 type Market @entity {
     id: ID! @unique @index
     ticker: String!

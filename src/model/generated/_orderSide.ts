@@ -1,4 +1,4 @@
 export enum OrderSide {
-    LONG = "LONG",
     SHORT = "SHORT",
+    LONG = "LONG",
 }

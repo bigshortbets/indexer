@@ -21,17 +21,23 @@ export class UnrealisedProfitLoseNetResolver {
       : Promise<UnrealisedProfitLoseNetResult> {
       const manager = await this.tx()
       const market = await manager.getRepository(Market).findOneBy({id: marketId})
+      let base : number
+      if(market){
+          base = market.contractUnit * market.initialMargin / market.maintenanceMargin;
+      } else {
+          throw new Error('Market is undefined')
+      }
 
       if(market) {
-          let allShortsPerUser = await manager.getRepository(Position).query(`
-           SELECT SUM(p.quantity * (${market.latestOraclePrice} - p.price) * ${market.contractUnit}) AS short_sum
+          let allLongsPerUser = await manager.getRepository(Position).query(`
+           SELECT SUM(p.quantity * (${market.latestOraclePrice} - p.price) * ${base}) AS short_sum
            FROM position AS p
            WHERE p.market_id = '${marketId}'
              AND p.short = '${who}'
              AND p.status = 'OPEN';
           `)
-          let allLongsPerUser = await manager.getRepository(Position).query(
-              `SELECT SUM(p.quantity * (p.price - ${market.latestOraclePrice}) * ${market.contractUnit}) AS long_sum
+          let allShortsPerUser = await manager.getRepository(Position).query(
+              `SELECT SUM(p.quantity * (p.price - ${market.latestOraclePrice}) * ${base}) AS long_sum
            FROM position AS p
            WHERE p.market_id = '${marketId}'
              AND p.long = '${who}'
