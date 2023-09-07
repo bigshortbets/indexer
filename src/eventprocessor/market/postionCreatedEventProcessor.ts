@@ -18,7 +18,6 @@ export class PositionCreatedEventProcessor implements EventProcessor{
         let e = new MarketPositionCreatedEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-            console.log(parsedEvent)
             let market = await ctx.store.get(Market, parsedEvent.market.toString())
             if(market) {
                 const positionTimestamp = new Date(block.header.timestamp)

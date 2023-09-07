@@ -17,19 +17,20 @@ export class MarketCreatedEventProcessor implements EventProcessor{
         if (e.isV1) {
             let parsedEvent = e.asV1
             console.log(parsedEvent)
-            await ctx.store.save(new Market({
+            const market =  new Market({
                 id: parsedEvent.marketId.toString(),
                 ticker: parsedEvent.ticker.toString(),
                 tickSize: BigInt(parsedEvent.tickSize),
                 lifetime: BigInt(parsedEvent.lifetime),
-                initialMargin: parsedEvent.initialMargin,
-                maintenanceMargin: parsedEvent.maintenanceMargin,
-                contractUnit: parsedEvent.contractUnit,
+                initialMargin: BigInt(parsedEvent.initialMargin),
+                maintenanceMargin: BigInt(parsedEvent.maintenanceMargin),
+                contractUnit: BigInt(parsedEvent.contractUnit),
                 blockHeight: BigInt(block.header.height),
                 timestamp: new Date(block.header.timestamp),
                 dailyVolume: BigInt(0),
                 latestOraclePrice: BigInt(0)
-            }));
+            })
+            await ctx.store.save(market);
         } else {
             throw new Error('Unsupported spec')
         }

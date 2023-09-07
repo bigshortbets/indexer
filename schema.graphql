@@ -19,9 +19,9 @@ type Market @entity {
     ticker: String!
     tickSize: BigInt!
     lifetime: BigInt!
-    initialMargin: Int!
-    maintenanceMargin: Int!
-    contractUnit: Int!
+    initialMargin: BigInt!
+    maintenanceMargin: BigInt!
+    contractUnit: BigInt!
     blockHeight: BigInt!
     timestamp: DateTime!
     dailyVolume: BigInt!
@@ -79,14 +79,5 @@ type LiquidationPrice @entity {
     liquidationPrice: BigInt!
     market: Market!
 }
-
-type UnrealizedProfitLose @entity {
-    id: ID!
-    value: BigInt!
-    market: Market!
-    user: String!
-}
-
-
 
 

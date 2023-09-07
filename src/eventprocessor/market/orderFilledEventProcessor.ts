@@ -17,7 +17,6 @@ export class OrderFilledEventProcessor implements EventProcessor{
         let e = new MarketOrderFilledEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-            console.log(parsedEvent)
             let order = await ctx.store.findOne(Order, {where: {id: parsedEvent.orderId.toString()}, relations: {market: true}});
             if(order) {
                 await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(ctx.store, order)

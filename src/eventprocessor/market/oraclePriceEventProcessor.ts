@@ -16,7 +16,6 @@ export class OraclePriceEventProcessor implements EventProcessor{
         let e = new MarketOraclePriceEvent(ctx, item.event)
         if (e.isV1) {
             const parsedEvent = e.asV1
-            console.log(parsedEvent)
             let market = await ctx.store.get(Market, parsedEvent.market.toString())
             if(market) {
                 market.latestOraclePrice = parsedEvent.price

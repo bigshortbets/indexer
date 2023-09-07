@@ -20,7 +20,6 @@ export class OrderCreatedEventProcessor implements EventProcessor{
 
         if (e.isV1) {
             const parsedEvent = e.asV1
-            console.log(parsedEvent)
 
             const market = await ctx.store.get(Market, parsedEvent.market.toString());
             const quantity = BigInt(parsedEvent.quantity)

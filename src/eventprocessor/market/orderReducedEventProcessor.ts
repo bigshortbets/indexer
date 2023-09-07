@@ -21,7 +21,6 @@ export class OrderReducedEventProcessor implements EventProcessor{
                 Order,
                 {where: {id : parsedEvent.orderId.toString()}, relations: {market: true}});
             if(persistedOrder !== undefined){
-                console.log(parsedEvent)
                 let quantityDelta = persistedOrder.quantity - BigInt(parsedEvent.quantity)
                 await AggregatedOrdersHandler.removeQuantityFromAggregatedOrders(ctx.store, persistedOrder, quantityDelta)
                 persistedOrder.quantity = BigInt(parsedEvent.quantity);
