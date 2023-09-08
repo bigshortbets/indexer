@@ -22,7 +22,6 @@ export class OrderCanceledEventProcessor implements EventProcessor{
             if(order) {
                 await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(ctx.store, order);
                 order.status = OrderStatus.CANCELLED
-                order.quantity = BigInt(0)
                 await ctx.store.save(order)
             } else {
               throw new Error('No order found')

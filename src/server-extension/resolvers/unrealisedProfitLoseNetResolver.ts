@@ -23,14 +23,14 @@ export class UnrealisedProfitLoseNetResolver {
       const market = await manager.getRepository(Market).findOneBy({id: marketId})
       if(market) {
           let allShortsPerUser = await manager.getRepository(Position).query(`
-           SELECT SUM(p.quantity * (${market.latestOraclePrice} - p.price) * 100 * ${market.contractUnit} / ${market.initialMargin}) AS short_sum
+           SELECT SUM(p.quantity * (p.price - ${market.latestOraclePrice}) * 100 * ${market.contractUnit} / ${market.initialMargin}) AS short_sum
            FROM position AS p
            WHERE p.market_id = '${marketId}'
              AND p.short = '${who}'
              AND p.status = 'OPEN';
           `)
           let allLongsPerUser = await manager.getRepository(Position).query(
-              `SELECT SUM(p.quantity * (p.price - ${market.latestOraclePrice})  * 100 * ${market.contractUnit} / ${market.initialMargin}) AS long_sum
+              `SELECT SUM(p.quantity * (${market.latestOraclePrice} - p.price)  * 100 * ${market.contractUnit} / ${market.initialMargin}) AS long_sum
            FROM position AS p
            WHERE p.market_id = '${marketId}'
              AND p.long = '${who}'
