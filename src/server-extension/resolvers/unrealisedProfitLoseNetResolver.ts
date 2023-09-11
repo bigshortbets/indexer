@@ -23,23 +23,25 @@ export class UnrealisedProfitLoseNetResolver {
       const market = await manager.getRepository(Market).findOneBy({id: marketId})
       if(market) {
           let allShortsPerUser = await manager.getRepository(Position).query(`
-           SELECT SUM(p.quantity * (p.price - ${market.latestOraclePrice}) * 100 * ${market.contractUnit} / ${market.initialMargin}) AS short_sum
+           SELECT SUM(p.quantity * (p.price - ${market.latestOraclePrice}) * ${market.contractUnit}) AS short_sum
            FROM position AS p
            WHERE p.market_id = '${marketId}'
              AND p.short = '${who}'
              AND p.status = 'OPEN';
           `)
           let allLongsPerUser = await manager.getRepository(Position).query(
-              `SELECT SUM(p.quantity * (${market.latestOraclePrice} - p.price)  * 100 * ${market.contractUnit} / ${market.initialMargin}) AS long_sum
+              `SELECT SUM(p.quantity * (${market.latestOraclePrice} - p.price) * ${market.contractUnit}) AS long_sum
            FROM position AS p
            WHERE p.market_id = '${marketId}'
              AND p.long = '${who}'
              AND p.status = 'OPEN'`
           )
+          console.log(allLongsPerUser[0], allShortsPerUser[0])
           const shortSum = allShortsPerUser[0] !== undefined ?
-              BigInt(allShortsPerUser[0].short_sum.toString().split(".")[0]) : BigInt(0)
+              BigInt(allShortsPerUser[0].short_sum.split(".")[0]) : BigInt(0)
           const longSum = allLongsPerUser[0] !== undefined ?
-              BigInt(allLongsPerUser[0].long_sum.toString().split(".")[0]) : BigInt(0)
+              BigInt(allLongsPerUser[0].long_sum.split(".")[0]) : BigInt(0)
+          console.log(shortSum, longSum)
           return  new UnrealisedProfitLoseNetResult({ value: (shortSum + longSum).toString()})
       } else {
           return new UnrealisedProfitLoseNetResult({value: "0"})

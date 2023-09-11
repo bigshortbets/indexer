@@ -26,7 +26,7 @@ export class PositionsReducedEventProcessor implements EventProcessor{
                 })
             if(position) {
                 const delta = BigInt(parsedEvent.quantity) - position.quantityLeft
-                await LiquidationPriceCalculator.calculateLiquidationPrice(position, ctx.store, delta)
+                await LiquidationPriceCalculator.calculate(position, ctx.store, delta)
                 position.quantityLeft = BigInt(parsedEvent.quantity)
                 await ctx.store.save(position)
             } else {

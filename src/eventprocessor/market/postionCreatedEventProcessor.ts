@@ -34,7 +34,7 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                     price: market.latestOraclePrice
                 })
                 const delta = position.quantityLeft
-                await LiquidationPriceCalculator.calculateLiquidationPrice(position, ctx.store, delta)
+                await LiquidationPriceCalculator.calculate(position, ctx.store, delta)
                 await ctx.store.save(position);
             } else {
                 throw new Error('Market or oracle price undefined')
