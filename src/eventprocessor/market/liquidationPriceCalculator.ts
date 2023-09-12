@@ -33,7 +33,7 @@ export class LiquidationPriceCalculator {
                 cumulativeQuantity: quantityDelta,
                 market: position.market,
             })
-            liquidationPrice.liquidationPrice = this.calculateLiquidationPrice(liquidationPrice, side)
+            liquidationPrice.liquidationPrice = BigInt(this.calculateLiquidationPrice(liquidationPrice, side))
         }
         if(liquidationPrice.cumulativeQuantity === BigInt(0) || liquidationPrice.cumulativeQuantity + quantityDelta <= BigInt(0)) {
             liquidationPrice.liquidationPrice = BigInt(0)
@@ -42,16 +42,16 @@ export class LiquidationPriceCalculator {
         } else {
             liquidationPrice.cumulativeValue += quantityDelta * position.price
             liquidationPrice.cumulativeQuantity += quantityDelta
-            liquidationPrice.liquidationPrice = this.calculateLiquidationPrice(liquidationPrice, side)
+            liquidationPrice.liquidationPrice = BigInt(this.calculateLiquidationPrice(liquidationPrice, side))
         }
         return liquidationPrice;
     }
 
     private static calculateBase(market : Market, side : OrderSide) {
-        const multiplier = side === OrderSide.LONG ? BigInt(1) : BigInt(-1);
-        return (BigInt(100) + multiplier * market.initialMargin) * (BigInt(100) + multiplier * market.maintenanceMargin) / BigInt(10_000)
+        const multiplier = side === OrderSide.LONG ? -1 : 1;
+        return (100 + multiplier * Number(market.initialMargin)) * (100 + multiplier * Number(market.maintenanceMargin)) / 10_000
     }
     private static calculateLiquidationPrice(liquidationPrice : LiquidationPrice, side : OrderSide) {
-        return (liquidationPrice.cumulativeValue / liquidationPrice.cumulativeQuantity) * this.calculateBase(liquidationPrice.market, side)
+        return Number(liquidationPrice.cumulativeValue / liquidationPrice.cumulativeQuantity) * this.calculateBase(liquidationPrice.market, side) // TODO: zastanowić się jak to zmienić żeby nie powodowało problemów (za mała dokładność)
     }
 }
