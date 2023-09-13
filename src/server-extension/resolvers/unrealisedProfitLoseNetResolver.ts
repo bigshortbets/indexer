@@ -38,9 +38,9 @@ export class UnrealisedProfitLoseNetResolver {
           )
           console.log(allLongsPerUser[0], allShortsPerUser[0])
           const shortSum = allShortsPerUser[0] !== undefined ?
-              BigInt(allShortsPerUser[0].short_sum.split(".")[0]) : BigInt(0)
+              BigInt(allShortsPerUser[0].short_sum) : BigInt(0)
           const longSum = allLongsPerUser[0] !== undefined ?
-              BigInt(allLongsPerUser[0].long_sum.split(".")[0]) : BigInt(0)
+              BigInt(allLongsPerUser[0].long_sum) : BigInt(0)
           console.log(shortSum, longSum)
           return  new UnrealisedProfitLoseNetResult({ value: (shortSum + longSum).toString()})
       } else {
