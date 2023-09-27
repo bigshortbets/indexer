@@ -2,9 +2,9 @@ import {EventProcessor} from "../eventProcessor";
 import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
 import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
-import {MarketPositionMarkedToMarketEvent} from "../../types/events";
 import {Position} from "../../model";
 import {Item} from "../../processor";
+import {MarketPositionMarkedToMarketEvent} from "../../types/events";
 
 export class PositionMarkedToMarketEventProcessor implements EventProcessor{
     getHandledItemName(): string {
@@ -22,7 +22,7 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor{
             if(!position) {
                 throw new Error('Position not found')
             }
-            position.price = position.market.latestOraclePrice
+            position.price = parsedEvent.price;
             await ctx.store.save(position)
         } else {
             throw new Error('Unsupported spec')

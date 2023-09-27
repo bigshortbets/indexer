@@ -36,7 +36,4 @@ export class Market {
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     dailyVolume!: bigint
-
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    latestOraclePrice!: bigint
 }

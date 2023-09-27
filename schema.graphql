@@ -25,7 +25,6 @@ type Market @entity {
     blockHeight: BigInt!
     timestamp: DateTime!
     dailyVolume: BigInt!
-    latestOraclePrice: BigInt!
 }
 
 type Order @entity {
@@ -52,14 +51,6 @@ type Position @entity {
     blockHeight: BigInt!
     timestamp: DateTime!
     status: PositionStatus
-}
-
-type OraclePrice @entity {
-    id: ID!
-    market: Market!
-    price: BigInt!
-    blockHeight: BigInt!
-    timestamp: DateTime!
 }
 
 type AggregatedOrdersByPrice @entity {

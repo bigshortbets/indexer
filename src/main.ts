@@ -2,6 +2,9 @@ import {Store, TypeormDatabase} from '@subsquid/typeorm-store'
 import {processor} from './processor'
 import {EventProcessorProvider} from "./eventprocessor/eventProcessorProvider";
 import {EntityManager} from "typeorm";
+import {OraclePriceProvider} from "./utils";
+
+OraclePriceProvider.initializeApi();
 
 const processorProvider = new EventProcessorProvider();
 let lastUpdateTime = -1;
