@@ -1,18 +1,19 @@
+import {Option} from "@subsquid/substrate-typegen/lib/support";
+
 const { ApiPromise } = require('@polkadot/api');
-const { Keyring } = require('@polkadot/keyring');
 export class OraclePriceProvider {
     private static api : any;
-    private static keyring : any;
-    private static owner: any;
     public static async initializeApi(){
         // Todo: envy
         OraclePriceProvider.api = await ApiPromise.create();
-        OraclePriceProvider.keyring = new Keyring({ type: 'sr25519'})
-        OraclePriceProvider.owner = OraclePriceProvider.keyring.addFromUri('//Bob')
     }
     public static async getLatestOraclePriceForMarketId(marketId : string) : Promise<BigInt> {
+        OraclePriceProvider.api = await ApiPromise.create();
         const value = OraclePriceProvider.convertStringValueToHexBigEndian(marketId)
-        return await OraclePriceProvider.api.rpc.state.call('state-call', ['MarketApi_oracle_price', value]) // TODO: marketID prawdopodobnie trzeba dostosować
+        const latestOraclePrice = await OraclePriceProvider.api.rpc.state.call('MarketApi_oracle_price', value);
+        const decodedPrice = latestOraclePrice.unwrap()
+        console.log(decodedPrice)
+        return decodedPrice;
     }
 
     private static convertStringValueToHexBigEndian(value : string) {
@@ -26,9 +27,9 @@ export class OraclePriceProvider {
             chunks.reverse();
             const bigEndianHex = chunks.join('');
             if (bigEndianHex.length % 2 !== 0) {
-                return '0' + bigEndianHex;
+                return '0x0' + bigEndianHex;
             }
-            return bigEndianHex;
+            return '0x' + bigEndianHex;
         }
         return '';
     }
