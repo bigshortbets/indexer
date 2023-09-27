@@ -1,8 +1,6 @@
 import {Arg, Field, ObjectType, Query, Resolver} from 'type-graphql'
 import type { EntityManager } from 'typeorm'
 import {Market, Position} from "../../model";
-import {OraclePriceProvider} from "../../utils/oraclePriceProvider";
-
 
 @ObjectType()
 export class UnrealisedProfitLoseNetResult {
@@ -40,10 +38,8 @@ export class UnrealisedProfitLoseNetResolver {
              AND p.status = 'OPEN'`
           )
           console.log(allLongsPerUser[0], allShortsPerUser[0])
-          const shortSum = allShortsPerUser[0] !== undefined ?
-              BigInt(allShortsPerUser[0].short_sum) : BigInt(0)
-          const longSum = allLongsPerUser[0] !== undefined ?
-              BigInt(allLongsPerUser[0].long_sum) : BigInt(0)
+          const shortSum = BigInt(allShortsPerUser[0]?.short_sum || 0)
+          const longSum = BigInt(allLongsPerUser[0]?.long_sum || 0)
           console.log(shortSum, longSum)
           return  new UnrealisedProfitLoseNetResult({ value: (shortSum + longSum).toString()})
       } else {
