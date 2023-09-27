@@ -1,10 +1,6 @@
 const { ApiPromise } = require('@polkadot/api');
 export class OraclePriceProvider {
     private static api : any;
-    public static async initializeApi(){
-        // Todo: envy
-        OraclePriceProvider.api = await ApiPromise.create();
-    }
     public static async getLatestOraclePriceForMarketId(marketId : string) : Promise<BigInt> {
         OraclePriceProvider.api = await ApiPromise.create();
         const value = OraclePriceProvider.convertStringValueToHexBigEndian(marketId)
