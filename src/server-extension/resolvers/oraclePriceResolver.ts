@@ -4,7 +4,7 @@ import {OraclePriceProvider} from "../../utils";
 @ObjectType()
 export class LatestOraclePrice {
     @Field(() => String, { nullable: false })
-    value!: BigInt
+    price!: BigInt
     constructor(props: Partial<LatestOraclePrice>) {
         Object.assign(this, props);
     }
@@ -15,6 +15,6 @@ export class OraclePriceResolver {
     @Query(() => LatestOraclePrice)
     async getLatestOraclePrice(@Arg('marketId', {nullable: false}) marketId: string)
         : Promise<LatestOraclePrice> {
-        return new LatestOraclePrice({value: await OraclePriceProvider.getLatestOraclePriceForMarketId(marketId)})
+        return new LatestOraclePrice({price: await OraclePriceProvider.getLatestOraclePriceForMarketId(marketId)})
     }
 }

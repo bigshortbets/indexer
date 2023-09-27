@@ -1,5 +1,3 @@
-import {Option} from "@subsquid/substrate-typegen/lib/support";
-
 const { ApiPromise } = require('@polkadot/api');
 export class OraclePriceProvider {
     private static api : any;
@@ -11,9 +9,8 @@ export class OraclePriceProvider {
         OraclePriceProvider.api = await ApiPromise.create();
         const value = OraclePriceProvider.convertStringValueToHexBigEndian(marketId)
         const latestOraclePrice = await OraclePriceProvider.api.rpc.state.call('MarketApi_oracle_price', value);
-        const decodedPrice = latestOraclePrice.unwrap()
-        console.log(decodedPrice)
-        return decodedPrice;
+        const optionType = OraclePriceProvider.api.createType('Option<Balance>', latestOraclePrice)
+        return optionType.unwrapOr(0).toString();
     }
 
     private static convertStringValueToHexBigEndian(value : string) {
