@@ -18,7 +18,13 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor{
             let parsedEvent = e.asV1
             console.log(parsedEvent)
 
-            let position = await ctx.store.findOne(Position, {where: {id: parsedEvent.positionId.toString()}, relations: {market: true}})
+            let position = await ctx.store.findOne(Position, {
+                where: {
+                    id: parsedEvent.positionId.toString(),
+                    market: {id: parsedEvent.market.toString()}
+                },
+                relations: {market: true}
+            })
             if(!position) {
                 throw new Error('Position not found')
             }

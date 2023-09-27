@@ -31,7 +31,7 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                     timestamp: positionTimestamp,
                     status: PositionStatus.OPEN,
                     quantityLeft: BigInt(parsedEvent.quantity),
-                    price: market.latestOraclePrice
+                    price: parsedEvent.price // temporary - set in the next event
                 })
                 const delta = position.quantityLeft
                 await LiquidationPriceCalculator.calculate(position, ctx.store, delta)

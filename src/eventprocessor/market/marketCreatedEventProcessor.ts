@@ -27,8 +27,7 @@ export class MarketCreatedEventProcessor implements EventProcessor{
                 contractUnit: BigInt(parsedEvent.contractUnit),
                 blockHeight: BigInt(block.header.height),
                 timestamp: new Date(block.header.timestamp),
-                dailyVolume: BigInt(0),
-                latestOraclePrice: BigInt(0)
+                dailyVolume: BigInt(0)
             })
             await ctx.store.save(market);
         } else {
