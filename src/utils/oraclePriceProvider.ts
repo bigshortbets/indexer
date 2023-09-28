@@ -1,8 +1,11 @@
+import {HttpProvider} from "@polkadot/api";
+
 const { ApiPromise } = require('@polkadot/api');
 export class OraclePriceProvider {
     private static api : any;
     public static async getLatestOraclePriceForMarketId(marketId : string) : Promise<BigInt> {
-        OraclePriceProvider.api = await ApiPromise.create();
+        const provider = new HttpProvider(process.env.NODE_RPC_URL);
+        OraclePriceProvider.api = await ApiPromise.create({provider});
         const value = OraclePriceProvider.convertStringValueToHexBigEndian(marketId)
         const latestOraclePrice = await OraclePriceProvider.api.rpc.state.call('MarketApi_oracle_price', value);
         const optionType = OraclePriceProvider.api.createType('Option<Balance>', latestOraclePrice)
