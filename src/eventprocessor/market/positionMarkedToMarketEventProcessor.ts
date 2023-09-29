@@ -16,8 +16,6 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor{
         let e = new MarketPositionMarkedToMarketEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-            console.log(parsedEvent)
-
             let position = await ctx.store.findOne(Position, {
                 where: {
                     id: parsedEvent.positionId.toString(),
@@ -25,11 +23,12 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor{
                 },
                 relations: {market: true}
             })
-            if(!position) {
-                throw new Error('Position not found')
+            if(position) {
+                position.price = parsedEvent.price;
+                await ctx.store.save(position)
+            } else {
+                console.warn('Position not found')
             }
-            position.price = parsedEvent.price;
-            await ctx.store.save(position)
         } else {
             throw new Error('Unsupported spec')
         }

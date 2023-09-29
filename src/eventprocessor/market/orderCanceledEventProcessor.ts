@@ -24,7 +24,7 @@ export class OrderCanceledEventProcessor implements EventProcessor{
                 order.status = OrderStatus.CANCELLED
                 await ctx.store.save(order)
             } else {
-              throw new Error('No order found')
+              console.warn('No order found')
             }
         } else {
             throw new Error('Unsupported spec')

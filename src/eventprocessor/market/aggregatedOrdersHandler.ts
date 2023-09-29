@@ -40,13 +40,13 @@ export class AggregatedOrdersHandler {
                 await store.remove(AggregatedOrdersByPrice, aggregatedOrder.id)
             }
             else if(aggregatedOrder.quantity < BigInt(0)) {
-                throw new Error('Quantity of aggregated orders is negative')
+                console.error('Quantity of aggregated orders is negative')
             }
             else {
                 await store.save(aggregatedOrder);
             }
         } else {
-            throw new Error('There is no aggregated order to subtract from')
+            console.error('There is no aggregated order to subtract from')
         }
 
     }
@@ -62,12 +62,12 @@ export class AggregatedOrdersHandler {
         if(aggregatedOrder) {
             aggregatedOrder.quantity -= quantity;
             if(aggregatedOrder.quantity <= BigInt(0)) {
-                throw new Error('Quantity of aggregated orders are not positive')
+                console.error('Quantity of aggregated orders are not positive')
             }
+            await store.save(aggregatedOrder);
         } else {
-            throw new Error('There is no aggregated order to subtract from')
+            console.error('There is no aggregated order to subtract from')
         }
-        await store.save(aggregatedOrder);
 
     }
 

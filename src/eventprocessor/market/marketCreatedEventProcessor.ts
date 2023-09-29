@@ -16,7 +16,6 @@ export class MarketCreatedEventProcessor implements EventProcessor{
         let e = new MarketMarketCreatedEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-            console.log(parsedEvent)
             const market =  new Market({
                 id: parsedEvent.marketId.toString(),
                 ticker: parsedEvent.ticker.toString(),

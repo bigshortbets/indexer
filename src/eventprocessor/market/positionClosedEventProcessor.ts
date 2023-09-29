@@ -17,7 +17,6 @@ export class PositionClosedEventProcessor implements EventProcessor{
         let e = new MarketPositionClosedEvent(ctx, item.event)
         if (e.isV1) {
             let parsedEvent = e.asV1
-            console.log(parsedEvent)
             let position = await ctx.store.findOne(Position,
                 {
                     where: {
@@ -27,13 +26,12 @@ export class PositionClosedEventProcessor implements EventProcessor{
                 })
             if(position) {
                 const delta = - position.quantityLeft
-                console.log("calculateLiqudationPrice: ", position, "delta: ", delta)
                 await LiquidationPriceCalculator.calculate(position, ctx.store, delta)
                 position.quantityLeft = BigInt(0)
                 position.status = PositionStatus.CLOSED;
                 await ctx.store.save(position);
             } else {
-                throw new Error(`There is no position with id: ${parsedEvent.positionId}`)
+                console.warn(`There is no position with id: ${parsedEvent.positionId}`)
             }
         } else {
             throw new Error('Unsupported spec')

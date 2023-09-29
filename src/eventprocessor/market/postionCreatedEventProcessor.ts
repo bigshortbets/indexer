@@ -37,7 +37,7 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                 await LiquidationPriceCalculator.calculate(position, ctx.store, delta)
                 await ctx.store.save(position);
             } else {
-                throw new Error('Market or oracle price undefined')
+                console.warn('Market undefined')
             }
         } else {
             throw new Error('Unsupported spec')

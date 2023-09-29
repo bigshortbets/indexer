@@ -26,7 +26,7 @@ export class OrderReducedEventProcessor implements EventProcessor{
                 persistedOrder.quantity = BigInt(parsedEvent.quantity);
                 await ctx.store.save(persistedOrder);
             } else {
-                throw  new Error("Order doesn't exist");
+                console.warn("Order doesn't exist");
             }
         } else {
             throw new Error('Unsupported spec')
