@@ -20,6 +20,12 @@ export class UnrealisedProfitLoseNetResolver {
   async calculateUnrealisedPLNetPerUser(@Arg('who', {nullable: false}) who: string,
                                         @Arg('marketId', {nullable: false}) marketId: string)
       : Promise<UnrealisedProfitLoseNetResult> {
+      if (marketId.length == 0) {
+          throw new Error('MarketId is empty')
+      }
+      if (who.length == 0) {
+          throw new Error('Who is empty')
+      }
       const manager = await this.tx()
       const market = await manager.getRepository(Market).findOneBy({id: marketId})
       const latestOraclePrice = await OraclePriceProvider.getLatestOraclePriceForMarketId(marketId)

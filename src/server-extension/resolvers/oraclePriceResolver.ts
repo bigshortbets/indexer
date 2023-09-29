@@ -15,6 +15,9 @@ export class OraclePriceResolver {
     @Query(() => LatestOraclePrice)
     async getLatestOraclePrice(@Arg('marketId', {nullable: false}) marketId: string)
         : Promise<LatestOraclePrice> {
+        if (marketId.length == 0) {
+            throw new Error('MarketId is empty')
+        }
         return new LatestOraclePrice({price: await OraclePriceProvider.getLatestOraclePriceForMarketId(marketId)})
     }
 }
