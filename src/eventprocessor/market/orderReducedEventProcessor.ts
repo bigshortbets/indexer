@@ -1,22 +1,19 @@
 import {EventProcessor} from "../eventProcessor";
-import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
-import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
-import {MarketOrderReducedEvent} from "../../types/events";
 import {Order} from "../../model";
-import {Item} from "../../processor";
 import {AggregatedOrdersHandler} from "./aggregatedOrdersHandler";
-
+import {DataHandlerContext, Block, Event} from "@subsquid/substrate-processor";
+import * as events from "../../types/events"
 export class OrderReducedEventProcessor implements EventProcessor{
-    getHandledItemName(): string {
+    getHandledEventName(): string {
         return "Market.OrderReduced";
     }
 
-    async process(ctx: BatchContext<Store, AddEventItem<any, any>>, block: BatchBlock<Item>, item: AddEventItem<any, any>) {
+    async process(ctx: DataHandlerContext<Store, any>, block: Block<any>, event: Event) {
         console.log('Order reduced event')
-        let e = new MarketOrderReducedEvent(ctx, item.event)
-        if (e.isV1) {
-            let parsedEvent = e.asV1
+        const orderReducedEvent = events.market.orderReduced.v1;
+        if (orderReducedEvent.is(event)) {
+            let parsedEvent = orderReducedEvent.decode(event)
             let persistedOrder = await ctx.store.findOne(
                 Order,
                 {where: {id : parsedEvent.orderId.toString()}, relations: {market: true}});
@@ -29,7 +26,7 @@ export class OrderReducedEventProcessor implements EventProcessor{
                 console.warn("Order doesn't exist");
             }
         } else {
-            throw new Error('Unsupported spec')
+            console.error('Unsupported spec')
         }
     }
 }

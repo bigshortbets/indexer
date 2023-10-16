@@ -2,15 +2,16 @@ import {Store, TypeormDatabase} from '@subsquid/typeorm-store'
 import {processor} from './processor'
 import {EventProcessorProvider} from "./eventprocessor/eventProcessorProvider";
 import {EntityManager} from "typeorm";
+import {DataHandlerContext} from "@subsquid/substrate-processor";
 
 
 const processorProvider = new EventProcessorProvider();
 let lastUpdateTime = -1;
-processor.run(new TypeormDatabase(), async (ctx) => {
+processor.run(new TypeormDatabase(), async (ctx : DataHandlerContext<Store, {}>) => {
     for (let block of ctx.blocks) {
-        for (let item of block.items) {
-            let processor = processorProvider.getProcessorByName(item.name);
-            await processor?.process(ctx, block, item);
+        for (let event  of block.events) {
+            let processor = processorProvider.getProcessorByName(event.name);
+            await processor?.process(ctx, block, event);
         }
     }
 

@@ -1,7 +1,18 @@
 {
   "outDir": "src/types",
-  "specVersions": "http://localhost:4444/graphql",
-  "events": true,
+  "specVersions": "./types.jsonl",
+  "events": [
+    "Market.MarketCreated",
+    "Market.MarketRemoved",
+    "Market.OrderCanceled",
+    "Market.OrderCreated",
+    "Market.OrderFilled",
+    "Market.OrderReduced",
+    "Market.PositionClosed",
+    "Market.PositionMarkedToMarket",
+    "Market.PositionReduced",
+    "Market.PositionCreated"
+  ],
   "calls": [
   ],
   "storage": [

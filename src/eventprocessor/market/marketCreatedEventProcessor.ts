@@ -1,37 +1,36 @@
 import {EventProcessor} from "../eventProcessor";
-import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
-import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
-import {MarketMarketCreatedEvent} from "../../types/events";
+import {market} from "../../types/events";
 import {Market} from "../../model";
-import {Item} from "../../processor";
+import {DataHandlerContext, Block, Event} from "@subsquid/substrate-processor";
 
 export class MarketCreatedEventProcessor implements EventProcessor{
-    getHandledItemName(): string {
+    getHandledEventName(): string {
         return "Market.MarketCreated";
     }
 
-    async process(ctx: BatchContext<Store, AddEventItem<any, any>>, block: BatchBlock<Item>, item: AddEventItem<any, any>) {
+    async process(ctx: DataHandlerContext<Store, any>, block: Block<any>, event: Event) {
         console.log('Market created event')
-        let e = new MarketMarketCreatedEvent(ctx, item.event)
-        if (e.isV1) {
-            let parsedEvent = e.asV1
-            const market =  new Market({
-                id: parsedEvent.marketId.toString(),
-                ticker: parsedEvent.ticker.toString(),
-                tickSize: BigInt(parsedEvent.tickSize),
-                lifetime: BigInt(parsedEvent.lifetime),
-                initialMargin: BigInt(parsedEvent.initialMargin),
-                maintenanceMargin: BigInt(parsedEvent.maintenanceMargin),
-                contractUnit: BigInt(parsedEvent.contractUnit),
+        const receivedEvent = market.marketCreated.v1;
+        if(receivedEvent.is(event)) {
+            const decodedEvent = receivedEvent.decode(event); // TODO: may be wrong type
+            const createdMarket = new Market({
+                id: decodedEvent.marketId.toString(),
+                ticker: decodedEvent.ticker.toString(),
+                tickSize: decodedEvent.tickSize,
+                lifetime: BigInt(decodedEvent.lifetime),
+                initialMargin: BigInt(decodedEvent.initialMargin),
+                maintenanceMargin: BigInt(decodedEvent.maintenanceMargin),
+                contractUnit: BigInt(decodedEvent.contractUnit),
                 blockHeight: BigInt(block.header.height),
-                timestamp: new Date(block.header.timestamp),
+                // timestamp: new Date(block.header.timestamp), // TODO: how timestamp is propagated
                 dailyVolume: BigInt(0)
             })
-            await ctx.store.save(market);
+            await ctx.store.save(createdMarket);
         } else {
-            throw new Error('Unsupported spec')
+            console.error("Unsupported spec");
         }
+
     }
 
 }

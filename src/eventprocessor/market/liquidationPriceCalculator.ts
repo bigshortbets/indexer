@@ -33,7 +33,7 @@ export class LiquidationPriceCalculator {
                 cumulativeQuantity: quantityDelta,
                 market: position.market,
             })
-            liquidationPrice.liquidationPrice = BigInt(this.calculateLiquidationPrice(liquidationPrice, side))
+            liquidationPrice.liquidationPrice = this.calculateLiquidationPrice(liquidationPrice, side)
         }
         if(liquidationPrice.cumulativeQuantity === BigInt(0) || liquidationPrice.cumulativeQuantity + quantityDelta <= BigInt(0)) {
             liquidationPrice.liquidationPrice = BigInt(0)
@@ -42,7 +42,7 @@ export class LiquidationPriceCalculator {
         } else {
             liquidationPrice.cumulativeValue += quantityDelta * position.price
             liquidationPrice.cumulativeQuantity += quantityDelta
-            liquidationPrice.liquidationPrice = BigInt(this.calculateLiquidationPrice(liquidationPrice, side))
+            liquidationPrice.liquidationPrice = this.calculateLiquidationPrice(liquidationPrice, side)
         }
         return liquidationPrice;
     }
@@ -52,6 +52,6 @@ export class LiquidationPriceCalculator {
         return (100 + multiplier * Number(market.initialMargin)) * (100 + multiplier * Number(market.maintenanceMargin)) / 10_000
     }
     private static calculateLiquidationPrice(liquidationPrice : LiquidationPrice, side : OrderSide) {
-        return Number(liquidationPrice.cumulativeValue / liquidationPrice.cumulativeQuantity) * this.calculateBase(liquidationPrice.market, side) // TODO: zastanowić się jak to zmienić żeby nie powodowało problemów (za mała dokładność)
+        return BigInt(Math.round(Number(liquidationPrice.cumulativeValue / liquidationPrice.cumulativeQuantity) * this.calculateBase(liquidationPrice.market, side))) // TODO: zastanowić się jak to zmienić żeby nie powodowało problemów (za mała dokładność)
     }
 }

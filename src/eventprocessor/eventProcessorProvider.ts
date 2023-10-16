@@ -29,7 +29,7 @@ export class EventProcessorProvider {
 
     constructor() {
         processors.map(processor => {
-            this.processorMap.set(processor.getHandledItemName(), processor);
+            this.processorMap.set(processor.getHandledEventName(), processor);
         })
     }
 
@@ -38,5 +38,9 @@ export class EventProcessorProvider {
     }
     getEventProcessors() : EventProcessor[] {
         return processors;
+    }
+
+    getAllProcessesNames() : string[] {
+        return processors.map(p => p.getHandledEventName());
     }
 }

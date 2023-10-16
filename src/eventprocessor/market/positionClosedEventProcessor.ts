@@ -1,22 +1,19 @@
 import {EventProcessor} from "../eventProcessor";
-import {AddEventItem} from "@subsquid/substrate-processor/lib/interfaces/dataSelection";
-import {BatchBlock, BatchContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
-import {MarketPositionClosedEvent} from "../../types/events";
 import {Position, PositionStatus} from "../../model";
-import {Item} from "../../processor";
 import {LiquidationPriceCalculator} from "./liquidationPriceCalculator";
-
+import * as events from "../../types/events";
+import {DataHandlerContext, Block, Event} from "@subsquid/substrate-processor";
 export class PositionClosedEventProcessor implements EventProcessor{
-    getHandledItemName(): string {
+    getHandledEventName(): string {
         return "Market.PositionClosed";
     }
 
-    async process(ctx: BatchContext<Store, AddEventItem<any, any>>, block: BatchBlock<Item>, item: AddEventItem<any, any>) {
+    async process(ctx: DataHandlerContext<Store, any>, block: Block<any>, event: Event) {
         console.log('Position closed event')
-        let e = new MarketPositionClosedEvent(ctx, item.event)
-        if (e.isV1) {
-            let parsedEvent = e.asV1
+        const positionClosedEvent = events.market.positionClosed.v1;
+        if (positionClosedEvent.is(event)) {
+            let parsedEvent = positionClosedEvent.decode(event);
             let position = await ctx.store.findOne(Position,
                 {
                     where: {
@@ -34,7 +31,7 @@ export class PositionClosedEventProcessor implements EventProcessor{
                 console.warn(`There is no position with id: ${parsedEvent.positionId}`)
             }
         } else {
-            throw new Error('Unsupported spec')
+            console.error('Unsupported spec')
         }
     }
 

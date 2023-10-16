@@ -1,37 +1,14 @@
 import {
-    BatchContext,
-    BatchProcessorCallItem,
-    BatchProcessorEventItem,
-    BatchProcessorItem,
     SubstrateBatchProcessor,
 } from '@subsquid/substrate-processor'
 import { EventProcessorProvider } from "./eventprocessor/eventProcessorProvider";
-const eventData =
-    {
-        data: {
-            event: {
-                args: true,
-                    call: true,
-                    extrinsic: {
-                    	hash: true,
-                        fee: true,
-                        indexInBlock: true
-                },
-            },
-        },
-    }
+
 console.log(process.env.DATA_SOURCE_ARCHIVE)
+const provider = new EventProcessorProvider();
 export const processor = new SubstrateBatchProcessor()
     .setDataSource({
-        chain: process.env.DATA_SOURCE_CHAIN,
-        archive: process.env.DATA_SOURCE_ARCHIVE + '/graphql'
+        chain: process.env.DATA_SOURCE_CHAIN as string,
+        archive: process.env.DATA_SOURCE_ARCHIVE + '/graphql' // TODO: Możliwe że to trzeba zmienić ale nie wiem jak - step 2
     })
-const provider = new EventProcessorProvider();
-provider
-    .getEventProcessors()
-    .forEach(p => processor.addEvent(p.getHandledItemName(), eventData));
-
-export type Item = BatchProcessorItem<typeof processor>
-export type EventItem = BatchProcessorEventItem<typeof processor>
-export type CallItem = BatchProcessorCallItem<typeof processor>
-export type ProcessorContext<Store> = BatchContext<Store, Item>
+    .addEvent({ name: provider.getAllProcessesNames() })
+    .setFields({ event: {} });
