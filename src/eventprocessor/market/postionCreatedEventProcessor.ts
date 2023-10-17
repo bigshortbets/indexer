@@ -18,7 +18,6 @@ export class PositionCreatedEventProcessor implements EventProcessor{
             let parsedEvent = positionCreatedEvent.decode(event)
             let market = await ctx.store.get(Market, parsedEvent.market.toString())
             if(market) {
-                // const positionTimestamp = new Date(block.header.timestamp)
                 let position = new Position({
                     id: parsedEvent.positionId.toString(),
                     market: market,
@@ -26,7 +25,8 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                     long: ss58.codec(42).encode((new TextEncoder).encode(parsedEvent.long)),
                     short: ss58.codec(42).encode((new TextEncoder).encode(parsedEvent.short)),
                     blockHeight: BigInt(block.header.height),
-                    // timestamp: positionTimestamp,
+                    // @ts-ignore
+                    timestamp: new Date(block.header.timestamp),
                     status: PositionStatus.OPEN,
                     quantityLeft: BigInt(parsedEvent.quantity),
                     price: parsedEvent.price // temporary - set in the next event

@@ -13,17 +13,20 @@ export class MarketCreatedEventProcessor implements EventProcessor{
         console.log('Market created event')
         const receivedEvent = market.marketCreated.v1;
         if(receivedEvent.is(event)) {
-            const decodedEvent = receivedEvent.decode(event); // TODO: may be wrong type
+            const decodedEvent = receivedEvent.decode(event);
+            const buffer = Buffer.from(decodedEvent.ticker.slice(2), 'hex');
+            const readableTicker = buffer.toString('utf8');
             const createdMarket = new Market({
                 id: decodedEvent.marketId.toString(),
-                ticker: decodedEvent.ticker.toString(),
+                ticker: readableTicker,
                 tickSize: decodedEvent.tickSize,
                 lifetime: BigInt(decodedEvent.lifetime),
                 initialMargin: BigInt(decodedEvent.initialMargin),
                 maintenanceMargin: BigInt(decodedEvent.maintenanceMargin),
                 contractUnit: BigInt(decodedEvent.contractUnit),
                 blockHeight: BigInt(block.header.height),
-                // timestamp: new Date(block.header.timestamp), // TODO: how timestamp is propagated
+                // @ts-ignore
+                timestamp: new Date(block.header.timestamp),
                 dailyVolume: BigInt(0)
             })
             await ctx.store.save(createdMarket);

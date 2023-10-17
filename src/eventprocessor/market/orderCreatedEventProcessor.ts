@@ -29,7 +29,8 @@ export class OrderCreatedEventProcessor implements EventProcessor{
                 initialQuantity: quantity,
                 who: ss58.codec(42).encode((new TextEncoder).encode(parsedEvent.who)),
                 blockHeight: BigInt(block.header.height),
-                // timestamp: new Date(block.header.timestamp),
+                // @ts-ignore
+                timestamp: new Date(block.header.timestamp),
                 status: OrderStatus.ACTIVE
             });
             await ctx.store.save(order);
