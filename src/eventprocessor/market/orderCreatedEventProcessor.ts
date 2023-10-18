@@ -1,10 +1,10 @@
 import {EventProcessor} from "../eventProcessor";
 import {Store} from "@subsquid/typeorm-store";
 import {Market, Order, OrderSide, OrderStatus} from "../../model";
-import * as ss58 from '@subsquid/ss58'
 import {AggregatedOrdersHandler} from "./aggregatedOrdersHandler";
 import {DataHandlerContext, Block, Event} from "@subsquid/substrate-processor";
 import * as events from "../../types/events"
+import {encodeUserValue} from "../../utils/encodersUtils";
 
 export class OrderCreatedEventProcessor implements EventProcessor{
     getHandledEventName(): string {
@@ -17,7 +17,6 @@ export class OrderCreatedEventProcessor implements EventProcessor{
         const orderCreatedEvent = events.market.orderCreated.v1;
         if (orderCreatedEvent.is(event)) {
             const parsedEvent = orderCreatedEvent.decode(event)
-
             const market = await ctx.store.get(Market, parsedEvent.market.toString());
             const quantity = BigInt(parsedEvent.quantity);
             const order = new Order({
@@ -27,7 +26,7 @@ export class OrderCreatedEventProcessor implements EventProcessor{
                 side: parsedEvent.side.__kind === 'Long' ? OrderSide.LONG : OrderSide.SHORT,
                 quantity: quantity,
                 initialQuantity: quantity,
-                who: ss58.codec(42).encode((new TextEncoder).encode(parsedEvent.who)),
+                who: encodeUserValue(parsedEvent.who),
                 blockHeight: BigInt(block.header.height),
                 // @ts-ignore
                 timestamp: new Date(block.header.timestamp),

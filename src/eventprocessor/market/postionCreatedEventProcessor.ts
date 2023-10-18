@@ -2,9 +2,9 @@ import {EventProcessor} from "../eventProcessor";
 import {Store} from "@subsquid/typeorm-store";
 import {Market, Position, PositionStatus} from "../../model";
 import * as events from "../../types/events"
-import * as ss58 from '@subsquid/ss58'
 import {LiquidationPriceCalculator} from "./liquidationPriceCalculator";
 import {DataHandlerContext, Event, Block} from "@subsquid/substrate-processor";
+import {encodeUserValue} from "../../utils/encodersUtils";
 
 export class PositionCreatedEventProcessor implements EventProcessor{
     getHandledEventName(): string {
@@ -22,8 +22,8 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                     id: parsedEvent.positionId.toString(),
                     market: market,
                     quantity: BigInt(parsedEvent.quantity),
-                    long: ss58.codec(42).encode((new TextEncoder).encode(parsedEvent.long)),
-                    short: ss58.codec(42).encode((new TextEncoder).encode(parsedEvent.short)),
+                    long: encodeUserValue(parsedEvent.long),
+                    short: encodeUserValue(parsedEvent.short),
                     blockHeight: BigInt(block.header.height),
                     // @ts-ignore
                     timestamp: new Date(block.header.timestamp),

@@ -3,6 +3,7 @@ import {Store} from "@subsquid/typeorm-store";
 import {market} from "../../types/events";
 import {Market} from "../../model";
 import {DataHandlerContext, Block, Event} from "@subsquid/substrate-processor";
+import {encodeMarketTicker} from "../../utils/encodersUtils";
 
 export class MarketCreatedEventProcessor implements EventProcessor{
     getHandledEventName(): string {
@@ -14,11 +15,9 @@ export class MarketCreatedEventProcessor implements EventProcessor{
         const receivedEvent = market.marketCreated.v1;
         if(receivedEvent.is(event)) {
             const decodedEvent = receivedEvent.decode(event);
-            const buffer = Buffer.from(decodedEvent.ticker.slice(2), 'hex');
-            const readableTicker = buffer.toString('utf8');
             const createdMarket = new Market({
                 id: decodedEvent.marketId.toString(),
-                ticker: readableTicker,
+                ticker: encodeMarketTicker(decodedEvent.ticker),
                 tickSize: decodedEvent.tickSize,
                 lifetime: BigInt(decodedEvent.lifetime),
                 initialMargin: BigInt(decodedEvent.initialMargin),
