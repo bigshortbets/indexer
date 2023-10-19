@@ -1,11 +1,15 @@
 manifestVersion: subsquid.io/v0.1
-name: my-awesome-squid
-version: 1
-description: 'The very first squid from manifest  '
-build: 
+name: bigsb-testnet
+version: 2
+description: 'BigShortBets Testnet'
+build:
 deploy:
   addons:
-    postgres: 
+    postgres:
+  secrets:
+    - NODE_RPC_URL
+    - DATA_SOURCE_CHAIN
+    - DATA_SOURCE_ARCHIVE
   processor:
     cmd:
       - node
@@ -14,6 +18,11 @@ deploy:
     cmd:
       - npx
       - squid-graphql-server
+      - '--subscriptions'
+      - '--subscription-poll-interval'
+      - '1000'
+      - '--max-root-fields'
+      - '10'
       - '--dumb-cache'
       - in-memory
       - '--dumb-cache-ttl'
@@ -22,3 +31,15 @@ deploy:
       - '100'
       - '--dumb-cache-max-age'
       - '1000'
+scale:
+  dedicated: true
+  addons:
+     postgres:
+         storage: 100G
+         profile: medium
+  processor:
+     profile: medium
+  api:
+     profile: medium
+     # load-balance one replica
+     replicas: 1
