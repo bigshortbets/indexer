@@ -36,10 +36,10 @@ scale:
   addons:
      postgres:
          storage: 100G
-         profile: medium
+         profile: small
   processor:
-     profile: medium
+     profile: small
   api:
-     profile: medium
+     profile: small
      # load-balance one replica
      replicas: 1
