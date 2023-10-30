@@ -43,6 +43,7 @@ type Order @entity {
 type Position @entity {
     id: ID!
     market: Market!
+    openPrice: BigInt!
     price: BigInt!
     quantity: BigInt!
     quantityLeft: BigInt!
