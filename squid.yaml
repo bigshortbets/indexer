@@ -40,6 +40,6 @@ scale:
   processor:
      profile: small
   api:
-     profile: small
+     profile: medium
      # load-balance one replica
-     replicas: 1
+     replicas: 2
