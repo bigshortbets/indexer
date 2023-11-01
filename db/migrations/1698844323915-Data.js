@@ -8,7 +8,7 @@ module.exports = class Data1698844323915 {
             await db.query('BEGIN');
             await db.query('ALTER TABLE "position" ADD "entry_price" numeric;');
             await db.query('UPDATE "position" SET entry_price = price;');
-            await db.query('ALTER TABLE "position" ALTER COLUMN ventry_price SET NOT NULL;');
+            await db.query('ALTER TABLE "position" ALTER COLUMN entry_price SET NOT NULL;');
 
             await db.commitTransaction();
         } catch (error) {
