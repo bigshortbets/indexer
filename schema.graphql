@@ -31,6 +31,7 @@ type Order @entity {
     id: ID! @unique @index
     market: Market!
     price: BigInt!
+	entryPrice: BigInt!
     quantity: BigInt!
     side: OrderSide!
     who: String

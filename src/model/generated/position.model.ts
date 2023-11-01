@@ -17,6 +17,9 @@ export class Position {
     market!: Market
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    entryPrice!: bigint
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     price!: bigint
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})

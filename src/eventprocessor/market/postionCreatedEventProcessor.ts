@@ -29,7 +29,8 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                     timestamp: new Date(block.header.timestamp),
                     status: PositionStatus.OPEN,
                     quantityLeft: BigInt(parsedEvent.quantity),
-                    price: parsedEvent.price // temporary - set in the next event
+                    price: parsedEvent.price, // temporary - set in the next event
+                    entryPrice: parsedEvent.price,
                 })
                 const delta = position.quantityLeft
                 await LiquidationPriceCalculator.calculate(position, ctx.store, delta)
