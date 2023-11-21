@@ -29,7 +29,7 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                     timestamp: new Date(block.header.timestamp),
                     status: PositionStatus.OPEN,
                     quantityLeft: BigInt(parsedEvent.quantity),
-                    openPrice: parsedEvent.price,
+                    createPrice: parsedEvent.price,
                     price: parsedEvent.price // temporary - set in the next event
                 })
                 const delta = position.quantityLeft
