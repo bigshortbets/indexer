@@ -18,9 +18,9 @@ export class OrderReducedEventProcessor implements EventProcessor{
                 Order,
                 {where: {id : parsedEvent.orderId.toString()}, relations: {market: true}});
             if(persistedOrder !== undefined){
-                let quantityDelta = persistedOrder.quantity - BigInt(parsedEvent.quantity)
+                let quantityDelta = persistedOrder.quantity - parsedEvent.quantity
                 await AggregatedOrdersHandler.removeQuantityFromAggregatedOrders(ctx.store, persistedOrder, quantityDelta)
-                persistedOrder.quantity = BigInt(parsedEvent.quantity);
+                persistedOrder.quantity = parsedEvent.quantity;
                 await ctx.store.save(persistedOrder);
             } else {
                 console.warn("Order doesn't exist");

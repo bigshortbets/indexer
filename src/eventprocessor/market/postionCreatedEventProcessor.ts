@@ -2,7 +2,6 @@ import {EventProcessor} from "../eventProcessor";
 import {Store} from "@subsquid/typeorm-store";
 import {Market, Position, PositionStatus} from "../../model";
 import * as events from "../../types/events"
-import {LiquidationPriceCalculator} from "./liquidationPriceCalculator";
 import {DataHandlerContext, Event, Block} from "@subsquid/substrate-processor";
 import {encodeUserValue} from "../../utils/encodersUtils";
 
@@ -21,19 +20,17 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                 let position = new Position({
                     id: parsedEvent.positionId.toString(),
                     market: market,
-                    quantity: BigInt(parsedEvent.quantity),
+                    quantity: parsedEvent.quantity,
                     long: encodeUserValue(parsedEvent.long),
                     short: encodeUserValue(parsedEvent.short),
-                    blockHeight: BigInt(block.header.height),
+                    blockHeight: block.header.height,
                     // @ts-ignore
                     timestamp: new Date(block.header.timestamp),
                     status: PositionStatus.OPEN,
-                    quantityLeft: BigInt(parsedEvent.quantity),
+                    quantityLeft: parsedEvent.quantity,
                     createPrice: parsedEvent.price,
                     price: parsedEvent.price // temporary - set in the next event
                 })
-                const delta = position.quantityLeft
-                await LiquidationPriceCalculator.calculate(position, ctx.store, delta)
                 await ctx.store.save(position);
             } else {
                 console.warn('Market undefined')

@@ -19,11 +19,11 @@ export class MarketCreatedEventProcessor implements EventProcessor{
                 id: decodedEvent.marketId.toString(),
                 ticker: encodeMarketTicker(decodedEvent.ticker),
                 tickSize: decodedEvent.tickSize,
-                lifetime: BigInt(decodedEvent.lifetime),
-                initialMargin: BigInt(decodedEvent.initialMargin),
-                maintenanceMargin: BigInt(decodedEvent.maintenanceMargin),
-                contractUnit: BigInt(decodedEvent.contractUnit),
-                blockHeight: BigInt(block.header.height),
+                lifetime: decodedEvent.lifetime,
+                initialMargin: decodedEvent.initialMargin,
+                maintenanceMargin: decodedEvent.maintenanceMargin,
+                contractUnit: decodedEvent.contractUnit,
+                blockHeight: block.header.height,
                 // @ts-ignore
                 timestamp: new Date(block.header.timestamp),
                 dailyVolume: BigInt(0)
