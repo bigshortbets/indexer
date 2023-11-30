@@ -9,6 +9,7 @@ import {MarketRemovedEventProcessor} from "./market/marketRemovedEventProcessor"
 import {PositionClosedEventProcessor} from "./market/positionClosedEventProcessor";
 import {PositionsReducedEventProcessor} from "./market/positionsReducedEventProcessor";
 import {PositionMarkedToMarketEventProcessor} from "./market/positionMarkedToMarketEventProcessor";
+import { LatestOraclePriceProcessor } from "./market/latestOraclePriceProcessor";
 
 const processors: EventProcessor[] = [
     new MarketCreatedEventProcessor(),
@@ -20,7 +21,8 @@ const processors: EventProcessor[] = [
     new MarketRemovedEventProcessor(),
     new PositionClosedEventProcessor(),
     new PositionsReducedEventProcessor(),
-    new PositionMarkedToMarketEventProcessor()
+    new PositionMarkedToMarketEventProcessor(),
+    new LatestOraclePriceProcessor()
 ];
 
 export class EventProcessorProvider {

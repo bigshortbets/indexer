@@ -11,10 +11,13 @@
     "Market.PositionClosed",
     "Market.PositionMarkedToMarket",
     "Market.PositionReduced",
-    "Market.PositionCreated"
+    "Market.PositionCreated",
+    "Oracle.NewFeedData"
   ],
-  "calls": [
-  ],
-  "storage": [
-  ]
+  "calls": [],
+  "pallets": {
+    "Oracle": {
+      "storage": ["Values"]
+    }
+  }
 }
