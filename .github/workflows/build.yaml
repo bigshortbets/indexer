@@ -18,11 +18,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install typecript
+      - name: Install typescript
         run: npm install -g typescript
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
 
       - name: Build project
-        run: yarn build
+        run: npm run build

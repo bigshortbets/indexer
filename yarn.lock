@@ -1198,6 +1198,8 @@
 
 "@subsquid/archive-registry@^3.3.0":
   version "3.3.0"
+  resolved "https://registry.npmjs.org/@subsquid/archive-registry/-/archive-registry-3.3.0.tgz"
+  integrity sha512-moXnGNOSmKMHyuDvUiOHbpL7IePSo4XZOW9OnzESIND64eGxlKusIsCi8Nth1DgzbE/UTTFeNJvYKu0v7SOIqw==
   dependencies:
     "@subsquid/util-internal" "^1.0.0"
     commander "^10.0.0"
@@ -1362,6 +1364,8 @@
 
 "@subsquid/substrate-processor@^7.2.1":
   version "7.2.1"
+  resolved "https://registry.npmjs.org/@subsquid/substrate-processor/-/substrate-processor-7.2.1.tgz"
+  integrity sha512-9T/wQIaDt4HfkioFQ8nGMc+/N/mEskiYFhQdvT0FYwdKxr3qbyvsbT2qoZfDS/i9J/d2y/39YKrtCMBKOwf65w==
   dependencies:
     "@subsquid/http-client" "^1.3.1"
     "@subsquid/logger" "^1.3.1"
@@ -1433,6 +1437,8 @@
 
 "@subsquid/typeorm-store@^1.2.4":
   version "1.2.4"
+  resolved "https://registry.npmjs.org/@subsquid/typeorm-store/-/typeorm-store-1.2.4.tgz"
+  integrity sha512-fcHp9cHEe1T1tVjV125CLbNjs/NIQKFW8bdK/stDn9prxuuwfiAGKvpztU52dKVuyQCUFL+8YTtFt2y1i7ZEBA==
   dependencies:
     "@subsquid/typeorm-config" "^3.3.1"
     "@subsquid/util-internal" "^2.5.2"
