@@ -16,8 +16,8 @@ export class Position {
     @ManyToOne_(() => Market, {nullable: true})
     market!: Market
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false,})
-    createPrice!: bigint;
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    createPrice!: bigint
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     price!: bigint
