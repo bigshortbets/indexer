@@ -14,25 +14,6 @@ jobs:
         with:
           node-version: '20'
 
-  build:
-    name: Build the project
-    needs: install-node
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-
-      - name: Install typescript
-        run: npm install -g typescript
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
-
   check-blockchain-metadata:
     name: Check if metadata are in sync with blockchain
     needs: install-node
@@ -54,8 +35,8 @@ jobs:
       - name: Check if metadata requires update
         run: git diff --exit-code types.jsonl
 
-  check-typeorm-entities:
-    name: Check if TypeORM entities are generated from the schema file
+  build-project:
+    name: Build project and check associated generation steps
     needs: install-node
     runs-on: ubuntu-latest
 
@@ -76,24 +57,41 @@ jobs:
       - name: Check if sqd typegen needs to be executed locally
         run: git diff --exit-code src/types
 
-  check-data-access-classes:
-    name: Check if data access classes are generated for an substrate metadata
-    needs: install-node
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-
-      - name: Install sqd toolset
-        run: npm install -g @subsquid/cli@latest
-
-      - name: Install typeorm-codegen
-        run: npm install @subsquid/typeorm-codegen --save-dev
-
       - name: Execute codegen
         run: sqd codegen
 
       - name: Check if sqd codegen needs to be executed locally
         run: git diff --exit-code src/model/generated
+
+      - name: Start PostgreSQL database
+        run: sqd up
+
+      - name: Build project
+        run: sqd build
+
+      - name: Apply migrations
+        run: sqd migration:apply
+
+      - name: Serve graphql
+        uses: JarvusInnovations/background-action@v1
+        with:
+          run: sqd serve
+          wait-on: http://localhost:4350/graphql
+
+      # - name: Run blockchain local node
+      #   uses: addnab/docker-run-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      #     image: bigshortbets/node:amd64
+      #     options: -d
+      #     run: frontier-template-node --dev --rpc-external --rpc-cors=all --rpc-methods=Safe --pruning=archive
+
+      # - name: Run processor
+      #   uses: JarvusInnovations/background-action@v1
+      #   with:
+      #     run: sqd process
+      #     # Prometheus metrics
+      #     wait-on: |
+      #       tcp:localhost:3000
+      #     wait-for: 1m
