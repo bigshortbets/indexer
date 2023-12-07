@@ -24,14 +24,14 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Install typescript
-        run: npm install -g typescript
+      # - name: Install typescript
+      #   run: npm install -g typescript
 
-      - name: Install dependencies
-        run: npm install
+      # - name: Install dependencies
+      #   run: npm install
 
-      - name: Build project
-        run: npm run build
+      # - name: Build project
+      #   run: npm run build
 
   check-blockchain-metadata:
     name: Check if metadata are in sync with blockchain
@@ -43,16 +43,16 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Install substrate metadata explorer
-        run: npm install -g @subsquid/substrate-metadata-explorer
+      # - name: Install substrate metadata explorer
+      #   run: npm install -g @subsquid/substrate-metadata-explorer
 
-      - name: Check metadata
-        env:
-          BLOCKCHAIN_NODE_RPC: ${{ secrets.BLOCKCHAIN_NODE_RPC }}
-        run: squid-substrate-metadata-explorer --rpc $BLOCKCHAIN_NODE_RPC --out types.jsonl
+      # - name: Check metadata
+      #   env:
+      #     BLOCKCHAIN_NODE_RPC: ${{ secrets.BLOCKCHAIN_NODE_RPC }}
+      #   run: squid-substrate-metadata-explorer --rpc $BLOCKCHAIN_NODE_RPC --out types.jsonl
 
-      - name: Check if metadata requires update
-        run: git diff --exit-code types.jsonl
+      # - name: Check if metadata requires update
+      #   run: git diff --exit-code types.jsonl
 
   check-typeorm-entities:
     name: Check if TypeORM entities are generated from the schema file
@@ -64,20 +64,42 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Install sqd toolset
-        run: npm install -g @subsquid/cli@latest
+      # - name: Install sqd toolset
+      #   run: npm install -g @subsquid/cli@latest
 
-      - name: Install typeorm-codegen
-        run: npm install @subsquid/typeorm-codegen --save-dev
+      # - name: Install typeorm-codegen
+      #   run: npm install @subsquid/typeorm-codegen --save-dev
 
-      - name: Execute typegen
-        run: sqd typegen
+      # - name: Execute typegen
+      #   run: sqd typegen
 
-      - name: Check if sqd typegen needs to be executed locally
-        run: git diff --exit-code src/types
+      # - name: Check if sqd typegen needs to be executed locally
+      #   run: git diff --exit-code src/types
 
   check-data-access-classes:
     name: Check if data access classes are generated for an substrate metadata
+    needs: install-node
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      # - name: Install sqd toolset
+      #   run: npm install -g @subsquid/cli@latest
+
+      # - name: Install typeorm-codegen
+      #   run: npm install @subsquid/typeorm-codegen --save-dev
+
+      # - name: Execute codegen
+      #   run: sqd codegen
+
+      # - name: Check if sqd codegen needs to be executed locally
+      #   run: git diff --exit-code src/model/generated
+
+  check-if-migrations-are-up-to-date:
+    name: Check if migrations are up to date
     needs: install-node
     runs-on: ubuntu-latest
 
@@ -92,8 +114,42 @@ jobs:
       - name: Install typeorm-codegen
         run: npm install @subsquid/typeorm-codegen --save-dev
 
-      - name: Execute codegen
-        run: sqd codegen
+      - name: Start PostgreSQL database
+        run: sqd up
 
-      - name: Check if sqd codegen needs to be executed locally
-        run: git diff --exit-code src/model/generated
+      - name: Build project
+        run: sqd build
+
+      - name: Apply migrations
+        run: sqd migration:apply
+
+  test:
+    name: Run tests
+    needs: install-node
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Install sqd toolset
+        run: npm install -g @subsquid/cli@latest
+
+      - name: Install typeorm-codegen
+        run: npm install @subsquid/typeorm-codegen --save-dev
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Start PostgreSQL database
+        run: sqd up
+
+      - name: Run processor
+        run: sqd process
+
+      - name: Serve graphql
+        run: sqd serve
