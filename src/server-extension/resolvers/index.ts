@@ -1,3 +1,3 @@
-import { OraclePriceResolver } from "./oraclePriceResolver";
+import { UnrealisedProfitLoseNetResolver } from "./unrealisedProfitLoseNetResolver";
 
-export { OraclePriceResolver };
+export { UnrealisedProfitLoseNetResolver };
