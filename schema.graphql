@@ -18,11 +18,11 @@ type Market @entity {
     id: ID! @unique @index
     ticker: String!
     tickSize: BigInt!
-    lifetime: BigInt!
-    initialMargin: BigInt!
-    maintenanceMargin: BigInt!
-    contractUnit: BigInt!
-    blockHeight: BigInt!
+    lifetime: Int!
+    initialMargin: Int!
+    maintenanceMargin: Int!
+    contractUnit: Int!
+    blockHeight: Int!
     timestamp: DateTime!
     dailyVolume: BigInt!
 }
@@ -31,12 +31,12 @@ type Order @entity {
     id: ID! @unique @index
     market: Market!
     price: BigInt!
-    quantity: BigInt!
+    quantity: Int!
     side: OrderSide!
     who: String
-    blockHeight: BigInt!
+    blockHeight: Int!
     timestamp: DateTime!
-    initialQuantity: BigInt!
+    initialQuantity: Int!
     status: OrderStatus!
 }
 
@@ -45,11 +45,11 @@ type Position @entity {
     market: Market!
     createPrice: BigInt!
     price: BigInt!
-    quantity: BigInt!
-    quantityLeft: BigInt!
+    quantity: Int!
+    quantityLeft: Int!
     long: String!
     short: String!
-    blockHeight: BigInt!
+    blockHeight: Int!
     timestamp: DateTime!
     status: PositionStatus
 }
@@ -57,19 +57,7 @@ type Position @entity {
 type AggregatedOrdersByPrice @entity {
     id: ID!
     price: BigInt!
-    quantity: BigInt!
+    quantity: Int!
     market: Market!
     side: OrderSide!
 }
-
-type LiquidationPrice @entity {
-    id: ID!
-    user: String!
-    side: OrderSide!
-    cumulativeValue: BigInt!
-    cumulativeQuantity: BigInt!
-    liquidationPrice: BigInt!
-    market: Market!
-}
-
-

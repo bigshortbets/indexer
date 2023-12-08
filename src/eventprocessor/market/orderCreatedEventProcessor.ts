@@ -18,7 +18,7 @@ export class OrderCreatedEventProcessor implements EventProcessor{
         if (orderCreatedEvent.is(event)) {
             const parsedEvent = orderCreatedEvent.decode(event)
             const market = await ctx.store.get(Market, parsedEvent.market.toString());
-            const quantity = BigInt(parsedEvent.quantity);
+            const quantity = parsedEvent.quantity;
             const order = new Order({
                 id: parsedEvent.orderId.toString(),
                 market: market,
@@ -27,7 +27,7 @@ export class OrderCreatedEventProcessor implements EventProcessor{
                 quantity: quantity,
                 initialQuantity: quantity,
                 who: encodeUserValue(parsedEvent.who),
-                blockHeight: BigInt(block.header.height),
+                blockHeight: block.header.height,
                 // @ts-ignore
                 timestamp: new Date(block.header.timestamp),
                 status: OrderStatus.ACTIVE

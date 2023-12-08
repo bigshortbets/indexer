@@ -16,20 +16,20 @@ export class Market {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     tickSize!: bigint
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    lifetime!: bigint
+    @Column_("int4", {nullable: false})
+    lifetime!: number
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    initialMargin!: bigint
+    @Column_("int4", {nullable: false})
+    initialMargin!: number
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    maintenanceMargin!: bigint
+    @Column_("int4", {nullable: false})
+    maintenanceMargin!: number
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    contractUnit!: bigint
+    @Column_("int4", {nullable: false})
+    contractUnit!: number
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    blockHeight!: bigint
+    @Column_("int4", {nullable: false})
+    blockHeight!: number
 
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date

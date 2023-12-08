@@ -2,7 +2,6 @@ import {EventProcessor} from "../eventProcessor";
 import {Event, Block, DataHandlerContext} from "@subsquid/substrate-processor";
 import {Store} from "@subsquid/typeorm-store";
 import {Position} from "../../model";
-import {LiquidationPriceCalculator} from "./liquidationPriceCalculator";
 import * as events from "../../types/events"
 
 export class PositionsReducedEventProcessor implements EventProcessor{
@@ -23,9 +22,7 @@ export class PositionsReducedEventProcessor implements EventProcessor{
                     relations: {market: true}
                 })
             if(position) {
-                const delta = BigInt(parsedEvent.quantity) - position.quantityLeft
-                await LiquidationPriceCalculator.calculate(position, ctx.store, delta)
-                position.quantityLeft = BigInt(parsedEvent.quantity)
+                position.quantityLeft = parsedEvent.quantity
                 await ctx.store.save(position)
             } else {
                 console.warn('Position not found')

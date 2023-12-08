@@ -36,10 +36,10 @@ export class AggregatedOrdersHandler {
             }})
         if(aggregatedOrder) {
             aggregatedOrder.quantity -= order.quantity;
-            if(aggregatedOrder.quantity === BigInt(0)) {
+            if(aggregatedOrder.quantity === 0) {
                 await store.remove(AggregatedOrdersByPrice, aggregatedOrder.id)
             }
-            else if(aggregatedOrder.quantity < BigInt(0)) {
+            else if(aggregatedOrder.quantity < 0) {
                 console.error('Quantity of aggregated orders is negative')
             }
             else {
@@ -50,7 +50,7 @@ export class AggregatedOrdersHandler {
         }
 
     }
-    public static async removeQuantityFromAggregatedOrders(store: Store, order: Order, quantity: bigint) {
+    public static async removeQuantityFromAggregatedOrders(store: Store, order: Order, quantity: number) {
         const orderSide = order?.side
         let aggregatedOrder = await store.findOne(
             AggregatedOrdersByPrice,
@@ -61,7 +61,7 @@ export class AggregatedOrdersHandler {
             }})
         if(aggregatedOrder) {
             aggregatedOrder.quantity -= quantity;
-            if(aggregatedOrder.quantity <= BigInt(0)) {
+            if(aggregatedOrder.quantity <= 0) {
                 console.error('Quantity of aggregated orders are not positive')
             }
             await store.save(aggregatedOrder);
