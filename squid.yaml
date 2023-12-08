@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: bigsb-testnet
-version: 2
+version: 3
 description: 'BigShortBets Testnet'
 build:
 deploy:
@@ -42,4 +42,4 @@ scale:
   api:
      profile: medium
      # load-balance one replica
-     replicas: 2
+     replicas: 1
