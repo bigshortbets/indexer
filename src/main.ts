@@ -3,7 +3,6 @@ import {processor} from './processor'
 import {EventProcessorProvider} from "./eventprocessor/eventProcessorProvider";
 import {EntityManager} from "typeorm";
 import {DataHandlerContext} from "@subsquid/substrate-processor";
-import "reflect-metadata";
 
 const processorProvider = new EventProcessorProvider();
 let lastUpdateTime = -1;
