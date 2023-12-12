@@ -49,12 +49,17 @@ export class LatestOraclePriceProcessor implements EventProcessor {
             id: marketId.toString(),
           },
         });
-        if (market !== undefined && marketPrice !== undefined) {
-          market.oraclePrice = marketPrice.value;
-          await ctx.store.save(market);
-        } else {
+        if (market !== undefined) {
           console.error(`Market with market Id ${marketId} does not exist.`);
+          continue;
         }
+        if (marketPrice !== undefined) {
+          console.error(`Price for market with market Id ${marketId} is not available.`);
+          continue;
+        }
+        
+        market.oraclePrice = marketPrice.value;
+        await ctx.store.save(market);
       }
     }
   }
