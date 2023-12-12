@@ -16,8 +16,8 @@ export class Market {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     tickSize!: bigint
 
-    @Column_("int4", {nullable: false})
-    lifetime!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    lifetime!: bigint
 
     @Column_("int4", {nullable: false})
     initialMargin!: number
@@ -25,11 +25,11 @@ export class Market {
     @Column_("int4", {nullable: false})
     maintenanceMargin!: number
 
-    @Column_("int4", {nullable: false})
-    contractUnit!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    contractUnit!: bigint
 
-    @Column_("int4", {nullable: false})
-    blockHeight!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    blockHeight!: bigint
 
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date
@@ -37,6 +37,6 @@ export class Market {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     dailyVolume!: bigint
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-    oraclePrice!: bigint | undefined | null
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    oraclePrice!: bigint
 }

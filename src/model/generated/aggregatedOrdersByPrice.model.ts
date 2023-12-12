@@ -15,8 +15,8 @@ export class AggregatedOrdersByPrice {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     price!: bigint
 
-    @Column_("int4", {nullable: false})
-    quantity!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    quantity!: bigint
 
     @Index_()
     @ManyToOne_(() => Market, {nullable: true})

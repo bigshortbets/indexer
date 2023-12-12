@@ -20,8 +20,8 @@ export class Order {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     price!: bigint
 
-    @Column_("int4", {nullable: false})
-    quantity!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    quantity!: bigint
 
     @Column_("varchar", {length: 5, nullable: false})
     side!: OrderSide
@@ -29,14 +29,14 @@ export class Order {
     @Column_("text", {nullable: true})
     who!: string | undefined | null
 
-    @Column_("int4", {nullable: false})
-    blockHeight!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    blockHeight!: bigint
 
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date
 
-    @Column_("int4", {nullable: false})
-    initialQuantity!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    initialQuantity!: bigint
 
     @Column_("varchar", {length: 13, nullable: false})
     status!: OrderStatus
