@@ -1,6 +1,18 @@
 import {sts, Result, Option, Bytes, BitSequence} from './support'
 
-export const AccountId32 = sts.bytes()
+export type BoundedVec = Bytes
+
+export interface TimestampedValue {
+    value: bigint
+    timestamp: bigint
+}
+
+export const TimestampedValue: sts.Type<TimestampedValue> = sts.struct(() => {
+    return  {
+        value: sts.bigint(),
+        timestamp: sts.bigint(),
+    }
+})
 
 export const OrderSide: sts.Type<OrderSide> = sts.closedEnum(() => {
     return  {
@@ -22,3 +34,5 @@ export interface OrderSide_Short {
 export const Percent = sts.number()
 
 export const BoundedVec = sts.bytes()
+
+export const AccountId32 = sts.bytes()
