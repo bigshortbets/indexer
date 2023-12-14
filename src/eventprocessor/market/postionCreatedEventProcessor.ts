@@ -20,14 +20,14 @@ export class PositionCreatedEventProcessor implements EventProcessor{
                 let position = new Position({
                     id: parsedEvent.positionId.toString(),
                     market: market,
-                    quantity: parsedEvent.quantity,
+                    quantity: BigInt(parsedEvent.quantity),
                     long: encodeUserValue(parsedEvent.long),
                     short: encodeUserValue(parsedEvent.short),
-                    blockHeight: block.header.height,
+                    blockHeight: BigInt(block.header.height),
                     // @ts-ignore
                     timestamp: new Date(block.header.timestamp),
                     status: PositionStatus.OPEN,
-                    quantityLeft: parsedEvent.quantity,
+                    quantityLeft: BigInt(parsedEvent.quantity),
                     createPrice: parsedEvent.price,
                     price: parsedEvent.price // temporary - set in the next event
                 })

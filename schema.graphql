@@ -15,50 +15,50 @@ enum OrderSide {
 }
 
 type Market @entity {
-  id: ID! @unique @index
-  ticker: String!
-  tickSize: BigInt!
-  lifetime: Int!
-  initialMargin: Int!
-  maintenanceMargin: Int!
-  contractUnit: Int!
-  blockHeight: Int!
-  timestamp: DateTime!
-  dailyVolume: BigInt!
-  oraclePrice: BigInt
+    id: ID! @unique @index
+    ticker: String!
+    tickSize: BigInt!
+    lifetime: BigInt!
+    initialMargin: Int!
+    maintenanceMargin: Int!
+    contractUnit: BigInt!
+    blockHeight: BigInt!
+    timestamp: DateTime!
+    dailyVolume: BigInt!
+    oraclePrice: BigInt!
 }
 
 type Order @entity {
-  id: ID! @unique @index
-  market: Market!
-  price: BigInt!
-  quantity: Int!
-  side: OrderSide!
-  who: String
-  blockHeight: Int!
-  timestamp: DateTime!
-  initialQuantity: Int!
-  status: OrderStatus!
+    id: ID! @unique @index
+    market: Market!
+    price: BigInt!
+    quantity: BigInt!
+    side: OrderSide!
+    who: String
+    blockHeight: BigInt!
+    timestamp: DateTime!
+    initialQuantity: BigInt!
+    status: OrderStatus!
 }
 
 type Position @entity {
-  id: ID!
-  market: Market!
-  createPrice: BigInt!
-  price: BigInt!
-  quantity: Int!
-  quantityLeft: Int!
-  long: String!
-  short: String!
-  blockHeight: Int!
-  timestamp: DateTime!
-  status: PositionStatus
+    id: ID!
+    market: Market!
+    createPrice: BigInt!
+    price: BigInt!
+    quantity: BigInt!
+    quantityLeft: BigInt!
+    long: String!
+    short: String!
+    blockHeight: BigInt!
+    timestamp: DateTime!
+    status: PositionStatus
 }
 
 type AggregatedOrdersByPrice @entity {
-  id: ID!
-  price: BigInt!
-  quantity: Int!
-  market: Market!
-  side: OrderSide!
+    id: ID!
+    price: BigInt!
+    quantity: BigInt!
+    market: Market!
+    side: OrderSide!
 }

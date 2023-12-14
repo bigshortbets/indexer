@@ -22,7 +22,7 @@ export class PositionsReducedEventProcessor implements EventProcessor{
                     relations: {market: true}
                 })
             if(position) {
-                position.quantityLeft = parsedEvent.quantity
+                position.quantityLeft = BigInt(parsedEvent.quantity)
                 await ctx.store.save(position)
             } else {
                 console.warn('Position not found')

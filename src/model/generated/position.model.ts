@@ -22,11 +22,11 @@ export class Position {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     price!: bigint
 
-    @Column_("int4", {nullable: false})
-    quantity!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    quantity!: bigint
 
-    @Column_("int4", {nullable: false})
-    quantityLeft!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    quantityLeft!: bigint
 
     @Column_("text", {nullable: false})
     long!: string
@@ -34,8 +34,8 @@ export class Position {
     @Column_("text", {nullable: false})
     short!: string
 
-    @Column_("int4", {nullable: false})
-    blockHeight!: number
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    blockHeight!: bigint
 
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date

@@ -1,12 +1,12 @@
-import {EventProcessor} from "../eventProcessor";
-import {Store} from "@subsquid/typeorm-store";
-import {Market, Order, OrderSide, OrderStatus} from "../../model";
-import {AggregatedOrdersHandler} from "./aggregatedOrdersHandler";
-import {DataHandlerContext, Block, Event} from "@subsquid/substrate-processor";
+import { EventProcessor } from "../eventProcessor";
+import { Store } from "@subsquid/typeorm-store";
+import { Market, Order, OrderSide, OrderStatus } from "../../model";
+import { AggregatedOrdersHandler } from "./aggregatedOrdersHandler";
+import { DataHandlerContext, Block, Event } from "@subsquid/substrate-processor";
 import * as events from "../../types/events"
-import {encodeUserValue} from "../../utils/encodersUtils";
+import { encodeUserValue } from "../../utils/encodersUtils";
 
-export class OrderCreatedEventProcessor implements EventProcessor{
+export class OrderCreatedEventProcessor implements EventProcessor {
     getHandledEventName(): string {
         return "Market.OrderCreated";
     }
@@ -24,10 +24,10 @@ export class OrderCreatedEventProcessor implements EventProcessor{
                 market: market,
                 price: parsedEvent.price,
                 side: parsedEvent.side.__kind === 'Long' ? OrderSide.LONG : OrderSide.SHORT,
-                quantity: quantity,
-                initialQuantity: quantity,
+                quantity: BigInt(quantity),
+                initialQuantity: BigInt(quantity),
                 who: encodeUserValue(parsedEvent.who),
-                blockHeight: block.header.height,
+                blockHeight: BigInt(block.header.height),
                 // @ts-ignore
                 timestamp: new Date(block.header.timestamp),
                 status: OrderStatus.ACTIVE

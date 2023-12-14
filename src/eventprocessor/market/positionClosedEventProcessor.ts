@@ -21,7 +21,7 @@ export class PositionClosedEventProcessor implements EventProcessor{
                     relations: {market: true}
                 })
             if(position) {
-                position.quantityLeft = 0
+                position.quantityLeft = BigInt(0)
                 position.status = PositionStatus.CLOSED;
                 await ctx.store.save(position);
             } else {
