@@ -25,7 +25,7 @@ type Market @entity {
     blockHeight: BigInt!
     timestamp: DateTime!
     dailyVolume: BigInt!
-    oraclePrice: BigInt!
+    oraclePrice: BigInt
 }
 
 type Order @entity {
