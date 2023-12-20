@@ -22,7 +22,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     console.log("Lates oracle price event");
     const receivedEvent = oracle.newFeedData.v10;
@@ -41,7 +41,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
       for await (const marketId of this.blockData[this.blockNumber]) {
         const marketPrice = await storage.values.v10.get(
           block.header,
-          marketId
+          marketId,
         );
 
         let market = await ctx.store.findOne(Market, {
@@ -55,7 +55,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
         }
         if (marketPrice === undefined) {
           console.error(
-            `Price for market with market Id ${marketId} is not available.`
+            `Price for market with market Id ${marketId} is not available.`,
           );
           continue;
         }

@@ -1,3 +1,3 @@
 import { OraclePriceProvider } from "./oraclePriceProvider";
 
-export {OraclePriceProvider}
+export { OraclePriceProvider };
