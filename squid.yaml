@@ -1,7 +1,7 @@
 manifestVersion: subsquid.io/v0.1
 name: bigsb-testnet
-version: 2
-description: 'BigShortBets Testnet'
+version: 4
+description: "BigShortBets Testnet"
 build:
 deploy:
   addons:
@@ -18,28 +18,28 @@ deploy:
     cmd:
       - npx
       - squid-graphql-server
-      - '--subscriptions'
-      - '--subscription-poll-interval'
-      - '1000'
-      - '--max-root-fields'
-      - '10'
-      - '--dumb-cache'
+      - "--subscriptions"
+      - "--subscription-poll-interval"
+      - "1000"
+      - "--max-root-fields"
+      - "10"
+      - "--dumb-cache"
       - in-memory
-      - '--dumb-cache-ttl'
-      - '1000'
-      - '--dumb-cache-size'
-      - '100'
-      - '--dumb-cache-max-age'
-      - '1000'
+      - "--dumb-cache-ttl"
+      - "1000"
+      - "--dumb-cache-size"
+      - "100"
+      - "--dumb-cache-max-age"
+      - "1000"
 scale:
   dedicated: true
   addons:
-     postgres:
-         storage: 100G
-         profile: small
+    postgres:
+      storage: 100G
+      profile: small
   processor:
-     profile: small
+    profile: small
   api:
-     profile: medium
-     # load-balance one replica
-     replicas: 2
+    profile: medium
+    # load-balance one replica
+    replicas: 2
