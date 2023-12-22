@@ -8,4 +8,7 @@ export const processor = new SubstrateBatchProcessor()
   })
   .addEvent({ name: provider.getAllProcessesNames() })
   .addCall({ name: ["Timestamp.set"] })
-  .setFields({ event: {}, block: { timestamp: true } });
+  .setFields({ event: {}, block: { timestamp: true } })
+  .setBlockRange({
+    from: 1,
+  });
