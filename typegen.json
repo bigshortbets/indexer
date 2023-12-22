@@ -14,7 +14,7 @@
     "Market.PositionCreated",
     "Oracle.NewFeedData"
   ],
-  "calls": [],
+  "calls": ["Timestamp.set"],
   "pallets": {
     "Oracle": {
       "storage": ["Values"]

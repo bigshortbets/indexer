@@ -10,6 +10,7 @@ import { PositionClosedEventProcessor } from "./market/positionClosedEventProces
 import { PositionsReducedEventProcessor } from "./market/positionsReducedEventProcessor";
 import { PositionMarkedToMarketEventProcessor } from "./market/positionMarkedToMarketEventProcessor";
 import { LatestOraclePriceProcessor } from "./market/latestOraclePriceProcessor";
+import { BlockchainTimeProcessor } from "./market/blockchainTimeProcessor";
 
 const processors: EventProcessor[] = [
   new MarketCreatedEventProcessor(),
@@ -23,6 +24,7 @@ const processors: EventProcessor[] = [
   new PositionsReducedEventProcessor(),
   new PositionMarkedToMarketEventProcessor(),
   new LatestOraclePriceProcessor(),
+  new BlockchainTimeProcessor(),
 ];
 
 export class EventProcessorProvider {
