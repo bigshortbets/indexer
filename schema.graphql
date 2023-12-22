@@ -62,3 +62,8 @@ type AggregatedOrdersByPrice @entity {
   market: Market!
   side: OrderSide!
 }
+
+type BlockchainTimestamp @entity {
+  id: ID!
+  timestamp: BigInt!
+}

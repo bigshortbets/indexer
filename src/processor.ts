@@ -7,4 +7,5 @@ export const processor = new SubstrateBatchProcessor()
     chain: process.env.DATA_SOURCE_CHAIN as string,
   })
   .addEvent({ name: provider.getAllProcessesNames() })
+  .addCall({ name: ["Timestamp.set"] })
   .setFields({ event: {}, block: { timestamp: true } });
