@@ -3,7 +3,7 @@ import {
   Block,
   DataHandlerContext,
   Event,
-  Call
+  Call,
 } from "@subsquid/substrate-processor";
 
 export interface EventProcessor {

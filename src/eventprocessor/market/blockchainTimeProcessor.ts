@@ -15,7 +15,7 @@ export class BlockchainTimeProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    call: Call
+    call: Call,
   ) {
     const timestampSet = timestamp.set.v1;
     if (timestampSet.is(call)) {

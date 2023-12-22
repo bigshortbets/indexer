@@ -14,7 +14,7 @@ processor.run(
         let processor = processorProvider.getProcessorByName(event.name);
         await processor?.process(ctx, block, event);
       }
-      for( let call of block.calls) {
+      for (let call of block.calls) {
         let processor = processorProvider.getProcessorByName(call.name);
         await processor?.process(ctx, block, call);
       }
