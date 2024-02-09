@@ -161,3 +161,19 @@ export const positionClosed =  {
         })
     ),
 }
+
+export const orderExtended =  {
+    name: 'Market.OrderExtended',
+    /**
+     * Order has been extended
+     */
+    v13: new EventType(
+        'Market.OrderExtended',
+        sts.struct({
+            market: sts.bigint(),
+            orderId: sts.bigint(),
+            newOrderId: sts.bigint(),
+            quantity: sts.number(),
+        })
+    ),
+}
