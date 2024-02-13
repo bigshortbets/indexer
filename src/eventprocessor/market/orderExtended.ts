@@ -34,7 +34,7 @@ export class OrderExtendedEventProcessor implements EventProcessor {
           price: order.price,
           side: order.side,
           quantity: BigInt(parsedEvent.quantity),
-          initialQuantity: order.initialQuantity,
+          initialQuantity: BigInt(parsedEvent.quantity),
           who: order.who,
           blockHeight: BigInt(block.header.height),
           // @ts-ignore
