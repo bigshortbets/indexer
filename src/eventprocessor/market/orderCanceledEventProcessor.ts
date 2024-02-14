@@ -17,7 +17,7 @@ export class OrderCanceledEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Order canceled event");
     const orderCanceledEvent = market.orderCanceled.v1;
@@ -28,12 +28,21 @@ export class OrderCanceledEventProcessor implements EventProcessor {
         relations: { market: true },
       });
       if (order) {
-        await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(
-          ctx.store,
-          order,
-        );
-        order.status = OrderStatus.CANCELLED;
-        await ctx.store.save(order);
+        if (order.status === OrderStatus.AUTOMATICALLY_MODIFIED) {
+          await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(
+            ctx.store,
+            order
+          );
+          order.status = OrderStatus.AUTOMATICALLY_CANCELLED;
+          await ctx.store.save(order);
+        } else {
+          await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(
+            ctx.store,
+            order
+          );
+          order.status = OrderStatus.CANCELLED;
+          await ctx.store.save(order);
+        }
       } else {
         console.warn("No order found");
       }

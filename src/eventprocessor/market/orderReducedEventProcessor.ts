@@ -1,6 +1,6 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { Order } from "../../model";
+import { Order, OrderStatus } from "../../model";
 import { AggregatedOrdersHandler } from "./aggregatedOrdersHandler";
 import {
   DataHandlerContext,
@@ -8,6 +8,7 @@ import {
   Event,
 } from "@subsquid/substrate-processor";
 import * as events from "../../types/events";
+
 export class OrderReducedEventProcessor implements EventProcessor {
   getHandledEventName(): string {
     return "Market.OrderReduced";
@@ -16,7 +17,7 @@ export class OrderReducedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Order reduced event");
     const orderReducedEvent = events.market.orderReduced.v1;
@@ -32,9 +33,10 @@ export class OrderReducedEventProcessor implements EventProcessor {
         await AggregatedOrdersHandler.removeQuantityFromAggregatedOrders(
           ctx.store,
           persistedOrder,
-          quantityDelta,
+          quantityDelta
         );
         persistedOrder.quantity = BigInt(parsedEvent.quantity);
+        persistedOrder.status = OrderStatus.ACTIVE;
         await ctx.store.save(persistedOrder);
       } else {
         console.warn("Order doesn't exist");

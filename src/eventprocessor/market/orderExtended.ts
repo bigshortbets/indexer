@@ -42,6 +42,8 @@ export class OrderExtendedEventProcessor implements EventProcessor {
           status: OrderStatus.ACTIVE,
         });
         await ctx.store.save(firstOrder);
+        order.status = OrderStatus.AUTOMATICALLY_MODIFIED;
+        await ctx.store.save(order);
         await AggregatedOrdersHandler.addNewOrderToTheAggregatedOrders(
           ctx.store,
           order
