@@ -17,7 +17,7 @@ export class OrderExtendedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     console.log("Order extended event");
     const orderCreatedEvent = events.market.orderExtended.v13;
@@ -46,7 +46,7 @@ export class OrderExtendedEventProcessor implements EventProcessor {
         await ctx.store.save(existingOrder);
         await AggregatedOrdersHandler.addNewOrderToTheAggregatedOrders(
           ctx.store,
-          newOrder
+          newOrder,
         );
       } else {
         console.warn("Order was not found");
