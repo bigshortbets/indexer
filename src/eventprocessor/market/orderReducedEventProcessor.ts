@@ -36,7 +36,10 @@ export class OrderReducedEventProcessor implements EventProcessor {
           quantityDelta
         );
         persistedOrder.quantity = BigInt(parsedEvent.quantity);
-        persistedOrder.status = OrderStatus.ACTIVE;
+        if (persistedOrder.status === OrderStatus.AUTOMATICALLY_MODIFIED) {
+          persistedOrder.status = OrderStatus.ACTIVE;
+        }
+
         await ctx.store.save(persistedOrder);
       } else {
         console.warn("Order doesn't exist");

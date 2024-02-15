@@ -23,30 +23,30 @@ export class OrderExtendedEventProcessor implements EventProcessor {
     const orderCreatedEvent = events.market.orderExtended.v13;
     if (orderCreatedEvent.is(event)) {
       const parsedEvent = orderCreatedEvent.decode(event);
-      let order = await ctx.store.findOne(Order, {
+      let existingOrder = await ctx.store.findOne(Order, {
         where: { id: parsedEvent.orderId.toString() },
         relations: { market: true },
       });
-      if (order) {
-        const firstOrder = new Order({
+      if (existingOrder) {
+        const newOrder = new Order({
           id: parsedEvent.newOrderId.toString(),
-          market: order.market,
-          price: order.price,
-          side: order.side,
+          market: existingOrder.market,
+          price: existingOrder.price,
+          side: existingOrder.side,
           quantity: BigInt(parsedEvent.quantity),
           initialQuantity: BigInt(parsedEvent.quantity),
-          who: order.who,
+          who: existingOrder.who,
           blockHeight: BigInt(block.header.height),
           // @ts-ignore
           timestamp: new Date(block.header.timestamp),
           status: OrderStatus.ACTIVE,
         });
-        await ctx.store.save(firstOrder);
-        order.status = OrderStatus.AUTOMATICALLY_MODIFIED;
-        await ctx.store.save(order);
+        await ctx.store.save(newOrder);
+        existingOrder.status = OrderStatus.AUTOMATICALLY_MODIFIED;
+        await ctx.store.save(existingOrder);
         await AggregatedOrdersHandler.addNewOrderToTheAggregatedOrders(
           ctx.store,
-          order
+          newOrder
         );
       } else {
         console.warn("Order was not found");
