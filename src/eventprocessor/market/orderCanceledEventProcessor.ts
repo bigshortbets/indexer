@@ -32,7 +32,11 @@ export class OrderCanceledEventProcessor implements EventProcessor {
           ctx.store,
           order,
         );
-        order.status = OrderStatus.CANCELLED;
+        if (order.status === OrderStatus.AUTOMATICALLY_MODIFIED) {
+          order.status = OrderStatus.AUTOMATICALLY_CANCELLED;
+        } else {
+          order.status = OrderStatus.CANCELLED;
+        }
         await ctx.store.save(order);
       } else {
         console.warn("No order found");

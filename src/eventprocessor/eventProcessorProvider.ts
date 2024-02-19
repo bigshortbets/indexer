@@ -7,9 +7,10 @@ import { OrderFilledEventProcessor } from "./market/orderFilledEventProcessor";
 import { OrderReducedEventProcessor } from "./market/orderReducedEventProcessor";
 import { MarketRemovedEventProcessor } from "./market/marketRemovedEventProcessor";
 import { PositionClosedEventProcessor } from "./market/positionClosedEventProcessor";
-import { PositionsReducedEventProcessor } from "./market/positionsReducedEventProcessor";
+import { PositionReducedEventProcessor } from "./market/positionReducedEventProcessor";
 import { PositionMarkedToMarketEventProcessor } from "./market/positionMarkedToMarketEventProcessor";
 import { LatestOraclePriceProcessor } from "./market/latestOraclePriceProcessor";
+import { OrderExtendedEventProcessor } from "./market/orderExtended";
 
 const processors: EventProcessor[] = [
   new MarketCreatedEventProcessor(),
@@ -20,9 +21,10 @@ const processors: EventProcessor[] = [
   new OrderReducedEventProcessor(),
   new MarketRemovedEventProcessor(),
   new PositionClosedEventProcessor(),
-  new PositionsReducedEventProcessor(),
+  new PositionReducedEventProcessor(),
   new PositionMarkedToMarketEventProcessor(),
   new LatestOraclePriceProcessor(),
+  new OrderExtendedEventProcessor(),
 ];
 
 export class EventProcessorProvider {

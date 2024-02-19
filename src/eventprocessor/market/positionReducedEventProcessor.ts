@@ -8,7 +8,7 @@ import { Store } from "@subsquid/typeorm-store";
 import { Position } from "../../model";
 import * as events from "../../types/events";
 
-export class PositionsReducedEventProcessor implements EventProcessor {
+export class PositionReducedEventProcessor implements EventProcessor {
   getHandledEventName(): string {
     return "Market.PositionReduced";
   }
