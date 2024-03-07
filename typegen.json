@@ -13,7 +13,10 @@
     "Market.PositionMarkedToMarket",
     "Market.PositionReduced",
     "Market.PositionCreated",
-    "Oracle.NewFeedData"
+    "Oracle.NewFeedData",
+    "Bridge.WithdrawRequested",
+    "Bridge.WithdrawCanceled",
+    "Bridge.WithdrawApproved"
   ],
   "calls": [],
   "pallets": {
