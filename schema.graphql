@@ -14,6 +14,11 @@ enum OrderSide {
   SHORT
   LONG
 }
+enum WidthdrawStatus {
+  APPROVED
+  CANCELLED
+  REQUESTED
+}
 
 type Market @entity {
   id: ID! @unique @index
@@ -62,4 +67,11 @@ type AggregatedOrdersByPrice @entity {
   quantity: BigInt!
   market: Market!
   side: OrderSide!
+}
+
+type Withdraw @entity {
+  id: ID!
+  amount: BigInt!
+  user: String!
+  status: WidthdrawStatus!
 }
