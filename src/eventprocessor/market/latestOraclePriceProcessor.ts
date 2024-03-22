@@ -9,7 +9,7 @@ import {
 import { oracle } from "../../types/events";
 import { oracle as storage } from "../../types/storage";
 import { BigDecimal } from "@subsquid/big-decimal";
-import { PRICE_DECIMALS } from "../../utils";
+import { USDC_DECIMALS } from "../../utils";
 
 type PriceData = { [key: string]: Set<bigint> };
 
@@ -62,7 +62,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
           continue;
         }
 
-        market.oraclePrice = BigDecimal(marketPrice.value, PRICE_DECIMALS);
+        market.oraclePrice = BigDecimal(marketPrice.value, USDC_DECIMALS);
         await ctx.store.save(market);
       }
     }

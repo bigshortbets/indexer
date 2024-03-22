@@ -1,4 +1,4 @@
 import { OraclePriceProvider } from "./oraclePriceProvider";
-import { PRICE_DECIMALS } from "./constants";
+import { USDC_DECIMALS } from "./constants";
 
-export { OraclePriceProvider, PRICE_DECIMALS };
+export { OraclePriceProvider, USDC_DECIMALS };
