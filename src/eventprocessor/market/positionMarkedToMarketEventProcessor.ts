@@ -7,6 +7,8 @@ import {
   Block,
 } from "@subsquid/substrate-processor";
 import * as events from "../../types/events";
+import { BigDecimal } from "@subsquid/big-decimal";
+import { PRICE_DECIMALS } from "../../utils";
 
 export class PositionMarkedToMarketEventProcessor implements EventProcessor {
   getHandledEventName(): string {
@@ -16,7 +18,7 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Position marked to marked event");
     const positionMarkedToMarketEvent = events.market.positionMarkedToMarket.v1;
@@ -30,7 +32,7 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor {
         relations: { market: true },
       });
       if (position) {
-        position.price = parsedEvent.price;
+        position.price = BigDecimal(parsedEvent.price, PRICE_DECIMALS);
         await ctx.store.save(position);
       } else {
         console.warn("Position not found");

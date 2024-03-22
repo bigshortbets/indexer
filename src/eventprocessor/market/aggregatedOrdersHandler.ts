@@ -1,16 +1,17 @@
 import { AggregatedOrdersByPrice, Order } from "../../model";
 import { Store } from "@subsquid/typeorm-store";
+import { Equal } from "typeorm";
 
 export class AggregatedOrdersHandler {
   public static async addNewOrderToTheAggregatedOrders(
     store: Store,
-    order: Order,
+    order: Order
   ) {
     let orderSide = order.side;
     let aggregatedOrder = await store.findOne(AggregatedOrdersByPrice, {
       where: {
         market: { id: order.market.id },
-        price: order.price,
+        price: Equal(order.price),
         side: orderSide,
       },
     });
@@ -22,7 +23,7 @@ export class AggregatedOrdersHandler {
           quantity: order.quantity,
           market: order.market,
           side: orderSide,
-        }),
+        })
       );
     } else {
       aggregatedOrder.quantity += order.quantity;
@@ -32,13 +33,13 @@ export class AggregatedOrdersHandler {
 
   public static async removeOrderFromAggregatedOrders(
     store: Store,
-    order: Order,
+    order: Order
   ) {
     const orderSide = order?.side;
     let aggregatedOrder = await store.findOne(AggregatedOrdersByPrice, {
       where: {
         market: { id: order.market.id },
-        price: order.price,
+        price: Equal(order.price),
         side: orderSide,
       },
     });
@@ -58,13 +59,13 @@ export class AggregatedOrdersHandler {
   public static async removeQuantityFromAggregatedOrders(
     store: Store,
     order: Order,
-    quantity: bigint,
+    quantity: bigint
   ) {
     const orderSide = order?.side;
     let aggregatedOrder = await store.findOne(AggregatedOrdersByPrice, {
       where: {
         market: { id: order.market.id },
-        price: order.price,
+        price: Equal(order.price),
         side: orderSide,
       },
     });

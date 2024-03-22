@@ -27,17 +27,17 @@ type Market @entity {
   lifetime: BigInt!
   initialMargin: Int!
   maintenanceMargin: Int!
-  contractUnit: BigInt!
+  contractUnit: BigDecimal!
   blockHeight: BigInt!
   timestamp: DateTime!
   dailyVolume: BigInt!
-  oraclePrice: BigInt
+  oraclePrice: BigDecimal
 }
 
 type Order @entity {
   id: ID! @unique @index
   market: Market!
-  price: BigInt!
+  price: BigDecimal!
   quantity: BigInt!
   side: OrderSide!
   who: String
@@ -50,8 +50,8 @@ type Order @entity {
 type Position @entity {
   id: ID!
   market: Market!
-  createPrice: BigInt!
-  price: BigInt!
+  createPrice: BigDecimal!
+  price: BigDecimal!
   quantity: BigInt!
   quantityLeft: BigInt!
   long: String!
@@ -63,7 +63,7 @@ type Position @entity {
 
 type AggregatedOrdersByPrice @entity {
   id: ID!
-  price: BigInt!
+  price: BigDecimal!
   quantity: BigInt!
   market: Market!
   side: OrderSide!

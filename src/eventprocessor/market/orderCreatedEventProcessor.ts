@@ -9,6 +9,8 @@ import {
 } from "@subsquid/substrate-processor";
 import * as events from "../../types/events";
 import { encodeUserValue } from "../../utils/encodersUtils";
+import { BigDecimal } from "@subsquid/big-decimal";
+import { PRICE_DECIMALS } from "../../utils";
 
 export class OrderCreatedEventProcessor implements EventProcessor {
   getHandledEventName(): string {
@@ -18,7 +20,7 @@ export class OrderCreatedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Order created event");
     const orderCreatedEvent = events.market.orderCreated.v1;
@@ -29,7 +31,7 @@ export class OrderCreatedEventProcessor implements EventProcessor {
       const order = new Order({
         id: parsedEvent.orderId.toString(),
         market: market,
-        price: parsedEvent.price,
+        price: BigDecimal(parsedEvent.price, PRICE_DECIMALS),
         side:
           parsedEvent.side.__kind === "Long" ? OrderSide.LONG : OrderSide.SHORT,
         quantity: BigInt(quantity),
@@ -43,7 +45,7 @@ export class OrderCreatedEventProcessor implements EventProcessor {
       await ctx.store.save(order);
       await AggregatedOrdersHandler.addNewOrderToTheAggregatedOrders(
         ctx.store,
-        order,
+        order
       );
     } else {
       console.error("Unsupported spec");

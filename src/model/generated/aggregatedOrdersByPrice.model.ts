@@ -1,3 +1,4 @@
+import {BigDecimal} from "@subsquid/big-decimal"
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
 import * as marshal from "./marshal"
 import {Market} from "./market.model"
@@ -12,8 +13,8 @@ export class AggregatedOrdersByPrice {
     @PrimaryColumn_()
     id!: string
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    price!: bigint
+    @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
+    price!: BigDecimal
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     quantity!: bigint
