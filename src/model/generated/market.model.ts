@@ -14,8 +14,8 @@ export class Market {
     @Column_("text", {nullable: false})
     ticker!: string
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    tickSize!: bigint
+    @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
+    tickSize!: BigDecimal
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     lifetime!: bigint
