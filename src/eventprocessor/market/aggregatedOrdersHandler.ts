@@ -1,5 +1,6 @@
 import { AggregatedOrdersByPrice, Order } from "../../model";
 import { Store } from "@subsquid/typeorm-store";
+import { Equal } from "typeorm";
 
 export class AggregatedOrdersHandler {
   public static async addNewOrderToTheAggregatedOrders(
@@ -10,7 +11,7 @@ export class AggregatedOrdersHandler {
     let aggregatedOrder = await store.findOne(AggregatedOrdersByPrice, {
       where: {
         market: { id: order.market.id },
-        price: order.price,
+        price: Equal(order.price),
         side: orderSide,
       },
     });
@@ -38,7 +39,7 @@ export class AggregatedOrdersHandler {
     let aggregatedOrder = await store.findOne(AggregatedOrdersByPrice, {
       where: {
         market: { id: order.market.id },
-        price: order.price,
+        price: Equal(order.price),
         side: orderSide,
       },
     });
@@ -64,7 +65,7 @@ export class AggregatedOrdersHandler {
     let aggregatedOrder = await store.findOne(AggregatedOrdersByPrice, {
       where: {
         market: { id: order.market.id },
-        price: order.price,
+        price: Equal(order.price),
         side: orderSide,
       },
     });

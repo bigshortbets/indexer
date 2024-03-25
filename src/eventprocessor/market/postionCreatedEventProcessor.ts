@@ -8,6 +8,8 @@ import {
   Block,
 } from "@subsquid/substrate-processor";
 import { encodeUserValue } from "../../utils/encodersUtils";
+import { BigDecimal } from "@subsquid/big-decimal";
+import { USDC_DECIMALS } from "../../utils";
 
 export class PositionCreatedEventProcessor implements EventProcessor {
   getHandledEventName(): string {
@@ -36,8 +38,8 @@ export class PositionCreatedEventProcessor implements EventProcessor {
           timestamp: new Date(block.header.timestamp),
           status: PositionStatus.OPEN,
           quantityLeft: BigInt(parsedEvent.quantity),
-          createPrice: parsedEvent.price,
-          price: parsedEvent.price, // temporary - set in the next event
+          createPrice: BigDecimal(parsedEvent.price, USDC_DECIMALS),
+          price: BigDecimal(parsedEvent.price, USDC_DECIMALS), // temporary - set in the next event
         });
         await ctx.store.save(position);
       } else {

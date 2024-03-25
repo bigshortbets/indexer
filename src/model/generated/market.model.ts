@@ -1,3 +1,4 @@
+import {BigDecimal} from "@subsquid/big-decimal"
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
 import * as marshal from "./marshal"
 
@@ -25,8 +26,8 @@ export class Market {
     @Column_("int4", {nullable: false})
     maintenanceMargin!: number
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    contractUnit!: bigint
+    @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
+    contractUnit!: BigDecimal
 
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     blockHeight!: bigint
@@ -37,6 +38,6 @@ export class Market {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     dailyVolume!: bigint
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
-    oraclePrice!: bigint | undefined | null
+    @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: true})
+    oraclePrice!: BigDecimal | undefined | null
 }

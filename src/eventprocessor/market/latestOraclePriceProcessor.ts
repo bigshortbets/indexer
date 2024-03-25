@@ -8,6 +8,8 @@ import {
 } from "@subsquid/substrate-processor";
 import { oracle } from "../../types/events";
 import { oracle as storage } from "../../types/storage";
+import { BigDecimal } from "@subsquid/big-decimal";
+import { USDC_DECIMALS } from "../../utils";
 
 type PriceData = { [key: string]: Set<bigint> };
 
@@ -60,7 +62,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
           continue;
         }
 
-        market.oraclePrice = marketPrice.value;
+        market.oraclePrice = BigDecimal(marketPrice.value, USDC_DECIMALS);
         await ctx.store.save(market);
       }
     }

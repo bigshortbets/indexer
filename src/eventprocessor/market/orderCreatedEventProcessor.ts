@@ -9,6 +9,8 @@ import {
 } from "@subsquid/substrate-processor";
 import * as events from "../../types/events";
 import { encodeUserValue } from "../../utils/encodersUtils";
+import { BigDecimal } from "@subsquid/big-decimal";
+import { USDC_DECIMALS } from "../../utils";
 
 export class OrderCreatedEventProcessor implements EventProcessor {
   getHandledEventName(): string {
@@ -29,7 +31,7 @@ export class OrderCreatedEventProcessor implements EventProcessor {
       const order = new Order({
         id: parsedEvent.orderId.toString(),
         market: market,
-        price: parsedEvent.price,
+        price: BigDecimal(parsedEvent.price, USDC_DECIMALS),
         side:
           parsedEvent.side.__kind === "Long" ? OrderSide.LONG : OrderSide.SHORT,
         quantity: BigInt(quantity),

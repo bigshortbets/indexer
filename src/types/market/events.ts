@@ -1,5 +1,6 @@
 import {sts, Block, Bytes, Option, Result, EventType, RuntimeCtx} from '../support'
 import * as v1 from '../v1'
+import * as v20 from '../v20'
 
 export const marketCreated =  {
     name: 'Market.MarketCreated',
@@ -19,6 +20,24 @@ export const marketCreated =  {
             initialMargin: v1.Percent,
             maintenanceMargin: v1.Percent,
             contractUnit: sts.number(),
+        })
+    ),
+    /**
+     * New Market created
+     */
+    v20: new EventType(
+        'Market.MarketCreated',
+        sts.struct({
+            marketId: sts.bigint(),
+            ticker: sts.bytes(),
+            tickSize: sts.bigint(),
+            /**
+             * Block number that will expire given market
+             */
+            lifetime: sts.number(),
+            initialMargin: v20.Percent,
+            maintenanceMargin: v20.Percent,
+            contractUnit: v20.ContractUnit,
         })
     ),
 }
