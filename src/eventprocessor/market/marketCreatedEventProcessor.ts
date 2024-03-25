@@ -9,6 +9,7 @@ import {
 } from "@subsquid/substrate-processor";
 import { encodeMarketTicker } from "../../utils/encodersUtils";
 import { BigDecimal } from "@subsquid/big-decimal";
+import { USDC_DECIMALS } from "../../utils";
 
 export class MarketCreatedEventProcessor implements EventProcessor {
   getHandledEventName(): string {
@@ -18,7 +19,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Market created event");
     let receivedEventv1 = market.marketCreated.v1;
@@ -28,7 +29,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
       const createdMarket = new Market({
         id: decodedEvent.marketId.toString(),
         ticker: encodeMarketTicker(decodedEvent.ticker),
-        tickSize: BigInt(decodedEvent.tickSize),
+        tickSize: BigDecimal(decodedEvent.tickSize, USDC_DECIMALS),
         lifetime: BigInt(decodedEvent.lifetime),
         initialMargin: decodedEvent.initialMargin,
         maintenanceMargin: decodedEvent.maintenanceMargin,
@@ -44,13 +45,13 @@ export class MarketCreatedEventProcessor implements EventProcessor {
       const createdMarket = new Market({
         id: decodedEvent.marketId.toString(),
         ticker: encodeMarketTicker(decodedEvent.ticker),
-        tickSize: BigInt(decodedEvent.tickSize),
+        tickSize: BigDecimal(decodedEvent.tickSize, USDC_DECIMALS),
         lifetime: BigInt(decodedEvent.lifetime),
         initialMargin: decodedEvent.initialMargin,
         maintenanceMargin: decodedEvent.maintenanceMargin,
         contractUnit: BigDecimal(
           decodedEvent.contractUnit.contractUnit,
-          decodedEvent.contractUnit.decimals,
+          decodedEvent.contractUnit.decimals
         ),
         blockHeight: BigInt(block.header.height),
         // @ts-ignore

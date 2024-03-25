@@ -23,7 +23,7 @@ enum WidthdrawStatus {
 type Market @entity {
   id: ID! @unique @index
   ticker: String!
-  tickSize: BigInt!
+  tickSize: BigDecimal!
   lifetime: BigInt!
   initialMargin: Int!
   maintenanceMargin: Int!
