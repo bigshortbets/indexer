@@ -9,6 +9,7 @@ import {
 } from "@subsquid/substrate-processor";
 import { encodeMarketTicker } from "../../utils/encodersUtils";
 import { BigDecimal } from "@subsquid/big-decimal";
+import { USDC_DECIMALS } from "../../utils";
 
 export class MarketCreatedEventProcessor implements EventProcessor {
   getHandledEventName(): string {
@@ -28,7 +29,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
       const createdMarket = new Market({
         id: decodedEvent.marketId.toString(),
         ticker: encodeMarketTicker(decodedEvent.ticker),
-        tickSize: BigInt(decodedEvent.tickSize),
+        tickSize: BigDecimal(decodedEvent.tickSize, USDC_DECIMALS),
         lifetime: BigInt(decodedEvent.lifetime),
         initialMargin: decodedEvent.initialMargin,
         maintenanceMargin: decodedEvent.maintenanceMargin,
@@ -44,7 +45,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
       const createdMarket = new Market({
         id: decodedEvent.marketId.toString(),
         ticker: encodeMarketTicker(decodedEvent.ticker),
-        tickSize: BigInt(decodedEvent.tickSize),
+        tickSize: BigDecimal(decodedEvent.tickSize, USDC_DECIMALS),
         lifetime: BigInt(decodedEvent.lifetime),
         initialMargin: decodedEvent.initialMargin,
         maintenanceMargin: decodedEvent.maintenanceMargin,
