@@ -1,5 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
-import * as marshal from "./marshal"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigIntColumn as BigIntColumn_, StringColumn as StringColumn_} from "@subsquid/typeorm-store"
 import {WidthdrawStatus} from "./_widthdrawStatus"
 
 @Entity_()
@@ -11,10 +10,10 @@ export class Withdraw {
     @PrimaryColumn_()
     id!: string
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    @BigIntColumn_({nullable: false})
     amount!: bigint
 
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     user!: string
 
     @Column_("varchar", {length: 9, nullable: false})
