@@ -91,13 +91,16 @@ jobs:
       - name: Apply migrations
         run: sqd migration:apply
 
-      - name: Serve graphql
-        uses: JarvusInnovations/background-action@v1
-        with:
-          run: sqd serve
-          wait-on: http://localhost:4350/graphql
-          log-output: true
-          log-output-if: failure
+      - name: Serve
+        run: sqd serve
+
+      # - name: Serve graphql
+      #   uses: JarvusInnovations/background-action@v1
+      #   with:
+      #     run: sqd serve
+      #     wait-on: http://localhost:4350/graphql
+      #     log-output: true
+      #     log-output-if: failure
 
       # - name: Run blockchain local node
       #   uses: addnab/docker-run-action@v3
