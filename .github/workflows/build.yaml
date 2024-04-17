@@ -96,6 +96,7 @@ jobs:
         with:
           run: sqd serve
           wait-on: http://localhost:4350/graphql
+          log-output: true
 
       # - name: Run blockchain local node
       #   uses: addnab/docker-run-action@v3
