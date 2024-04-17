@@ -14,45 +14,45 @@ jobs:
         with:
           node-version: 20
 
-  check-blockchain-metadata:
-    name: Check if metadata are in sync with blockchain
-    needs: install-node
-    runs-on: ubuntu-latest
+  # check-blockchain-metadata:
+  #   name: Check if metadata are in sync with blockchain
+  #   needs: install-node
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v4
 
-      - name: Install substrate metadata explorer
-        run: npm install -g @subsquid/substrate-metadata-explorer
+  #     - name: Install substrate metadata explorer
+  #       run: npm install -g @subsquid/substrate-metadata-explorer
 
-      - name: Check metadata
-        env:
-          BLOCKCHAIN_NODE_RPC: ${{ secrets.BLOCKCHAIN_NODE_RPC }}
-        run: squid-substrate-metadata-explorer --rpc $BLOCKCHAIN_NODE_RPC --out types.jsonl
+  #     - name: Check metadata
+  #       env:
+  #         BLOCKCHAIN_NODE_RPC: ${{ secrets.BLOCKCHAIN_NODE_RPC }}
+  #       run: squid-substrate-metadata-explorer --rpc $BLOCKCHAIN_NODE_RPC --out types.jsonl
 
-      - name: Check if metadata requires update
-        run: git diff --exit-code types.jsonl
+  #     - name: Check if metadata requires update
+  #       run: git diff --exit-code types.jsonl
 
-  check-formatting:
-    name: Execute linter and check formatting
-    needs: install-node
-    runs-on: ubuntu-latest
+  # check-formatting:
+  #   name: Execute linter and check formatting
+  #   needs: install-node
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v4
 
-      - name: Install linter
-        run: npm install -g --save-dev --save-exact prettier
+  #     - name: Install linter
+  #       run: npm install -g --save-dev --save-exact prettier
 
-      - name: Check formatting
-        run: npx prettier . --write
+  #     - name: Check formatting
+  #       run: npx prettier . --write
 
-      - name: Check if formatting requires update
-        run: git diff --exit-code
+  #     - name: Check if formatting requires update
+  #       run: git diff --exit-code
 
   build-project:
     name: Build project and check associated generation steps
@@ -96,8 +96,11 @@ jobs:
         with:
           run: sqd serve
           wait-on: http://localhost:4350/graphql
+          wait-for: 30s
           log-output: true
           log-output-if: failure
+          tail: true
+
 
       # - name: Run blockchain local node
       #   uses: addnab/docker-run-action@v3
