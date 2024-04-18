@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: bigsb-testnet
-version: 4
+version: 8
 description: "BigShortBets Testnet"
 build:
 deploy:
@@ -15,22 +15,9 @@ deploy:
       - node
       - lib/main
   api:
-    cmd:
-      - npx
-      - squid-graphql-server
-      - "--subscriptions"
-      - "--subscription-poll-interval"
-      - "1000"
-      - "--max-root-fields"
-      - "10"
-      - "--dumb-cache"
-      - in-memory
-      - "--dumb-cache-ttl"
-      - "1000"
-      - "--dumb-cache-size"
-      - "100"
-      - "--dumb-cache-max-age"
-      - "1000"
+    env:
+      SQD_DEBUG: '*'
+    cmd: [ "npx", "squid-graphql-server", "--subscriptions", "--max-root-fields", "10", "--sql-statement-timeout", "1000", "--subscription-poll-interval", "1000", "--dumb-cache", "in-memory", "--dumb-cache-ttl", "1000", "--dumb-cache-size", "100", "--dumb-cache-max-age", "1000" ]
 scale:
   dedicated: true
   addons:

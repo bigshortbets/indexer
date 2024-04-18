@@ -21,7 +21,7 @@ processor.run(
       if (now - lastUpdateTime >= 1000 * 15) {
         // do envów
         lastUpdateTime = now;
-        await update24Volume(ctx.store);
+        // await update24Volume(ctx.store);
       }
     }
   },
