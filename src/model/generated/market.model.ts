@@ -1,6 +1,5 @@
 import {BigDecimal} from "@subsquid/big-decimal"
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
-import * as marshal from "./marshal"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, BigDecimalColumn as BigDecimalColumn_, BigIntColumn as BigIntColumn_, IntColumn as IntColumn_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
 
 @Entity_()
 export class Market {
@@ -11,33 +10,33 @@ export class Market {
     @PrimaryColumn_()
     id!: string
 
-    @Column_("text", {nullable: false})
+    @StringColumn_({nullable: false})
     ticker!: string
 
-    @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
+    @BigDecimalColumn_({nullable: false})
     tickSize!: BigDecimal
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    @BigIntColumn_({nullable: false})
     lifetime!: bigint
 
-    @Column_("int4", {nullable: false})
+    @IntColumn_({nullable: false})
     initialMargin!: number
 
-    @Column_("int4", {nullable: false})
+    @IntColumn_({nullable: false})
     maintenanceMargin!: number
 
-    @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
+    @BigDecimalColumn_({nullable: false})
     contractUnit!: BigDecimal
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    @BigIntColumn_({nullable: false})
     blockHeight!: bigint
 
-    @Column_("timestamp with time zone", {nullable: false})
+    @DateTimeColumn_({nullable: false})
     timestamp!: Date
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    @BigIntColumn_({nullable: false})
     dailyVolume!: bigint
 
-    @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: true})
+    @BigDecimalColumn_({nullable: true})
     oraclePrice!: BigDecimal | undefined | null
 }
