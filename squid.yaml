@@ -13,19 +13,12 @@ deploy:
   processor:
     cmd: ["sqd", "process:prod"]
   api:
-    env:
-      SQD_DEBUG: "*"
     cmd:
       [
         "npx",
         "squid-graphql-server",
-        "--subscriptions",
-        "--subscription-poll-interval",
-        "1000",
         "--max-root-fields",
         "10",
-        "--sql-statement-timeout",
-        "1000",
         "--dumb-cache",
         "in-memory",
         "--dumb-cache-ttl",
@@ -36,12 +29,14 @@ deploy:
         "1000",
       ]
 scale:
+  dedicated: true
   addons:
     postgres:
       storage: 10G
       profile: small
   processor:
-    profile: small
+    profile: medium
   api:
     profile: medium
+    # load-balance
     replicas: 2
