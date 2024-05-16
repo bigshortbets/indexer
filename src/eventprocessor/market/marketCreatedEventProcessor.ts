@@ -19,7 +19,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     console.log("Market created event");
     let receivedEventv1 = market.marketCreated.v1;
@@ -52,7 +52,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
         maintenanceMargin: decodedEvent.maintenanceMargin,
         contractUnit: BigDecimal(
           decodedEvent.contractUnit.contractUnit,
-          decodedEvent.contractUnit.decimals
+          decodedEvent.contractUnit.decimals,
         ),
         blockHeight: BigInt(block.header.height),
         // @ts-ignore
