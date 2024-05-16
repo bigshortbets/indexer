@@ -1,5 +1,6 @@
 import {BigDecimal} from "@subsquid/big-decimal"
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, BigDecimalColumn as BigDecimalColumn_, BigIntColumn as BigIntColumn_, IntColumn as IntColumn_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
+import {MarketStatus} from "./_marketStatus"
 
 @Entity_()
 export class Market {
@@ -39,4 +40,7 @@ export class Market {
 
     @BigDecimalColumn_({nullable: true})
     oraclePrice!: BigDecimal | undefined | null
+
+    @Column_("varchar", {length: 5, nullable: false})
+    status!: MarketStatus
 }

@@ -1,7 +1,7 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
 import { market } from "../../types/events";
-import { Market } from "../../model";
+import { Market, MarketStatus } from "../../model";
 import {
   DataHandlerContext,
   Block,
@@ -19,7 +19,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Market created event");
     let receivedEventv1 = market.marketCreated.v1;
@@ -38,6 +38,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
         // @ts-ignore
         timestamp: new Date(block.header.timestamp),
         dailyVolume: BigInt(0),
+        status: MarketStatus.OPEN,
       });
       await ctx.store.save(createdMarket);
     } else if (receivedEventv20.is(event)) {
@@ -51,12 +52,13 @@ export class MarketCreatedEventProcessor implements EventProcessor {
         maintenanceMargin: decodedEvent.maintenanceMargin,
         contractUnit: BigDecimal(
           decodedEvent.contractUnit.contractUnit,
-          decodedEvent.contractUnit.decimals,
+          decodedEvent.contractUnit.decimals
         ),
         blockHeight: BigInt(block.header.height),
         // @ts-ignore
         timestamp: new Date(block.header.timestamp),
         dailyVolume: BigInt(0),
+        status: MarketStatus.OPEN,
       });
       await ctx.store.save(createdMarket);
     } else {
