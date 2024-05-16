@@ -26,7 +26,7 @@ processor.run(
         // await update24Volume(ctx.store);
       }
     }
-  }
+  },
 );
 
 async function update24Volume(store: Store) {
