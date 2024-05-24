@@ -3,6 +3,7 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, M
 import {Market} from "./market.model"
 import {OrderSide} from "./_orderSide"
 import {OrderStatus} from "./_orderStatus"
+import {OrderType} from "./_orderType"
 
 @Entity_()
 export class Order {
@@ -40,4 +41,7 @@ export class Order {
 
     @Column_("varchar", {length: 23, nullable: false})
     status!: OrderStatus
+
+    @Column_("varchar", {length: 7, nullable: false})
+    type!: OrderType
 }

@@ -13,8 +13,10 @@ processor.run(
     for (let block of ctx.blocks) {
       await CheckIfMarketClosed.closeMarket(ctx, block);
       for (let event of block.events) {
-        let processor = processorProvider.getProcessorByName(event.name);
-        await processor?.process(ctx, block, event);
+        for (let call of block.calls) {
+          let processor = processorProvider.getProcessorByName(event.name);
+          await processor?.process(ctx, block, event, call);
+        }
       }
     }
 
@@ -26,7 +28,7 @@ processor.run(
         // await update24Volume(ctx.store);
       }
     }
-  },
+  }
 );
 
 async function update24Volume(store: Store) {
