@@ -11,7 +11,7 @@ export interface EventProcessor {
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
     event: Event<any>,
-    call?: Call<any>
+    call?: Call<any>,
   ): Promise<void>;
   getHandledEventName(): string;
 }

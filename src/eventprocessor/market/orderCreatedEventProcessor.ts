@@ -24,7 +24,7 @@ export class OrderCreatedEventProcessor implements EventProcessor {
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
     event: Event,
-    call: Call
+    call: Call,
   ) {
     const orderCreatedEvent = events.market.orderCreated.v1;
 
@@ -74,7 +74,7 @@ export class OrderCreatedEventProcessor implements EventProcessor {
       await ctx.store.save(order);
       await AggregatedOrdersHandler.addNewOrderToTheAggregatedOrders(
         ctx.store,
-        order
+        order,
       );
     } else {
       console.error("Unsupported spec");
