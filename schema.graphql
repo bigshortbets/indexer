@@ -19,6 +19,10 @@ enum WidthdrawStatus {
   CANCELLED
   REQUESTED
 }
+enum MarketStatus {
+  OPEN
+  CLOSE
+}
 
 type Market @entity {
   id: ID! @unique @index
@@ -32,6 +36,7 @@ type Market @entity {
   timestamp: DateTime!
   dailyVolume: BigInt!
   oraclePrice: BigDecimal
+  status: MarketStatus!
 }
 
 type Order @entity {

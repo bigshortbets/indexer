@@ -1,4 +1,5 @@
 export * from "./market.model"
+export * from "./_marketStatus"
 export * from "./order.model"
 export * from "./_orderSide"
 export * from "./_orderStatus"

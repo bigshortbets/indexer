@@ -3,6 +3,7 @@ import { processor } from "./processor";
 import { EventProcessorProvider } from "./eventprocessor/eventProcessorProvider";
 import { EntityManager } from "typeorm";
 import { DataHandlerContext } from "@subsquid/substrate-processor";
+import { CheckIfMarketClosed } from "./eventprocessor/market/checkIfMarketClosed";
 
 const processorProvider = new EventProcessorProvider();
 let lastUpdateTime = -1;
@@ -10,6 +11,7 @@ processor.run(
   new TypeormDatabase(),
   async (ctx: DataHandlerContext<Store, {}>) => {
     for (let block of ctx.blocks) {
+      await CheckIfMarketClosed.closeMarket(ctx, block);
       for (let event of block.events) {
         let processor = processorProvider.getProcessorByName(event.name);
         await processor?.process(ctx, block, event);
