@@ -23,6 +23,10 @@ enum MarketStatus {
   OPEN
   CLOSE
 }
+enum OrderType {
+  OPENING
+  CLOSING
+}
 
 type Market @entity {
   id: ID! @unique @index
@@ -50,6 +54,7 @@ type Order @entity {
   timestamp: DateTime!
   initialQuantity: BigInt!
   status: OrderStatus!
+  type: OrderType!
 }
 
 type Position @entity {

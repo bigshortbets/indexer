@@ -4,6 +4,7 @@ import { EventProcessorProvider } from "./eventprocessor/eventProcessorProvider"
 import { EntityManager } from "typeorm";
 import { DataHandlerContext } from "@subsquid/substrate-processor";
 import { CheckIfMarketClosed } from "./eventprocessor/market/checkIfMarketClosed";
+import { searchInArray } from "./utils";
 
 const processorProvider = new EventProcessorProvider();
 let lastUpdateTime = -1;
@@ -14,7 +15,12 @@ processor.run(
       await CheckIfMarketClosed.closeMarket(ctx, block);
       for (let event of block.events) {
         let processor = processorProvider.getProcessorByName(event.name);
-        await processor?.process(ctx, block, event);
+        await processor?.process(
+          ctx,
+          block,
+          event,
+          searchInArray(block.calls, "extrinsicIndex", event.extrinsicIndex),
+        );
       }
     }
 
