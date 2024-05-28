@@ -85,3 +85,18 @@ type Withdraw @entity {
   user: String!
   status: WidthdrawStatus!
 }
+
+type ReserveRepatriated @entity {
+  id: ID!
+  amount: BigDecimal!
+  user: String! @index
+  market: Market!
+  timestamp: DateTime!
+}
+
+type UserBalance @entity {
+  id: ID!
+  user: String! @index
+  balanceChange: Int!
+  market: Market!
+}

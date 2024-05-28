@@ -14,6 +14,7 @@ import { OrderExtendedEventProcessor } from "./market/orderExtended";
 import { WithdrawRequestedEventProcessor } from "./bridge/withdrawRequestedEventProcessor";
 import { WithdrawCanceledEventProcessor } from "./bridge/withdrawCanceledEventProcess";
 import { WithdrawApprovedEventProcessor } from "./bridge/withdrawApprovedEventProcessor";
+import { ReserveRepatriatedEventProcessor } from "./balances/reserveRepatriatedEventProcessor";
 
 const processors: EventProcessor[] = [
   new MarketCreatedEventProcessor(),
@@ -31,6 +32,7 @@ const processors: EventProcessor[] = [
   new WithdrawCanceledEventProcessor(),
   new WithdrawRequestedEventProcessor(),
   new WithdrawApprovedEventProcessor(),
+  new ReserveRepatriatedEventProcessor(),
 ];
 
 export class EventProcessorProvider {

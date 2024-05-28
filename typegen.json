@@ -16,7 +16,8 @@
     "Oracle.NewFeedData",
     "Bridge.WithdrawRequested",
     "Bridge.WithdrawCanceled",
-    "Bridge.WithdrawApproved"
+    "Bridge.WithdrawApproved",
+    "Balances.ReserveRepatriated"
   ],
   "calls": [],
   "pallets": {
