@@ -26,7 +26,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
     event: Event,
-    call: Call
+    call: Call,
   ) {
     console.log("Reserve repatriated event");
     const reserveRepatriatedEvent = events.balances.reserveRepatriated.v1;
