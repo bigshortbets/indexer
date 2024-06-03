@@ -86,7 +86,7 @@ type Withdraw @entity {
   status: WidthdrawStatus!
 }
 
-type ReserveRepatriated @entity {
+type MarketSettlements @entity {
   id: ID!
   amount: BigDecimal!
   user: String! @index
