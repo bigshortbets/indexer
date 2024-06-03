@@ -1,12 +1,6 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import {
-  Withdraw,
-  WidthdrawStatus,
-  ReserveRepatriated,
-  UserBalance,
-  Market,
-} from "../../model";
+import { MarketSettlements, UserBalance, Market } from "../../model";
 import {
   DataHandlerContext,
   Block,
@@ -14,7 +8,6 @@ import {
   Call,
 } from "@subsquid/substrate-processor";
 import * as events from "../../types/events";
-import { timeStamp } from "console";
 import { BigDecimal } from "@subsquid/big-decimal";
 
 export class ReserveRepatriatedEventProcessor implements EventProcessor {
@@ -34,7 +27,8 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       const parsedEvent = reserveRepatriatedEvent.decode(event);
       const marketId = call.args.market;
       let market = await ctx.store.get(Market, marketId);
-      let reserveRepatriatedFrom = new ReserveRepatriated({
+      let reserveRepatriatedFrom = new MarketSettlements({
+        id: `${block.header.id}.${event.id}.0`,
         amount: BigDecimal(parsedEvent.amount).mul(-1),
         user: parsedEvent.from,
         market: market,
@@ -42,7 +36,8 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         timestamp: new Date(block.header.timestamp),
       });
       await ctx.store.save(reserveRepatriatedFrom);
-      let reserveRepatriatedTo = new ReserveRepatriated({
+      let reserveRepatriatedTo = new MarketSettlements({
+        id: `${block.header.id}.${event.id}.1`,
         amount: BigDecimal(parsedEvent.amount),
         user: parsedEvent.to,
         market: market,
@@ -60,6 +55,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         await ctx.store.save(userFrom);
       } else {
         const newUser = new UserBalance({
+          id: `${block.header.id}.${event.id}.0`,
           user: parsedEvent.from,
           balanceChange: this.convertWeiToNumber(parsedEvent.amount) * -1,
         });
@@ -75,6 +71,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         await ctx.store.save(userTo);
       } else {
         const newUser = new UserBalance({
+          id: `${block.header.id}.${event.id}.1`,
           user: parsedEvent.to,
           balanceChange: this.convertWeiToNumber(parsedEvent.amount),
         });
