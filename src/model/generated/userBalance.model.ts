@@ -1,4 +1,5 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, IntColumn as IntColumn_, ManyToOne as ManyToOne_} from "@subsquid/typeorm-store"
+import {BigDecimal} from "@subsquid/big-decimal"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, BigDecimalColumn as BigDecimalColumn_, ManyToOne as ManyToOne_} from "@subsquid/typeorm-store"
 import {Market} from "./market.model"
 
 @Entity_()
@@ -14,8 +15,8 @@ export class UserBalance {
     @StringColumn_({nullable: false})
     user!: string
 
-    @IntColumn_({nullable: false})
-    balanceChange!: number
+    @BigDecimalColumn_({nullable: false})
+    balanceChange!: BigDecimal
 
     @Index_()
     @ManyToOne_(() => Market, {nullable: true})
