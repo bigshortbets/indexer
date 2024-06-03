@@ -1,6 +1,6 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { Order, OrderStatus, OrderType } from "../../model";
+import { Order, OrderStatus } from "../../model";
 import { AggregatedOrdersHandler } from "./aggregatedOrdersHandler";
 import {
   DataHandlerContext,
@@ -40,7 +40,7 @@ export class OrderExtendedEventProcessor implements EventProcessor {
           // @ts-ignore
           timestamp: new Date(block.header.timestamp),
           status: OrderStatus.ACTIVE,
-          type: OrderType.CLOSING,
+          type: existingOrder.type,
         });
         await ctx.store.save(newOrder);
         existingOrder.status = OrderStatus.AUTOMATICALLY_MODIFIED;
