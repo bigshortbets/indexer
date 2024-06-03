@@ -1,5 +1,5 @@
-module.exports = class Data1717403923391 {
-    name = 'Data1717403923391'
+module.exports = class Data1717406182629 {
+    name = 'Data1717406182629'
 
     async up(db) {
         await db.query(`CREATE TABLE "market" ("id" character varying NOT NULL, "ticker" text NOT NULL, "tick_size" numeric NOT NULL, "lifetime" numeric NOT NULL, "initial_margin" integer NOT NULL, "maintenance_margin" integer NOT NULL, "contract_unit" numeric NOT NULL, "block_height" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "daily_volume" numeric NOT NULL, "oracle_price" numeric, "status" character varying(5) NOT NULL, CONSTRAINT "PK_1e9a2963edfd331d92018e3abac" PRIMARY KEY ("id"))`)
@@ -10,7 +10,7 @@ module.exports = class Data1717403923391 {
         await db.query(`CREATE TABLE "aggregated_orders_by_price" ("id" character varying NOT NULL, "price" numeric NOT NULL, "quantity" numeric NOT NULL, "side" character varying(5) NOT NULL, "market_id" character varying, CONSTRAINT "PK_43d8c277d4b42f0ecd9e93d1d76" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_6a3c7cf051dee6be40f560f2f0" ON "aggregated_orders_by_price" ("market_id") `)
         await db.query(`CREATE TABLE "withdraw" ("id" character varying NOT NULL, "amount" numeric NOT NULL, "user" text NOT NULL, "status" character varying(9) NOT NULL, CONSTRAINT "PK_5c172f81689173f75bf5906ef22" PRIMARY KEY ("id"))`)
-        await db.query(`CREATE TABLE "market_settlements" ("id" character varying NOT NULL, "amount" numeric NOT NULL, "user" text NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "market_id" character varying, CONSTRAINT "PK_e29485c52f72700921fc2eb736f" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "market_settlements" ("id" character varying NOT NULL, "amount" numeric NOT NULL, "user" text NOT NULL, "type" character varying(8) NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "market_id" character varying, CONSTRAINT "PK_e29485c52f72700921fc2eb736f" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_b5f2240a59c8d1b72ec029d3d1" ON "market_settlements" ("user") `)
         await db.query(`CREATE INDEX "IDX_7576b8515e52f177ca4797d594" ON "market_settlements" ("market_id") `)
         await db.query(`CREATE TABLE "user_balance" ("id" character varying NOT NULL, "user" text NOT NULL, "balance_change" integer NOT NULL, "market_id" character varying, CONSTRAINT "PK_f3edf5a1907e7b430421b9c2ddd" PRIMARY KEY ("id"))`)
