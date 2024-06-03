@@ -25,7 +25,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
     event: Event,
-    call: Call,
+    call: Call
   ) {
     console.log("Reserve repatriated event");
     const reserveRepatriatedEvent = events.balances.reserveRepatriated.v1;
@@ -59,7 +59,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       });
       if (userFrom) {
         userFrom.balanceChange = userFrom.balanceChange.sub(
-          BigDecimal(parsedEvent.amount, USDC_DECIMALS),
+          BigDecimal(parsedEvent.amount, USDC_DECIMALS)
         );
         await ctx.store.save(userFrom);
       } else {
@@ -67,7 +67,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
           id: `${block.header.id}.${event.id}.0`,
           user: parsedEvent.from,
           balanceChange: BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(
-            -1,
+            -1
           ),
         });
         await ctx.store.save(newUser);
@@ -78,7 +78,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       });
       if (userTo) {
         userTo.balanceChange = userTo.balanceChange.add(
-          BigDecimal(parsedEvent.amount, USDC_DECIMALS),
+          BigDecimal(parsedEvent.amount, USDC_DECIMALS)
         );
         await ctx.store.save(userTo);
       } else {
@@ -92,13 +92,5 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     } else {
       console.error("Unsupported spec");
     }
-  }
-
-  convertWeiToNumber(weiValue: bigint): number {
-    const weiToEtherConversionFactor: bigint = 1000000000000000000n;
-
-    const etherValue: bigint = weiValue / weiToEtherConversionFactor;
-
-    return Number(etherValue);
   }
 }
