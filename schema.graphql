@@ -28,6 +28,11 @@ enum OrderType {
   CLOSING
 }
 
+enum TransferType {
+  INGOING
+  OUTGOING
+}
+
 type Market @entity {
   id: ID! @unique @index
   ticker: String!
@@ -91,11 +96,11 @@ type MarketSettlements @entity {
   amount: BigDecimal!
   user: String! @index
   market: Market!
+  type: TransferType!
   timestamp: DateTime!
 }
 
 type UserBalance @entity {
-  id: ID!
   user: String! @index
   balanceChange: Int!
   market: Market!

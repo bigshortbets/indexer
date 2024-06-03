@@ -1,6 +1,7 @@
 import {BigDecimal} from "@subsquid/big-decimal"
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigDecimalColumn as BigDecimalColumn_, StringColumn as StringColumn_, Index as Index_, ManyToOne as ManyToOne_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
 import {Market} from "./market.model"
+import {TransferType} from "./_transferType"
 
 @Entity_()
 export class MarketSettlements {
@@ -21,6 +22,9 @@ export class MarketSettlements {
     @Index_()
     @ManyToOne_(() => Market, {nullable: true})
     market!: Market
+
+    @Column_("varchar", {length: 8, nullable: false})
+    type!: TransferType
 
     @DateTimeColumn_({nullable: false})
     timestamp!: Date

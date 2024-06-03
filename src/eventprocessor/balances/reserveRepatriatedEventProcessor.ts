@@ -1,6 +1,11 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { MarketSettlements, UserBalance, Market } from "../../model";
+import {
+  MarketSettlements,
+  UserBalance,
+  Market,
+  TransferType,
+} from "../../model";
 import {
   DataHandlerContext,
   Block,
@@ -29,9 +34,10 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       let market = await ctx.store.get(Market, marketId);
       let reserveRepatriatedFrom = new MarketSettlements({
         id: `${block.header.id}.${event.id}.0`,
-        amount: BigDecimal(parsedEvent.amount).mul(-1),
+        amount: BigDecimal(parsedEvent.amount),
         user: parsedEvent.from,
         market: market,
+        type: TransferType.OUTGOING,
         // @ts-ignore
         timestamp: new Date(block.header.timestamp),
       });
@@ -41,6 +47,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         amount: BigDecimal(parsedEvent.amount),
         user: parsedEvent.to,
         market: market,
+        type: TransferType.INGOING,
         // @ts-ignore
         timestamp: new Date(block.header.timestamp),
       });
