@@ -10,7 +10,7 @@ import { PositionClosedEventProcessor } from "./market/positionClosedEventProces
 import { PositionReducedEventProcessor } from "./market/positionReducedEventProcessor";
 import { PositionMarkedToMarketEventProcessor } from "./market/positionMarkedToMarketEventProcessor";
 import { LatestOraclePriceProcessor } from "./market/latestOraclePriceProcessor";
-import { OrderExtendedEventProcessor } from "./market/orderExtended";
+import { OrderExtendedEventProcessor } from "./market/orderExtendedEventProcessor";
 import { WithdrawRequestedEventProcessor } from "./bridge/withdrawRequestedEventProcessor";
 import { WithdrawCanceledEventProcessor } from "./bridge/withdrawCanceledEventProcess";
 import { WithdrawApprovedEventProcessor } from "./bridge/withdrawApprovedEventProcessor";

@@ -40,6 +40,7 @@ export class OrderExtendedEventProcessor implements EventProcessor {
           // @ts-ignore
           timestamp: new Date(block.header.timestamp),
           status: OrderStatus.ACTIVE,
+          type: existingOrder.type,
         });
         await ctx.store.save(newOrder);
         existingOrder.status = OrderStatus.AUTOMATICALLY_MODIFIED;
