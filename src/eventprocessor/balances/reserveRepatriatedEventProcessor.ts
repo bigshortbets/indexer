@@ -15,6 +15,7 @@ import {
 import * as events from "../../types/events";
 import { BigDecimal } from "@subsquid/big-decimal";
 import { USDC_DECIMALS } from "../../utils";
+import { encodeUserValue } from "../../utils/encodersUtils";
 
 export class ReserveRepatriatedEventProcessor implements EventProcessor {
   getHandledEventName(): string {
@@ -32,11 +33,13 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     if (reserveRepatriatedEvent.is(event)) {
       const parsedEvent = reserveRepatriatedEvent.decode(event);
       const marketId = call.args.market;
+      const userFromAddress = encodeUserValue(parsedEvent.from);
+      const userToAddress = encodeUserValue(parsedEvent.to);
       let market = await ctx.store.get(Market, marketId);
       let reserveRepatriatedFrom = new MarketSettlements({
-        id: `${block.header.id}.${event.id}.0`,
+        id: `${event.id}.0`,
         amount: BigDecimal(parsedEvent.amount, USDC_DECIMALS),
-        user: parsedEvent.from,
+        user: userFromAddress,
         market: market,
         type: TransferType.OUTGOING,
         // @ts-ignore
@@ -44,9 +47,9 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       });
       await ctx.store.save(reserveRepatriatedFrom);
       let reserveRepatriatedTo = new MarketSettlements({
-        id: `${block.header.id}.${event.id}.1`,
+        id: `${event.id}.1`,
         amount: BigDecimal(parsedEvent.amount, USDC_DECIMALS),
-        user: parsedEvent.to,
+        user: userToAddress,
         market: market,
         type: TransferType.INGOING,
         // @ts-ignore
@@ -54,7 +57,10 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       });
       await ctx.store.save(reserveRepatriatedTo);
       const userFrom = await ctx.store.findOne(UserBalance, {
-        where: { user: parsedEvent.from, market: { id: marketId } },
+        where: {
+          user: userFromAddress,
+          market: { id: marketId },
+        },
         relations: { market: true },
       });
       if (userFrom) {
@@ -64,8 +70,8 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         await ctx.store.save(userFrom);
       } else {
         const newUser = new UserBalance({
-          id: `${block.header.id}.${event.id}.0`,
-          user: parsedEvent.from,
+          id: `${event.id}.0`,
+          user: userFromAddress,
           balanceChange: BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(
             -1,
           ),
@@ -73,7 +79,10 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         await ctx.store.save(newUser);
       }
       const userTo = await ctx.store.findOne(UserBalance, {
-        where: { user: parsedEvent.to, market: { id: marketId } },
+        where: {
+          user: userToAddress,
+          market: { id: marketId },
+        },
         relations: { market: true },
       });
       if (userTo) {
@@ -83,8 +92,8 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         await ctx.store.save(userTo);
       } else {
         const newUser = new UserBalance({
-          id: `${block.header.id}.${event.id}.1`,
-          user: parsedEvent.to,
+          id: `${event.id}.1`,
+          user: userToAddress,
           balanceChange: BigDecimal(parsedEvent.amount, USDC_DECIMALS),
         });
         await ctx.store.save(newUser);
