@@ -26,15 +26,25 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
     event: Event,
-    call: Call,
+    call: Call
   ) {
     console.log("Reserve repatriated event");
     const reserveRepatriatedEvent = events.balances.reserveRepatriated.v1;
+    const found = block.events.find(
+      (element) =>
+        element.index === event.index + 1 &&
+        element.extrinsicIndex === event.extrinsicIndex &&
+        (element.name === "Market.PositionMarkedToMarket" ||
+          element.name === "Market.PositionReduced" ||
+          element.name === "Market.PositionClosed")
+    );
     if (reserveRepatriatedEvent.is(event)) {
       const parsedEvent = reserveRepatriatedEvent.decode(event);
-      const marketId = call.args.market;
+      const marketId = found?.args.market;
+
       const userFromAddress = encodeUserValue(parsedEvent.from);
       const userToAddress = encodeUserValue(parsedEvent.to);
+
       let market = await ctx.store.get(Market, marketId);
       let reserveRepatriatedFrom = new MarketSettlements({
         id: `${event.id}.0`,
@@ -65,7 +75,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       });
       if (userFrom) {
         userFrom.balanceChange = userFrom.balanceChange.sub(
-          BigDecimal(parsedEvent.amount, USDC_DECIMALS),
+          BigDecimal(parsedEvent.amount, USDC_DECIMALS)
         );
         await ctx.store.save(userFrom);
       } else {
@@ -73,8 +83,9 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
           id: `${event.id}.0`,
           user: userFromAddress,
           balanceChange: BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(
-            -1,
+            -1
           ),
+          market: market,
         });
         await ctx.store.save(newUser);
       }
@@ -87,7 +98,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       });
       if (userTo) {
         userTo.balanceChange = userTo.balanceChange.add(
-          BigDecimal(parsedEvent.amount, USDC_DECIMALS),
+          BigDecimal(parsedEvent.amount, USDC_DECIMALS)
         );
         await ctx.store.save(userTo);
       } else {
@@ -95,6 +106,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
           id: `${event.id}.1`,
           user: userToAddress,
           balanceChange: BigDecimal(parsedEvent.amount, USDC_DECIMALS),
+          market: market,
         });
         await ctx.store.save(newUser);
       }
