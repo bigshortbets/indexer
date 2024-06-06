@@ -15,6 +15,7 @@ export class UserBalance {
     @StringColumn_({nullable: false})
     user!: string
 
+    @Index_()
     @BigDecimalColumn_({nullable: false})
     balanceChange!: BigDecimal
 

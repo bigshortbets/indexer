@@ -30,7 +30,7 @@ export class MarketRemovedEventProcessor implements EventProcessor {
       for (const element of marketLeaderboard) {
         const user = await ctx.store.findOne(GeneralLeaderboard, {
           where: {
-            user: element.user,
+            id: element.user,
           },
         });
         if (user) {
