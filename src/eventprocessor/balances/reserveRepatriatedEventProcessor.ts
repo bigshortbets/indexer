@@ -27,7 +27,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
     event: Event,
-    call: Call
+    call: Call,
   ) {
     console.log("Reserve repatriated event");
     const reserveRepatriatedEvent = events.balances.reserveRepatriated.v1;
@@ -39,7 +39,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         element.callAddress?.toString() === event.callAddress?.toString() &&
         (element.name === "Market.PositionMarkedToMarket" ||
           element.name === "Market.PositionReduced" ||
-          element.name === "Market.PositionClosed")
+          element.name === "Market.PositionClosed"),
     );
     if (reserveRepatriatedEvent.is(event)) {
       const parsedEvent = reserveRepatriatedEvent.decode(event);
@@ -75,7 +75,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         marketId,
         parsedEvent.amount,
         market,
-        event.id
+        event.id,
       );
       await this.saveUserToBalance(
         ctx,
@@ -83,12 +83,12 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         marketId,
         parsedEvent.amount,
         market,
-        event.id
+        event.id,
       );
       await this.saveGeneralRankingFrom(
         ctx,
         userFromAddress,
-        parsedEvent.amount
+        parsedEvent.amount,
       );
       await this.saveGeneralRankingTo(ctx, userToAddress, parsedEvent.amount);
     } else {
@@ -99,7 +99,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
   private async saveGeneralRankingFrom(
     ctx: DataHandlerContext<Store, any>,
     userAddress: string,
-    amount: bigint
+    amount: bigint,
   ) {
     const user = await ctx.store.findOne(GeneralLeaderboard, {
       where: {
@@ -108,7 +108,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     });
     if (user) {
       user.balanceChange = user.balanceChange.sub(
-        BigDecimal(amount, USDC_DECIMALS)
+        BigDecimal(amount, USDC_DECIMALS),
       );
       await ctx.store.save(user);
     } else {
@@ -124,7 +124,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
   private async saveGeneralRankingTo(
     ctx: DataHandlerContext<Store, any>,
     userAddress: string,
-    amount: bigint
+    amount: bigint,
   ) {
     const user = await ctx.store.findOne(GeneralLeaderboard, {
       where: {
@@ -133,7 +133,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     });
     if (user) {
       user.balanceChange = user.balanceChange.add(
-        BigDecimal(amount, USDC_DECIMALS)
+        BigDecimal(amount, USDC_DECIMALS),
       );
       await ctx.store.save(user);
     } else {
@@ -152,7 +152,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     marketId: string,
     amount: bigint,
     market: Market | undefined,
-    eventId: string
+    eventId: string,
   ) {
     const user = await ctx.store.findOne(UserBalance, {
       where: {
@@ -163,7 +163,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     });
     if (user) {
       user.balanceChange = user.balanceChange.sub(
-        BigDecimal(amount, USDC_DECIMALS)
+        BigDecimal(amount, USDC_DECIMALS),
       );
       await ctx.store.save(user);
     } else {
@@ -183,7 +183,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     marketId: string,
     amount: bigint,
     market: Market | undefined,
-    eventId: string
+    eventId: string,
   ) {
     const user = await ctx.store.findOne(UserBalance, {
       where: {
@@ -194,7 +194,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     });
     if (user) {
       user.balanceChange = user.balanceChange.add(
-        BigDecimal(amount, USDC_DECIMALS)
+        BigDecimal(amount, USDC_DECIMALS),
       );
       await ctx.store.save(user);
     } else {
