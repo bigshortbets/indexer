@@ -49,6 +49,12 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       const userToAddress = encodeUserValue(parsedEvent.to);
 
       let market = await ctx.store.get(Market, marketId);
+
+      if (!market) {
+        console.error("Unsupported spec");
+        return;
+      }
+
       let reserveRepatriatedFrom = new MarketSettlements({
         id: `${event.id}.0`,
         amount: BigDecimal(parsedEvent.amount, USDC_DECIMALS),
@@ -130,7 +136,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     userAddress: string,
     marketId: string,
     amount: BigDecimal,
-    market: Market | undefined,
+    market: Market,
     eventId: string,
     idSufix: string,
   ) {
