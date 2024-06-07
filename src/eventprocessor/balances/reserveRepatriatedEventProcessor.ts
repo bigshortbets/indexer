@@ -51,7 +51,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       let market = await ctx.store.get(Market, marketId);
 
       if (!market) {
-        console.error("Unsupported spec");
+        console.error(`Skipped - market does not exists: ${marketId}`);
         return;
       }
 
