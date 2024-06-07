@@ -32,8 +32,10 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     const reserveRepatriatedEvent = events.balances.reserveRepatriated.v1;
     const found = block.events.find(
       (element) =>
-        element.index === event.index + 1 &&
-        element.extrinsicIndex === event.extrinsicIndex &&
+        (element.index === event.index + 1 ||
+          element.index === event.index + 2 ||
+          element.index === event.index + 3) &&
+        element.callAddress?.toString() === event.callAddress?.toString() &&
         (element.name === "Market.PositionMarkedToMarket" ||
           element.name === "Market.PositionReduced" ||
           element.name === "Market.PositionClosed"),
