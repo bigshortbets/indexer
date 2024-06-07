@@ -5,6 +5,7 @@ import {
   UserBalance,
   Market,
   TransferType,
+  GeneralLeaderboard,
 } from "../../model";
 import {
   DataHandlerContext,
@@ -48,6 +49,12 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       const userToAddress = encodeUserValue(parsedEvent.to);
 
       let market = await ctx.store.get(Market, marketId);
+
+      if (!market) {
+        console.error(`Skipped - market does not exists: ${marketId}`);
+        return;
+      }
+
       let reserveRepatriatedFrom = new MarketSettlements({
         id: `${event.id}.0`,
         amount: BigDecimal(parsedEvent.amount, USDC_DECIMALS),
@@ -68,52 +75,89 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         timestamp: new Date(block.header.timestamp),
       });
       await ctx.store.save(reserveRepatriatedTo);
-      const userFrom = await ctx.store.findOne(UserBalance, {
-        where: {
-          user: userFromAddress,
-          market: { id: marketId },
-        },
-        relations: { market: true },
-      });
-      if (userFrom) {
-        userFrom.balanceChange = userFrom.balanceChange.sub(
-          BigDecimal(parsedEvent.amount, USDC_DECIMALS),
-        );
-        await ctx.store.save(userFrom);
-      } else {
-        const newUser = new UserBalance({
-          id: `${event.id}.0`,
-          user: userFromAddress,
-          balanceChange: BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(
-            -1,
-          ),
-          market: market,
-        });
-        await ctx.store.save(newUser);
-      }
-      const userTo = await ctx.store.findOne(UserBalance, {
-        where: {
-          user: userToAddress,
-          market: { id: marketId },
-        },
-        relations: { market: true },
-      });
-      if (userTo) {
-        userTo.balanceChange = userTo.balanceChange.add(
-          BigDecimal(parsedEvent.amount, USDC_DECIMALS),
-        );
-        await ctx.store.save(userTo);
-      } else {
-        const newUser = new UserBalance({
-          id: `${event.id}.1`,
-          user: userToAddress,
-          balanceChange: BigDecimal(parsedEvent.amount, USDC_DECIMALS),
-          market: market,
-        });
-        await ctx.store.save(newUser);
-      }
+
+      await this.saveUserBalance(
+        ctx,
+        userFromAddress,
+        marketId,
+        BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(-1),
+        market,
+        event.id,
+        "0",
+      );
+      await this.saveUserBalance(
+        ctx,
+        userFromAddress,
+        marketId,
+        BigDecimal(parsedEvent.amount, USDC_DECIMALS),
+        market,
+        event.id,
+        "1",
+      );
+      await this.saveGeneralRanking(
+        ctx,
+        userFromAddress,
+        BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(-1),
+      );
+      await this.saveGeneralRanking(
+        ctx,
+        userToAddress,
+        BigDecimal(parsedEvent.amount, USDC_DECIMALS),
+      );
     } else {
       console.error("Unsupported spec");
+    }
+  }
+
+  private async saveGeneralRanking(
+    ctx: DataHandlerContext<Store, any>,
+    userAddress: string,
+    amount: BigDecimal,
+  ) {
+    const user = await ctx.store.findOne(GeneralLeaderboard, {
+      where: {
+        id: userAddress,
+      },
+    });
+    if (user) {
+      user.balanceChange = user.balanceChange.add(amount);
+      await ctx.store.save(user);
+    } else {
+      const newUser = new GeneralLeaderboard({
+        id: userAddress,
+        balanceChange: amount,
+      });
+      await ctx.store.save(newUser);
+    }
+  }
+
+  private async saveUserBalance(
+    ctx: DataHandlerContext<Store, any>,
+    userAddress: string,
+    marketId: string,
+    amount: BigDecimal,
+    market: Market,
+    eventId: string,
+    idSufix: string,
+  ) {
+    const user = await ctx.store.findOne(UserBalance, {
+      where: {
+        user: userAddress,
+        market: { id: marketId },
+      },
+      relations: { market: true },
+    });
+    if (user) {
+      user.balanceChange = user.balanceChange.add(amount);
+      await ctx.store.save(user);
+    } else {
+      const newUser = new UserBalance({
+        id: `${eventId}.${idSufix}`,
+        user: userAddress,
+        balanceChange: amount,
+        market: market,
+      });
+      await ctx.store.save(newUser);
     }
   }
 }

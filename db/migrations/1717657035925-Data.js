@@ -1,5 +1,5 @@
-module.exports = class Data1717412280756 {
-    name = 'Data1717412280756'
+module.exports = class Data1717657035925 {
+    name = 'Data1717657035925'
 
     async up(db) {
         await db.query(`CREATE TABLE "market" ("id" character varying NOT NULL, "ticker" text NOT NULL, "tick_size" numeric NOT NULL, "lifetime" numeric NOT NULL, "initial_margin" integer NOT NULL, "maintenance_margin" integer NOT NULL, "contract_unit" numeric NOT NULL, "block_height" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "daily_volume" numeric NOT NULL, "oracle_price" numeric, "status" character varying(5) NOT NULL, CONSTRAINT "PK_1e9a2963edfd331d92018e3abac" PRIMARY KEY ("id"))`)
@@ -16,6 +16,8 @@ module.exports = class Data1717412280756 {
         await db.query(`CREATE TABLE "user_balance" ("id" character varying NOT NULL, "user" text NOT NULL, "balance_change" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_f3edf5a1907e7b430421b9c2ddd" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_0f7286bb3c5c88d8b5a7612b11" ON "user_balance" ("user") `)
         await db.query(`CREATE INDEX "IDX_99b139cd3e9dadefb8263133d7" ON "user_balance" ("market_id") `)
+        await db.query(`CREATE TABLE "general_leaderboard" ("id" character varying NOT NULL, "user" text NOT NULL, "balance_change" numeric NOT NULL, CONSTRAINT "PK_c5c71acd0600bd847910441dadd" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_1c32fd072e1a3a8cc9426df2d0" ON "general_leaderboard" ("user") `)
         await db.query(`ALTER TABLE "order" ADD CONSTRAINT "FK_d91cc35ada00c918781b7f0599d" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "position" ADD CONSTRAINT "FK_d744886149158961e1b796182f8" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "aggregated_orders_by_price" ADD CONSTRAINT "FK_6a3c7cf051dee6be40f560f2f07" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
@@ -38,6 +40,8 @@ module.exports = class Data1717412280756 {
         await db.query(`DROP TABLE "user_balance"`)
         await db.query(`DROP INDEX "public"."IDX_0f7286bb3c5c88d8b5a7612b11"`)
         await db.query(`DROP INDEX "public"."IDX_99b139cd3e9dadefb8263133d7"`)
+        await db.query(`DROP TABLE "general_leaderboard"`)
+        await db.query(`DROP INDEX "public"."IDX_1c32fd072e1a3a8cc9426df2d0"`)
         await db.query(`ALTER TABLE "order" DROP CONSTRAINT "FK_d91cc35ada00c918781b7f0599d"`)
         await db.query(`ALTER TABLE "position" DROP CONSTRAINT "FK_d744886149158961e1b796182f8"`)
         await db.query(`ALTER TABLE "aggregated_orders_by_price" DROP CONSTRAINT "FK_6a3c7cf051dee6be40f560f2f07"`)

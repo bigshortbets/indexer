@@ -103,6 +103,11 @@ type MarketSettlements @entity {
 type UserBalance @entity {
   id: ID!
   user: String! @index
-  balanceChange: BigDecimal!
+  balanceChange: BigDecimal! @index
   market: Market!
+}
+
+type GeneralLeaderboard @entity {
+  id: ID! @index
+  balanceChange: BigDecimal! @index
 }
