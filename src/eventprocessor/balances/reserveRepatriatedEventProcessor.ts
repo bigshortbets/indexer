@@ -87,7 +87,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
       );
       await this.saveUserBalance(
         ctx,
-        userFromAddress,
+        userToAddress,
         marketId,
         BigDecimal(parsedEvent.amount, USDC_DECIMALS),
         market,
