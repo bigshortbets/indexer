@@ -35,7 +35,6 @@ export class OrderCreatedEventProcessor implements EventProcessor {
     call: Call,
   ) {
     const orderCreatedEvent = events.market.orderCreated.v1;
-    console.log(event);
     if (orderCreatedEvent.is(event)) {
       const parsedEvent = orderCreatedEvent.decode(event);
       const market = await ctx.store.get(Market, parsedEvent.market.toString());
