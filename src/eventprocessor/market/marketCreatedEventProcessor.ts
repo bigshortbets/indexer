@@ -21,27 +21,10 @@ export class MarketCreatedEventProcessor implements EventProcessor {
     block: Block<any>,
     event: Event,
   ) {
-    let receivedEventv1 = market.marketCreated.v1;
-    let receivedEventv20 = market.marketCreated.v20;
-    if (receivedEventv1.is(event)) {
-      const decodedEvent = receivedEventv1.decode(event);
-      const createdMarket = new Market({
-        id: decodedEvent.marketId.toString(),
-        ticker: encodeMarketTicker(decodedEvent.ticker),
-        tickSize: BigDecimal(decodedEvent.tickSize, USDC_DECIMALS),
-        lifetime: BigInt(decodedEvent.lifetime),
-        initialMargin: decodedEvent.initialMargin,
-        maintenanceMargin: decodedEvent.maintenanceMargin,
-        contractUnit: BigDecimal(decodedEvent.contractUnit, 0),
-        blockHeight: BigInt(block.header.height),
-        // @ts-ignore
-        timestamp: new Date(block.header.timestamp),
-        dailyVolume: BigInt(0),
-        status: MarketStatus.OPEN,
-      });
-      await ctx.store.save(createdMarket);
-    } else if (receivedEventv20.is(event)) {
-      const decodedEvent = receivedEventv20.decode(event);
+    let receivedEvent = market.marketCreated.v1;
+
+    if (receivedEvent.is(event)) {
+      const decodedEvent = receivedEvent.decode(event);
       const createdMarket = new Market({
         id: decodedEvent.marketId.toString(),
         ticker: encodeMarketTicker(decodedEvent.ticker),

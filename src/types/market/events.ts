@@ -1,6 +1,5 @@
 import {sts, Block, Bytes, Option, Result, EventType, RuntimeCtx} from '../support'
 import * as v1 from '../v1'
-import * as v20 from '../v20'
 
 export const marketCreated =  {
     name: 'Market.MarketCreated',
@@ -11,7 +10,7 @@ export const marketCreated =  {
         'Market.MarketCreated',
         sts.struct({
             marketId: sts.bigint(),
-            ticker: v1.BoundedVec,
+            ticker: sts.bytes(),
             tickSize: sts.bigint(),
             /**
              * Block number that will expire given market
@@ -19,25 +18,7 @@ export const marketCreated =  {
             lifetime: sts.number(),
             initialMargin: v1.Percent,
             maintenanceMargin: v1.Percent,
-            contractUnit: sts.number(),
-        })
-    ),
-    /**
-     * New Market created
-     */
-    v20: new EventType(
-        'Market.MarketCreated',
-        sts.struct({
-            marketId: sts.bigint(),
-            ticker: sts.bytes(),
-            tickSize: sts.bigint(),
-            /**
-             * Block number that will expire given market
-             */
-            lifetime: sts.number(),
-            initialMargin: v20.Percent,
-            maintenanceMargin: v20.Percent,
-            contractUnit: v20.ContractUnit,
+            contractUnit: v1.ContractUnit,
         })
     ),
 }
@@ -66,9 +47,27 @@ export const orderCreated =  {
             market: sts.bigint(),
             price: sts.bigint(),
             side: v1.OrderSide,
+            orderType: v1.OrderType,
             quantity: sts.number(),
             who: v1.AccountId32,
             orderId: sts.bigint(),
+        })
+    ),
+}
+
+export const orderExtended =  {
+    name: 'Market.OrderExtended',
+    /**
+     * Order has been extended
+     */
+    v1: new EventType(
+        'Market.OrderExtended',
+        sts.struct({
+            market: sts.bigint(),
+            orderId: sts.bigint(),
+            newOrderId: sts.bigint(),
+            newPositionId: sts.bigint(),
+            quantity: sts.number(),
         })
     ),
 }
@@ -177,22 +176,6 @@ export const positionClosed =  {
         sts.struct({
             market: sts.bigint(),
             positionId: sts.bigint(),
-        })
-    ),
-}
-
-export const orderExtended =  {
-    name: 'Market.OrderExtended',
-    /**
-     * Order has been extended
-     */
-    v13: new EventType(
-        'Market.OrderExtended',
-        sts.struct({
-            market: sts.bigint(),
-            orderId: sts.bigint(),
-            newOrderId: sts.bigint(),
-            quantity: sts.number(),
         })
     ),
 }

@@ -19,21 +19,9 @@ export class WithdrawApprovedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Bridge withdraw canceled event");
-    const withdrawApprovedEventv15 = events.bridge.withdrawApproved.v15;
-    const withdrawApprovedEventv18 = events.bridge.withdrawApproved.v18;
-    if (withdrawApprovedEventv15.is(event)) {
-      const parsedEvent = withdrawApprovedEventv15.decode(event);
-      let withdraw = await ctx.store.findOne(Withdraw, {
-        where: { id: parsedEvent.identifier.toString() },
-      });
-      if (withdraw) {
-        withdraw.status = WidthdrawStatus.APPROVED;
-        await ctx.store.save(withdraw);
-      } else {
-        console.warn("No withdraw found");
-      }
-    } else if (withdrawApprovedEventv18.is(event)) {
-      const parsedEvent = withdrawApprovedEventv18.decode(event);
+    const withdrawApprovedEvent = events.bridge.withdrawApproved.v1;
+    if (withdrawApprovedEvent.is(event)) {
+      const parsedEvent = withdrawApprovedEvent.decode(event);
       let withdraw = await ctx.store.findOne(Withdraw, {
         where: { id: parsedEvent.identifier.toString() },
       });

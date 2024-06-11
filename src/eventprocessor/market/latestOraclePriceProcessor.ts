@@ -27,7 +27,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Latest oracle price event");
-    const receivedEvent = oracle.newFeedData.v10;
+    const receivedEvent = oracle.newFeedData.v1;
     if (receivedEvent.is(event)) {
       const decodedEvent = receivedEvent.decode(event);
       if (block.header.height != this.blockNumber) {
@@ -41,10 +41,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
       }
 
       for await (const marketId of this.blockData[this.blockNumber]) {
-        const marketPrice = await storage.values.v10.get(
-          block.header,
-          marketId,
-        );
+        const marketPrice = await storage.values.v1.get(block.header, marketId);
 
         let market = await ctx.store.findOne(Market, {
           where: {

@@ -1,7 +1,5 @@
 import {sts, Result, Option, Bytes, BitSequence} from './support'
 
-export type BoundedVec = Bytes
-
 export interface TimestampedValue {
     value: bigint
     timestamp: bigint
@@ -13,6 +11,24 @@ export const TimestampedValue: sts.Type<TimestampedValue> = sts.struct(() => {
         timestamp: sts.bigint(),
     }
 })
+
+export const OrderType: sts.Type<OrderType> = sts.closedEnum(() => {
+    return  {
+        Offsetting: sts.bigint(),
+        Opening: sts.unit(),
+    }
+})
+
+export type OrderType = OrderType_Offsetting | OrderType_Opening
+
+export interface OrderType_Offsetting {
+    __kind: 'Offsetting'
+    value: bigint
+}
+
+export interface OrderType_Opening {
+    __kind: 'Opening'
+}
 
 export const OrderSide: sts.Type<OrderSide> = sts.closedEnum(() => {
     return  {
@@ -31,9 +47,21 @@ export interface OrderSide_Short {
     __kind: 'Short'
 }
 
+export const ContractUnit: sts.Type<ContractUnit> = sts.struct(() => {
+    return  {
+        contractUnit: sts.number(),
+        decimals: sts.number(),
+    }
+})
+
+export interface ContractUnit {
+    contractUnit: number
+    decimals: number
+}
+
 export const Percent = sts.number()
 
-export const BoundedVec = sts.bytes()
+export const H160 = sts.bytes()
 
 export const BalanceStatus: sts.Type<BalanceStatus> = sts.closedEnum(() => {
     return  {

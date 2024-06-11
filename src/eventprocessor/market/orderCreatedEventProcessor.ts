@@ -1,6 +1,14 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { Market, Order, OrderSide, OrderStatus, OrderType } from "../../model";
+import {
+  ClosingOrder,
+  Market,
+  OpeningOrder,
+  Order,
+  OrderSide,
+  OrderStatus,
+  OrderType,
+} from "../../model";
 import { AggregatedOrdersHandler } from "./aggregatedOrdersHandler";
 import {
   DataHandlerContext,
@@ -27,49 +35,33 @@ export class OrderCreatedEventProcessor implements EventProcessor {
     call: Call,
   ) {
     const orderCreatedEvent = events.market.orderCreated.v1;
-
+    console.log(event);
     if (orderCreatedEvent.is(event)) {
       const parsedEvent = orderCreatedEvent.decode(event);
       const market = await ctx.store.get(Market, parsedEvent.market.toString());
       const quantity = parsedEvent.quantity;
       let order: Order;
-      if (call.name === this.callName) {
-        order = new Order({
-          id: parsedEvent.orderId.toString(),
-          market: market,
-          price: BigDecimal(parsedEvent.price, USDC_DECIMALS),
-          side:
-            parsedEvent.side.__kind === "Long"
-              ? OrderSide.LONG
-              : OrderSide.SHORT,
-          quantity: BigInt(quantity),
-          initialQuantity: BigInt(quantity),
-          who: encodeUserValue(parsedEvent.who),
-          blockHeight: BigInt(block.header.height),
-          // @ts-ignore
-          timestamp: new Date(block.header.timestamp),
-          status: OrderStatus.ACTIVE,
-          type: OrderType.OPENING,
-        });
-      } else {
-        order = new Order({
-          id: parsedEvent.orderId.toString(),
-          market: market,
-          price: BigDecimal(parsedEvent.price, USDC_DECIMALS),
-          side:
-            parsedEvent.side.__kind === "Long"
-              ? OrderSide.LONG
-              : OrderSide.SHORT,
-          quantity: BigInt(quantity),
-          initialQuantity: BigInt(quantity),
-          who: encodeUserValue(parsedEvent.who),
-          blockHeight: BigInt(block.header.height),
-          // @ts-ignore
-          timestamp: new Date(block.header.timestamp),
-          status: OrderStatus.ACTIVE,
-          type: OrderType.CLOSING,
-        });
-      }
+      order = new Order({
+        id: parsedEvent.orderId.toString(),
+        market: market,
+        price: BigDecimal(parsedEvent.price, USDC_DECIMALS),
+        side:
+          parsedEvent.side.__kind === "Long" ? OrderSide.LONG : OrderSide.SHORT,
+        quantity: BigInt(quantity),
+        initialQuantity: BigInt(quantity),
+        who: encodeUserValue(parsedEvent.who),
+        blockHeight: BigInt(block.header.height),
+        // @ts-ignore
+        timestamp: new Date(block.header.timestamp),
+        status: OrderStatus.ACTIVE,
+        type:
+          parsedEvent.orderType.__kind === "Opening"
+            ? new OpeningOrder({ type: "OpeningOrder" })
+            : new ClosingOrder({
+                type: "ClosingOrder",
+                value: parsedEvent.orderType.value,
+              }),
+      });
 
       await ctx.store.save(order);
       await AggregatedOrdersHandler.addNewOrderToTheAggregatedOrders(
