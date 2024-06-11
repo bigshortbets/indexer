@@ -1,6 +1,6 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { Order, OrderStatus } from "../../model";
+import { ClosingOrder, Order, OrderStatus } from "../../model";
 import { AggregatedOrdersHandler } from "./aggregatedOrdersHandler";
 import {
   DataHandlerContext,
@@ -20,9 +20,9 @@ export class OrderExtendedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Order extended event");
-    const orderCreatedEvent = events.market.orderExtended.v13;
-    if (orderCreatedEvent.is(event)) {
-      const parsedEvent = orderCreatedEvent.decode(event);
+    const orderExtendedEvent = events.market.orderExtended.v1;
+    if (orderExtendedEvent.is(event)) {
+      const parsedEvent = orderExtendedEvent.decode(event);
       let existingOrder = await ctx.store.findOne(Order, {
         where: { id: parsedEvent.orderId.toString() },
         relations: { market: true },
@@ -40,7 +40,10 @@ export class OrderExtendedEventProcessor implements EventProcessor {
           // @ts-ignore
           timestamp: new Date(block.header.timestamp),
           status: OrderStatus.ACTIVE,
-          type: existingOrder.type,
+          type: new ClosingOrder({
+            type: existingOrder.type.type,
+            value: parsedEvent.newPositionId,
+          }),
         });
         await ctx.store.save(newOrder);
         existingOrder.status = OrderStatus.AUTOMATICALLY_MODIFIED;

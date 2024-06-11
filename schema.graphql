@@ -23,10 +23,17 @@ enum MarketStatus {
   OPEN
   CLOSE
 }
-enum OrderType {
-  OPENING
-  CLOSING
+
+type OpeningOrder {
+  type: String!
 }
+
+type ClosingOrder {
+  type: String!
+  value: BigInt!
+}
+
+union OrderType = OpeningOrder | ClosingOrder
 
 enum TransferType {
   INGOING

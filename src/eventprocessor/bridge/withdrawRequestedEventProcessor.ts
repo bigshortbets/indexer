@@ -19,7 +19,7 @@ export class WithdrawRequestedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Bridge withdraw request event");
-    const withdrawRequestedEvent = events.bridge.withdrawRequested.v14;
+    const withdrawRequestedEvent = events.bridge.withdrawRequested.v1;
     if (withdrawRequestedEvent.is(event)) {
       const parsedEvent = withdrawRequestedEvent.decode(event);
       const withdraw = new Withdraw({

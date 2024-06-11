@@ -1,9 +1,10 @@
 import {BigDecimal} from "@subsquid/big-decimal"
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, BigDecimalColumn as BigDecimalColumn_, BigIntColumn as BigIntColumn_, StringColumn as StringColumn_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
+import * as marshal from "./marshal"
 import {Market} from "./market.model"
 import {OrderSide} from "./_orderSide"
 import {OrderStatus} from "./_orderStatus"
-import {OrderType} from "./_orderType"
+import {OrderType, fromJsonOrderType} from "./_orderType"
 
 @Entity_()
 export class Order {
@@ -42,6 +43,6 @@ export class Order {
     @Column_("varchar", {length: 23, nullable: false})
     status!: OrderStatus
 
-    @Column_("varchar", {length: 7, nullable: false})
+    @Column_("jsonb", {transformer: {to: obj => obj.toJSON(), from: obj => obj == null ? undefined : fromJsonOrderType(obj)}, nullable: false})
     type!: OrderType
 }
