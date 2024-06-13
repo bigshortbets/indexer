@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: bigsb-testnet
-version: 8
+version: 1
 description: "BigShortBets Testnet"
 build:
 deploy:
