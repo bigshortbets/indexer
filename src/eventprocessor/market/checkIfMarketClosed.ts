@@ -13,9 +13,7 @@ export class CheckIfMarketClosed {
       },
     });
     for (const market of markets) {
-      // @ts-ignore
-      const blockTimestampInSec = BigInt(block.header.timestamp) / 1000n;
-      if (market.lifetime < blockTimestampInSec) {
+      if (market.lifetime < block.header.height) {
         market.status = MarketStatus.CLOSE;
         await ctx.store.save(market);
       }
