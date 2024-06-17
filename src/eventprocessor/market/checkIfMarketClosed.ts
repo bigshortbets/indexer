@@ -5,7 +5,7 @@ import { Market, MarketStatus } from "../../model";
 export class CheckIfMarketClosed {
   public static async closeMarket(
     ctx: DataHandlerContext<Store, any>,
-    block: Block<any>,
+    block: Block<any>
   ) {
     const markets = await ctx.store.find(Market, {
       where: {
@@ -13,9 +13,7 @@ export class CheckIfMarketClosed {
       },
     });
     for (const market of markets) {
-      // @ts-ignore
-      const blockTimestampInSec = BigInt(block.header.timestamp) / 1000n;
-      if (market.lifetime < blockTimestampInSec) {
+      if (market.lifetime < block.header.height) {
         market.status = MarketStatus.CLOSE;
         await ctx.store.save(market);
       }
