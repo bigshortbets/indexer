@@ -38,7 +38,7 @@ export class AggregatedOrdersHandler {
     const orderSide = order?.side;
     let aggregatedOrder = await store.findOne(AggregatedOrdersByPrice, {
       where: {
-        market: { id: `${order.market.id}.${order.price}.${orderSide}` },
+        market: { id: order.market.id },
         price: Equal(order.price),
         side: orderSide,
       },
@@ -64,7 +64,7 @@ export class AggregatedOrdersHandler {
     const orderSide = order?.side;
     let aggregatedOrder = await store.findOne(AggregatedOrdersByPrice, {
       where: {
-        market: { id: `${order.market.id}.${order.price}.${orderSide}` },
+        market: { id: order.market.id },
         price: Equal(order.price),
         side: orderSide,
       },
