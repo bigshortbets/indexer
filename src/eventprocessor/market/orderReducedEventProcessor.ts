@@ -17,7 +17,7 @@ export class OrderReducedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     console.log("Order reduced event");
     const orderReducedEvent = events.market.orderReduced.v2;
@@ -33,7 +33,7 @@ export class OrderReducedEventProcessor implements EventProcessor {
         await AggregatedOrdersHandler.removeQuantityFromAggregatedOrders(
           ctx.store,
           persistedOrder,
-          quantityDelta
+          quantityDelta,
         );
         persistedOrder.quantity = BigInt(parsedEvent.quantity);
         if (persistedOrder.status === OrderStatus.AUTOMATICALLY_MODIFIED) {

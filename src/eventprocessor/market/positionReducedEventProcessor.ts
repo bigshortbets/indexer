@@ -16,7 +16,7 @@ export class PositionReducedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     console.log("Position reduced event");
     const positionReducedEvent = events.market.positionReduced.v2;

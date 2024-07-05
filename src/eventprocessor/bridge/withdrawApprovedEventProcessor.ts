@@ -16,7 +16,7 @@ export class WithdrawApprovedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     console.log("Bridge withdraw canceled event");
     const withdrawApprovedEvent = events.bridge.withdrawApproved.v2;

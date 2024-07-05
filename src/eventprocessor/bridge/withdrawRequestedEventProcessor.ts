@@ -16,7 +16,7 @@ export class WithdrawRequestedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     console.log("Bridge withdraw request event");
     const withdrawRequestedEvent = events.bridge.withdrawRequested.v2;
