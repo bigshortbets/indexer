@@ -19,7 +19,7 @@ export class WithdrawApprovedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Bridge withdraw canceled event");
-    const withdrawApprovedEvent = events.bridge.withdrawApproved.v1;
+    const withdrawApprovedEvent = events.bridge.withdrawApproved.v2;
     if (withdrawApprovedEvent.is(event)) {
       const parsedEvent = withdrawApprovedEvent.decode(event);
       let withdraw = await ctx.store.findOne(Withdraw, {

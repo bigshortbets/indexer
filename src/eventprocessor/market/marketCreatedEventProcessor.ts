@@ -21,7 +21,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
     block: Block<any>,
     event: Event,
   ) {
-    let receivedEvent = market.marketCreated.v1;
+    let receivedEvent = market.marketCreated.v2;
 
     if (receivedEvent.is(event)) {
       const decodedEvent = receivedEvent.decode(event);

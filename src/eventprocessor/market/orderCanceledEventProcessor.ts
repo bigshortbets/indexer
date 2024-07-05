@@ -20,7 +20,7 @@ export class OrderCanceledEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Order canceled event");
-    const orderCanceledEvent = market.orderCanceled.v1;
+    const orderCanceledEvent = market.orderCanceled.v2;
     if (orderCanceledEvent.is(event)) {
       let parsedEvent = orderCanceledEvent.decode(event);
       let order = await ctx.store.findOne(Order, {

@@ -20,7 +20,7 @@ export class OrderFilledEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Order filled event");
-    const orderFilledEvent = events.market.orderFilled.v1;
+    const orderFilledEvent = events.market.orderFilled.v2;
     if (orderFilledEvent.is(event)) {
       let parsedEvent = orderFilledEvent.decode(event);
 

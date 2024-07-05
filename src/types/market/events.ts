@@ -1,12 +1,12 @@
 import {sts, Block, Bytes, Option, Result, EventType, RuntimeCtx} from '../support'
-import * as v1 from '../v1'
+import * as v2 from '../v2'
 
 export const marketCreated =  {
     name: 'Market.MarketCreated',
     /**
      * New Market created
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.MarketCreated',
         sts.struct({
             marketId: sts.bigint(),
@@ -16,9 +16,9 @@ export const marketCreated =  {
              * Block number that will expire given market
              */
             lifetime: sts.number(),
-            initialMargin: v1.Percent,
-            maintenanceMargin: v1.Percent,
-            contractUnit: v1.ContractUnit,
+            initialMargin: v2.Percent,
+            maintenanceMargin: v2.Percent,
+            contractUnit: v2.ContractUnit,
         })
     ),
 }
@@ -28,7 +28,7 @@ export const marketRemoved =  {
     /**
      * Market has been closed and removed
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.MarketRemoved',
         sts.struct({
             marketId: sts.bigint(),
@@ -41,15 +41,15 @@ export const orderCreated =  {
     /**
      * New Order settled
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.OrderCreated',
         sts.struct({
             market: sts.bigint(),
             price: sts.bigint(),
-            side: v1.OrderSide,
-            orderType: v1.OrderType,
+            side: v2.OrderSide,
+            orderType: v2.OrderType,
             quantity: sts.number(),
-            who: v1.AccountId32,
+            who: v2.AccountId32,
             orderId: sts.bigint(),
         })
     ),
@@ -60,7 +60,7 @@ export const orderExtended =  {
     /**
      * Order has been extended
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.OrderExtended',
         sts.struct({
             market: sts.bigint(),
@@ -77,7 +77,7 @@ export const orderReduced =  {
     /**
      * Status of the order changed
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.OrderReduced',
         sts.struct({
             market: sts.bigint(),
@@ -95,7 +95,7 @@ export const orderFilled =  {
     /**
      * Entire order has been realized
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.OrderFilled',
         sts.struct({
             market: sts.bigint(),
@@ -109,7 +109,7 @@ export const orderCanceled =  {
     /**
      * Order has been canceled
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.OrderCanceled',
         sts.struct({
             market: sts.bigint(),
@@ -123,15 +123,15 @@ export const positionCreated =  {
     /**
      * New position created
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.PositionCreated',
         sts.struct({
             market: sts.bigint(),
             positionId: sts.bigint(),
             price: sts.bigint(),
             quantity: sts.number(),
-            long: v1.AccountId32,
-            short: v1.AccountId32,
+            long: v2.AccountId32,
+            short: v2.AccountId32,
         })
     ),
 }
@@ -141,7 +141,7 @@ export const positionReduced =  {
     /**
      * Position reduced
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.PositionReduced',
         sts.struct({
             market: sts.bigint(),
@@ -156,7 +156,7 @@ export const positionMarkedToMarket =  {
     /**
      * Position marked to market with oracle price
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.PositionMarkedToMarket',
         sts.struct({
             market: sts.bigint(),
@@ -171,7 +171,7 @@ export const positionClosed =  {
     /**
      * Position closed
      */
-    v1: new EventType(
+    v2: new EventType(
         'Market.PositionClosed',
         sts.struct({
             market: sts.bigint(),

@@ -19,7 +19,7 @@ export class PositionReducedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Position reduced event");
-    const positionReducedEvent = events.market.positionReduced.v1;
+    const positionReducedEvent = events.market.positionReduced.v2;
     if (positionReducedEvent.is(event)) {
       let parsedEvent = positionReducedEvent.decode(event);
       let position = await ctx.store.findOne(Position, {

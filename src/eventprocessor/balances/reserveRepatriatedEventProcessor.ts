@@ -30,7 +30,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     call: Call,
   ) {
     console.log("Reserve repatriated event");
-    const reserveRepatriatedEvent = events.balances.reserveRepatriated.v1;
+    const reserveRepatriatedEvent = events.balances.reserveRepatriated.v2;
     const found = block.events.find(
       (element) =>
         (element.index === event.index + 1 ||

@@ -18,7 +18,7 @@ export class AggregatedOrdersHandler {
     if (aggregatedOrder === undefined) {
       await store.save(
         new AggregatedOrdersByPrice({
-          id: order.id,
+          id: `${order.market.id}.${order.price}.${orderSide}`,
           price: order.price,
           quantity: order.quantity,
           market: order.market,

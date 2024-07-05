@@ -20,7 +20,7 @@ export class OrderReducedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Order reduced event");
-    const orderReducedEvent = events.market.orderReduced.v1;
+    const orderReducedEvent = events.market.orderReduced.v2;
     if (orderReducedEvent.is(event)) {
       let parsedEvent = orderReducedEvent.decode(event);
       let persistedOrder = await ctx.store.findOne(Order, {

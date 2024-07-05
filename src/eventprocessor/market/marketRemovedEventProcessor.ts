@@ -19,7 +19,7 @@ export class MarketRemovedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Market removed event");
-    const marketRemovedEvent = market.marketRemoved.v1;
+    const marketRemovedEvent = market.marketRemoved.v2;
     if (marketRemovedEvent.is(event)) {
       let parsedEvent = marketRemovedEvent.decode(event);
       const marketLeaderboard = await ctx.store.find(UserBalance, {

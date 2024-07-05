@@ -20,7 +20,7 @@ export class OrderExtendedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Order extended event");
-    const orderExtendedEvent = events.market.orderExtended.v1;
+    const orderExtendedEvent = events.market.orderExtended.v2;
     if (orderExtendedEvent.is(event)) {
       const parsedEvent = orderExtendedEvent.decode(event);
       let existingOrder = await ctx.store.findOne(Order, {
