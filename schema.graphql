@@ -87,7 +87,7 @@ type AggregatedOrdersByPrice @entity {
   id: ID!
   price: BigDecimal!
   quantity: BigInt!
-  market: Market!
+  market: Market! @index
   side: OrderSide!
 }
 

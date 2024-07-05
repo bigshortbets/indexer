@@ -17,10 +17,10 @@ export class OrderFilledEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Order filled event");
-    const orderFilledEvent = events.market.orderFilled.v1;
+    const orderFilledEvent = events.market.orderFilled.v2;
     if (orderFilledEvent.is(event)) {
       let parsedEvent = orderFilledEvent.decode(event);
 
@@ -31,7 +31,7 @@ export class OrderFilledEventProcessor implements EventProcessor {
       if (order) {
         await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(
           ctx.store,
-          order,
+          order
         );
         order.status = OrderStatus.COMPLETED;
         order.quantity = BigInt(0);

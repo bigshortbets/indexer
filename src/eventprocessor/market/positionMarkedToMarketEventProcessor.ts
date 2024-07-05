@@ -18,10 +18,10 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Position marked to marked event");
-    const positionMarkedToMarketEvent = events.market.positionMarkedToMarket.v1;
+    const positionMarkedToMarketEvent = events.market.positionMarkedToMarket.v2;
     if (positionMarkedToMarketEvent.is(event)) {
       let parsedEvent = positionMarkedToMarketEvent.decode(event);
       let position = await ctx.store.findOne(Position, {

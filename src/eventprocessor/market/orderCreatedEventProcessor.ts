@@ -32,9 +32,9 @@ export class OrderCreatedEventProcessor implements EventProcessor {
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
     event: Event,
-    call: Call,
+    call: Call
   ) {
-    const orderCreatedEvent = events.market.orderCreated.v1;
+    const orderCreatedEvent = events.market.orderCreated.v2;
     if (orderCreatedEvent.is(event)) {
       const parsedEvent = orderCreatedEvent.decode(event);
       const market = await ctx.store.get(Market, parsedEvent.market.toString());
@@ -65,7 +65,7 @@ export class OrderCreatedEventProcessor implements EventProcessor {
       await ctx.store.save(order);
       await AggregatedOrdersHandler.addNewOrderToTheAggregatedOrders(
         ctx.store,
-        order,
+        order
       );
     } else {
       console.error("Unsupported spec");

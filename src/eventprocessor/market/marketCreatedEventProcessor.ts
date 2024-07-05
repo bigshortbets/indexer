@@ -19,9 +19,9 @@ export class MarketCreatedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
-    let receivedEvent = market.marketCreated.v1;
+    let receivedEvent = market.marketCreated.v2;
 
     if (receivedEvent.is(event)) {
       const decodedEvent = receivedEvent.decode(event);
@@ -34,7 +34,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
         maintenanceMargin: decodedEvent.maintenanceMargin,
         contractUnit: BigDecimal(
           decodedEvent.contractUnit.contractUnit,
-          decodedEvent.contractUnit.decimals,
+          decodedEvent.contractUnit.decimals
         ),
         blockHeight: BigInt(block.header.height),
         // @ts-ignore

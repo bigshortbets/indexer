@@ -19,10 +19,10 @@ export class PositionCreatedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Position created event");
-    const positionCreatedEvent = events.market.positionCreated.v1;
+    const positionCreatedEvent = events.market.positionCreated.v2;
     if (positionCreatedEvent.is(event)) {
       let parsedEvent = positionCreatedEvent.decode(event);
       let market = await ctx.store.get(Market, parsedEvent.market.toString());

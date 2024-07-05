@@ -15,10 +15,10 @@ export class PositionClosedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Position closed event");
-    const positionClosedEvent = events.market.positionClosed.v1;
+    const positionClosedEvent = events.market.positionClosed.v2;
     if (positionClosedEvent.is(event)) {
       let parsedEvent = positionClosedEvent.decode(event);
       let position = await ctx.store.findOne(Position, {

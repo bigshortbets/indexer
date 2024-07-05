@@ -17,10 +17,10 @@ export class OrderCanceledEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     console.log("Order canceled event");
-    const orderCanceledEvent = market.orderCanceled.v1;
+    const orderCanceledEvent = market.orderCanceled.v2;
     if (orderCanceledEvent.is(event)) {
       let parsedEvent = orderCanceledEvent.decode(event);
       let order = await ctx.store.findOne(Order, {
@@ -30,7 +30,7 @@ export class OrderCanceledEventProcessor implements EventProcessor {
       if (order) {
         await AggregatedOrdersHandler.removeOrderFromAggregatedOrders(
           ctx.store,
-          order,
+          order
         );
         if (order.status === OrderStatus.AUTOMATICALLY_MODIFIED) {
           order.status = OrderStatus.AUTOMATICALLY_CANCELLED;

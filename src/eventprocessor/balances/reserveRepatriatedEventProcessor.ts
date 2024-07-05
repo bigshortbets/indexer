@@ -27,10 +27,10 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
     event: Event,
-    call: Call,
+    call: Call
   ) {
     console.log("Reserve repatriated event");
-    const reserveRepatriatedEvent = events.balances.reserveRepatriated.v1;
+    const reserveRepatriatedEvent = events.balances.reserveRepatriated.v2;
     const found = block.events.find(
       (element) =>
         (element.index === event.index + 1 ||
@@ -39,7 +39,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         element.callAddress?.toString() === event.callAddress?.toString() &&
         (element.name === "Market.PositionMarkedToMarket" ||
           element.name === "Market.PositionReduced" ||
-          element.name === "Market.PositionClosed"),
+          element.name === "Market.PositionClosed")
     );
     if (reserveRepatriatedEvent.is(event)) {
       const parsedEvent = reserveRepatriatedEvent.decode(event);
@@ -83,7 +83,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(-1),
         market,
         event.id,
-        "0",
+        "0"
       );
       await this.saveUserBalance(
         ctx,
@@ -92,17 +92,17 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
         BigDecimal(parsedEvent.amount, USDC_DECIMALS),
         market,
         event.id,
-        "1",
+        "1"
       );
       await this.saveGeneralRanking(
         ctx,
         userFromAddress,
-        BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(-1),
+        BigDecimal(parsedEvent.amount, USDC_DECIMALS).times(-1)
       );
       await this.saveGeneralRanking(
         ctx,
         userToAddress,
-        BigDecimal(parsedEvent.amount, USDC_DECIMALS),
+        BigDecimal(parsedEvent.amount, USDC_DECIMALS)
       );
     } else {
       console.error("Unsupported spec");
@@ -112,7 +112,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
   private async saveGeneralRanking(
     ctx: DataHandlerContext<Store, any>,
     userAddress: string,
-    amount: BigDecimal,
+    amount: BigDecimal
   ) {
     const user = await ctx.store.findOne(GeneralLeaderboard, {
       where: {
@@ -138,7 +138,7 @@ export class ReserveRepatriatedEventProcessor implements EventProcessor {
     amount: BigDecimal,
     market: Market,
     eventId: string,
-    idSufix: string,
+    idSufix: string
   ) {
     const user = await ctx.store.findOne(UserBalance, {
       where: {
