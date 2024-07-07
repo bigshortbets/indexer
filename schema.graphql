@@ -73,6 +73,8 @@ type Position @entity {
   id: ID!
   market: Market!
   createPrice: BigDecimal!
+  createPriceLong: BigDecimal!
+  createPriceShort: BigDecimal!
   price: BigDecimal!
   quantity: BigInt!
   quantityLeft: BigInt!

@@ -1,11 +1,12 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { Order, OrderStatus } from "../../model";
+import { Order, OrderStatus, Position, OrderSide } from "../../model";
 import { AggregatedOrdersHandler } from "./aggregatedOrdersHandler";
 import {
   DataHandlerContext,
   Event,
   Block,
+  Call,
 } from "@subsquid/substrate-processor";
 import * as events from "../../types/events";
 
@@ -33,6 +34,43 @@ export class OrderFilledEventProcessor implements EventProcessor {
           ctx.store,
           order,
         );
+
+        if (order.type.isTypeOf === "ClosingOrder") {
+          let offsetingPositionId = order.type.value;
+          let offsetingPosition = await ctx.store.findOne(Position, {
+            where: { id: offsetingPositionId.toString() },
+          });
+
+          if (offsetingPosition) {
+            const positionCreatedEvent = block.events.find(
+              (element) =>
+                element.index < event.index &&
+                event.index - element.index <= 4 &&
+                element.callAddress?.toString() ===
+                  event.callAddress?.toString() &&
+                element.name === "Market.PositionCreated",
+            );
+            if (positionCreatedEvent) {
+              let newPosition = await ctx.store.findOne(Position, {
+                where: { id: positionCreatedEvent?.args.positionId.toString() },
+              });
+
+              if (newPosition) {
+                if (order.side === OrderSide.LONG) {
+                  newPosition.createPriceLong =
+                    offsetingPosition.createPriceLong;
+                } else {
+                  newPosition.createPriceShort =
+                    offsetingPosition.createPriceShort;
+                }
+                await ctx.store.save(newPosition);
+              }
+            }
+          } else {
+            console.warn("Position not found");
+          }
+        }
+
         order.status = OrderStatus.COMPLETED;
         order.quantity = BigInt(0);
         await ctx.store.save(order);
