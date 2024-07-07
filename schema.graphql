@@ -118,3 +118,14 @@ type GeneralLeaderboard @entity {
   id: ID! @index
   balanceChange: BigDecimal! @index
 }
+
+type HistoricalOraclePrice @entity {
+  id: ID!
+  market: Market!
+  price: BigDecimal!
+  timestamp: DateTime!
+}
+
+type Query {
+  historicalOraclePrices(marketId: ID!, startTime: DateTime!, endTime: DateTime!): [HistoricalOraclePrice!]!
+}
