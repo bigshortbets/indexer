@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-// src/utils/marginDataProvider.ts
-=======
->>>>>>> Stashed changes
 import { HttpProvider } from "@polkadot/api";
 import * as ss58 from "@subsquid/ss58-codec"; 
 import { convertStringValueToHexBigEndian } from "./encodersUtils";
@@ -32,40 +28,17 @@ export class MarginDataProvider {
     const dataBytes = encodedMarketId + hexWalletAddress 
     // Ensure the hexWalletAddress is used directly in the rpc call
     try {
-      console.log(`Calling MarketApi_margin_data with marketId ${marketId} and hexWalletAddress ${hexWalletAddress}`);
       const marginData = await MarginDataProvider.api.rpc.state.call(
-<<<<<<< Updated upstream
-        "MarketApi_margin",
-        dataBytes
-      );
-
-      console.log('Creating Option<Balance> type from marginData');
-      const optionType = MarginDataProvider.api.createType(
-=======
         "MarketApi_margin_data",
         dataBytes
       );
-
-      console.log('Creating Balance type from margin');
       const margin = MarginDataProvider.api.createType(
->>>>>>> Stashed changes
+
         "Balance",
         marginData
       );
-
-<<<<<<< Updated upstream
-      const result = optionType.unwrapOr(0).toString();
-      console.log(`Fetched margin data: ${result}`);
-      return result;
-=======
-      console.log(`Fetched margin data: ${margin}`);
       return marginData;
->>>>>>> Stashed changes
     } catch (error) {
-      console.error("Error fetching margin data:", error);
-      console.error(`MarketId: ${marketId}`);
-      console.error(`WalletAddress: ${walletAddress}`);
-      console.error(`Hex WalletAddress: ${hexWalletAddress}`);
       throw error;
     }
   }

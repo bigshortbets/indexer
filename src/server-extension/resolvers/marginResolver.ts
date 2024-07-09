@@ -5,7 +5,7 @@ import { MarginProvider } from "../../utils";
 @ObjectType()
 export class MarginDataForMarket {
   @Field(() => String, { nullable: false })
-  data!: string;
+  Margin!: string;
 
   constructor(props: Partial<MarginDataForMarket>) {
     Object.assign(this, props);
@@ -23,7 +23,7 @@ export class MarginResolver {
       throw new Error("MarketId or WalletAddress is empty");
     }
     return new MarginDataForMarket({
-      data: await MarginProvider.getMarginForMarket(marketId, walletAddress),
+      Margin: await MarginProvider.getMarginForMarket(marketId, walletAddress),
     });
   }
 }
