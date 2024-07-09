@@ -2,7 +2,7 @@
   "name": "squid",
   "private": true,
   "engines": {
-    "node": ">=16"
+    "node": ">=22"
   },
   "scripts": {
     "build": "rm -rf lib && tsc"
