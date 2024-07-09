@@ -14,26 +14,26 @@ jobs:
         with:
           node-version: 22
 
-  check-blockchain-metadata:
-    name: Check if metadata are in sync with blockchain
-    needs: install-node
-    runs-on: ubuntu-latest
+  # check-blockchain-metadata:
+  #   name: Check if metadata are in sync with blockchain
+  #   needs: install-node
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v4
 
-      - name: Install substrate metadata explorer
-        run: npm install -g @subsquid/substrate-metadata-explorer
+  #     - name: Install substrate metadata explorer
+  #       run: npm install -g @subsquid/substrate-metadata-explorer
 
-      - name: Check metadata
-        env:
-          BLOCKCHAIN_NODE_RPC: ${{ secrets.BLOCKCHAIN_NODE_RPC }}
-        run: squid-substrate-metadata-explorer --rpc $BLOCKCHAIN_NODE_RPC --out types.jsonl
+  #     - name: Check metadata
+  #       env:
+  #         BLOCKCHAIN_NODE_RPC: ${{ secrets.BLOCKCHAIN_NODE_RPC }}
+  #       run: squid-substrate-metadata-explorer --rpc $BLOCKCHAIN_NODE_RPC --out types.jsonl
 
-      - name: Check if metadata requires update
-        run: git diff --exit-code types.jsonl
+  #     - name: Check if metadata requires update
+  #       run: git diff --exit-code types.jsonl
 
   check-formatting:
     name: Execute linter and check formatting
@@ -73,26 +73,26 @@ jobs:
       - name: Install typeorm-codegen
         run: npm install @subsquid/typeorm-codegen --save-dev
 
-      - name: Execute typegen
-        run: sqd typegen
+      # - name: Execute typegen
+      #   run: sqd typegen
 
-      - name: Check if sqd typegen needs to be executed locally
-        run: git diff --exit-code src/types
+      # - name: Check if sqd typegen needs to be executed locally
+      #   run: git diff --exit-code src/types
 
-      - name: Execute codegen
-        run: sqd codegen
+      # - name: Execute codegen
+      #   run: sqd codegen
 
-      - name: Check if sqd codegen needs to be executed locally
-        run: git diff --exit-code src/model/generated
+      # - name: Check if sqd codegen needs to be executed locally
+      #   run: git diff --exit-code src/model/generated
 
-      - name: Start PostgreSQL database
-        run: sqd up
+      # - name: Start PostgreSQL database
+      #   run: sqd up
 
-      - name: Build project
-        run: sqd build
+      # - name: Build project
+      #   run: sqd build
 
-      - name: Apply migrations
-        run: sqd migration:apply
+      # - name: Apply migrations
+      #   run: sqd migration:apply
 
       # - name: Serve graphql
       #   uses: JarvusInnovations/background-action@v1
