@@ -64,6 +64,9 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
+      - name: Check node version
+        run: node --version
+
       - name: Install sqd toolset
         run: npm install -g @subsquid/cli@latest
 
