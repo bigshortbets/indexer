@@ -4,25 +4,19 @@ on:
   push:
 
 jobs:
-  install-node:
-    name: Install NodeJS
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Setup NodeJS
-        uses: actions/setup-node@v2
-        with:
-          node-version: 22
-
   check-blockchain-metadata:
     name: Check if metadata are in sync with blockchain
-    needs: install-node
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Install substrate metadata explorer
         run: npm install -g @subsquid/substrate-metadata-explorer
@@ -37,13 +31,17 @@ jobs:
 
   check-formatting:
     name: Execute linter and check formatting
-    needs: install-node
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Install linter
         run: npm install -g --save-dev --save-exact prettier
@@ -56,13 +54,22 @@ jobs:
 
   build-project:
     name: Build project and check associated generation steps
-    needs: install-node
     runs-on: ubuntu-latest
-
+    env:
+      NODE_RPC_URL: ${{ secrets.BLOCKCHAIN_NODE_RPC }}
+      DATA_SOURCE_CHAIN: ${{ secrets.BLOCKCHAIN_NODE_RPC }}
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check node version
+        run: node --version
 
       - name: Install sqd toolset
         run: npm install -g @subsquid/cli@latest
@@ -91,26 +98,11 @@ jobs:
       - name: Apply migrations
         run: sqd migration:apply
 
-      # - name: Serve graphql
-      #   uses: JarvusInnovations/background-action@v1
-      #   with:
-      #     run: sqd serve
-      #     wait-on: http://localhost:4350/graphql
+      - name: Run processor in backgorund
+        run: sqd process &
 
-      # - name: Run blockchain local node
-      #   uses: addnab/docker-run-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-      #     image: bigshortbets/node:amd64
-      #     options: -d
-      #     run: frontier-template-node --dev --rpc-external --rpc-cors=all --rpc-methods=Safe --pruning=archive
-
-      # - name: Run processor
-      #   uses: JarvusInnovations/background-action@v1
-      #   with:
-      #     run: sqd process
-      #     # Prometheus metrics
-      #     wait-on: |
-      #       tcp:localhost:3000
-      #     wait-for: 1m
+      - name: Serve graphql
+        uses: JarvusInnovations/background-action@v1
+        with:
+          run: sqd serve:prod
+          wait-on: http://localhost:4350/graphql
