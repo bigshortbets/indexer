@@ -39,6 +39,8 @@ export class PositionCreatedEventProcessor implements EventProcessor {
           status: PositionStatus.OPEN,
           quantityLeft: BigInt(parsedEvent.quantity),
           createPrice: BigDecimal(parsedEvent.price, USDC_DECIMALS),
+          createPriceLong: BigDecimal(parsedEvent.price, USDC_DECIMALS),
+          createPriceShort: BigDecimal(parsedEvent.price, USDC_DECIMALS),
           price: BigDecimal(parsedEvent.price, USDC_DECIMALS), // temporary - set in the next event
         });
         await ctx.store.save(position);

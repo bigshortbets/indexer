@@ -20,6 +20,12 @@ export class Position {
     createPrice!: BigDecimal
 
     @BigDecimalColumn_({nullable: false})
+    createPriceLong!: BigDecimal
+
+    @BigDecimalColumn_({nullable: false})
+    createPriceShort!: BigDecimal
+
+    @BigDecimalColumn_({nullable: false})
     price!: BigDecimal
 
     @BigIntColumn_({nullable: false})

@@ -1276,7 +1276,7 @@
     "@subsquid/util-internal-json" "^1.2.2"
     supports-color "^8.1.1"
 
-"@subsquid/openreader@^4.5.1", "@subsquid/openreader@^4.6.0":
+"@subsquid/openreader@^4.6.0":
   version "4.6.0"
   resolved "https://registry.npmjs.org/@subsquid/openreader/-/openreader-4.6.0.tgz"
   integrity sha512-/05vSoKP3UHxU6GJYfKcfSIi4bWfzbr9x/H2wW5XxE4uc8gFeaVZHCmQMTaO9941oK//9rk9BQTH5Slhwuj7gw==
@@ -1300,7 +1300,7 @@
     pg "^8.11.3"
     ws "^8.14.2"
 
-"@subsquid/rpc-client@^4.5.0", "@subsquid/rpc-client@^4.7.0", "@subsquid/rpc-client@^4.8.0", "@subsquid/rpc-client@^4.9.0":
+"@subsquid/rpc-client@^4.5.0", "@subsquid/rpc-client@^4.9.0":
   version "4.9.0"
   resolved "https://registry.npmjs.org/@subsquid/rpc-client/-/rpc-client-4.9.0.tgz"
   integrity sha512-lpb6qRMMlaacXOFPRhv4CZ7g4w7pKIR7ZEbMjyFexLOdv9MkcYzuGD5XT5REGaBA6mfQMaLa33K5lqAb+tJKBQ==
@@ -1344,26 +1344,26 @@
     "@subsquid/ss58-codec" "^1.2.3"
     "@subsquid/util-internal-hex" "^1.2.2"
 
-"@subsquid/substrate-data-raw@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/@subsquid/substrate-data-raw/-/substrate-data-raw-1.1.2.tgz"
-  integrity sha512-7avtgVy77acgPG8zBoJ9siTpuZ3stNdUojTP4RQeJrArpR4jbyh6Ui3Cv2nIfLPxNfVpV11qoPQ1XVKv7vb0vQ==
+"@subsquid/substrate-data-raw@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.npmjs.org/@subsquid/substrate-data-raw/-/substrate-data-raw-1.1.5.tgz"
+  integrity sha512-YdS7JkKyySdCXAjYBcTJ7TBDTbIQyvG4wyiPPrRXDz4YltBkb8qmxepx/vPUoFgkvkCXH1w3ADhlTQYdyTsdyQ==
   dependencies:
-    "@subsquid/util-internal" "^3.1.0"
-    "@subsquid/util-internal-ingest-tools" "^1.1.2"
+    "@subsquid/util-internal" "^3.2.0"
+    "@subsquid/util-internal-ingest-tools" "^1.1.4"
     "@subsquid/util-internal-range" "^0.3.0"
     "@subsquid/util-timeout" "^2.3.2"
 
-"@subsquid/substrate-data@^4.0.4":
-  version "4.0.4"
-  resolved "https://registry.npmjs.org/@subsquid/substrate-data/-/substrate-data-4.0.4.tgz"
-  integrity sha512-Ad5B1f4I4SqmGJfOAjuKF5zD2B6VSYNx67XpfHcNMoT9yBc8tTf87EEYb37wty1K6s6ZZTh60zWec2dUviIltA==
+"@subsquid/substrate-data@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/@subsquid/substrate-data/-/substrate-data-4.1.0.tgz"
+  integrity sha512-IrhgP1LsqWbXtg35WQEUbVF1xkeNuSPCcwV2TCnjWM2IK2w/LpHN6JLdOIbxQVm3Em1BBPaJUzAakF24gDJQBA==
   dependencies:
     "@subsquid/scale-codec" "^4.0.1"
-    "@subsquid/substrate-data-raw" "^1.1.2"
-    "@subsquid/util-internal" "^3.1.0"
+    "@subsquid/substrate-data-raw" "^1.1.5"
+    "@subsquid/util-internal" "^3.2.0"
     "@subsquid/util-internal-hex" "^1.2.2"
-    "@subsquid/util-internal-ingest-tools" "^1.1.2"
+    "@subsquid/util-internal-ingest-tools" "^1.1.4"
     "@subsquid/util-internal-range" "^0.3.0"
     "@subsquid/util-xxhash" "^1.2.2"
     "@substrate/calc" "^0.2.8"
@@ -1382,20 +1382,20 @@
     "@subsquid/util-internal-read-lines" "^1.2.2"
     commander "^11.1.0"
 
-"@subsquid/substrate-processor@^8.3.1":
-  version "8.3.1"
-  resolved "https://registry.npmjs.org/@subsquid/substrate-processor/-/substrate-processor-8.3.1.tgz"
-  integrity sha512-I0vvDENLQZTy/vXOHAe0Oth52XVJZyhMNXhrzfA+mI1WMxMBQt2gf6x7J2T/OjTWHJoQUMMv8MWfk3s++hJZpg==
+"@subsquid/substrate-processor@^8.4.1":
+  version "8.4.1"
+  resolved "https://registry.npmjs.org/@subsquid/substrate-processor/-/substrate-processor-8.4.1.tgz"
+  integrity sha512-LGYNBQPi4W8OPHwvTi95HjNtqVQrhY22xNk1TChFD5A7MKdgZ4oIc51TnlZGrAzWCbAD5jcbp75DOSexQdwaXg==
   dependencies:
     "@subsquid/http-client" "^1.4.0"
     "@subsquid/logger" "^1.3.3"
     "@subsquid/rpc-client" "^4.9.0"
-    "@subsquid/substrate-data" "^4.0.4"
-    "@subsquid/substrate-data-raw" "^1.1.2"
+    "@subsquid/substrate-data" "^4.1.0"
+    "@subsquid/substrate-data-raw" "^1.1.5"
     "@subsquid/util-internal" "^3.2.0"
     "@subsquid/util-internal-archive-client" "^0.1.2"
     "@subsquid/util-internal-hex" "^1.2.2"
-    "@subsquid/util-internal-ingest-tools" "^1.1.2"
+    "@subsquid/util-internal-ingest-tools" "^1.1.4"
     "@subsquid/util-internal-json" "^1.2.3"
     "@subsquid/util-internal-processor-tools" "^4.1.1"
     "@subsquid/util-internal-range" "^0.3.0"
@@ -1429,15 +1429,15 @@
     "@subsquid/util-naming" "^1.2.2"
     commander "^11.1.0"
 
-"@subsquid/typeorm-codegen@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@subsquid/typeorm-codegen/-/typeorm-codegen-2.0.0.tgz"
-  integrity sha512-AZ3rQr/uT3wOmequjfrfkp0sOl7XGj2yG33gNelJOTtbMOfqRucI82lP+eslnmiAORX2dzDvbs97hIvxpf2WMA==
+"@subsquid/typeorm-codegen@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/@subsquid/typeorm-codegen/-/typeorm-codegen-2.0.1.tgz"
+  integrity sha512-OVQTHSn538lzxgZuuf4NJiRvoHPuAmAK2Hfr4PEhaAVJg1AufjXL5CjZUjDOZEFgepgS7GH40RVZJEq7E0obzg==
   dependencies:
-    "@subsquid/openreader" "^4.5.1"
-    "@subsquid/util-internal" "^3.1.0"
+    "@subsquid/openreader" "^4.6.0"
+    "@subsquid/util-internal" "^3.2.0"
     "@subsquid/util-internal-code-printer" "^1.2.2"
-    "@subsquid/util-naming" "^1.2.2"
+    "@subsquid/util-naming" "^1.3.0"
     commander "^11.1.0"
 
 "@subsquid/typeorm-config@^4.1.0", "@subsquid/typeorm-config@^4.1.1":
@@ -1461,13 +1461,13 @@
     commander "^11.1.0"
     dotenv "^16.3.1"
 
-"@subsquid/typeorm-store@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/@subsquid/typeorm-store/-/typeorm-store-1.4.0.tgz"
-  integrity sha512-Ff96ySH3btbGC8QgFkMEtuylz8lrBeAcbBSy/XF9pQLDdpun01yxekJwmKKPswQxYqSQgwEt38Nmp2jvC0BysQ==
+"@subsquid/typeorm-store@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.npmjs.org/@subsquid/typeorm-store/-/typeorm-store-1.5.1.tgz"
+  integrity sha512-XIhc/4qotnJP+8RDxWjUdsSCr+LOPOAp9U+u0VCqnyXx5rN13MDS0L5KSkIGinr/OQtK1CBWmRpDLF4ExWcWCw==
   dependencies:
-    "@subsquid/typeorm-config" "^4.1.0"
-    "@subsquid/util-internal" "^3.1.0"
+    "@subsquid/typeorm-config" "^4.1.1"
+    "@subsquid/util-internal" "^3.2.0"
 
 "@subsquid/util-internal-archive-client@^0.1.2":
   version "0.1.2"
@@ -1523,13 +1523,13 @@
     "@subsquid/logger" "^1.3.3"
     stoppable "^1.1.0"
 
-"@subsquid/util-internal-ingest-tools@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/@subsquid/util-internal-ingest-tools/-/util-internal-ingest-tools-1.1.2.tgz"
-  integrity sha512-1fgi4W6x1B2+fYLGwjo+R4FjbLvR2b9h2/0EEqT8Ww6o4V15EubLf1TjBr8o/AWGN5Y/eYaMqWlFzbQsKQlcUQ==
+"@subsquid/util-internal-ingest-tools@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.npmjs.org/@subsquid/util-internal-ingest-tools/-/util-internal-ingest-tools-1.1.4.tgz"
+  integrity sha512-2xWyqfg0mITsNdsYuGi3++UTy/D04N69KovyW5Rd71zCDSEedV0ePX5hQl/IT/o+H/u++HcXPggwJMVl09g6kQ==
   dependencies:
     "@subsquid/logger" "^1.3.3"
-    "@subsquid/util-internal" "^3.1.0"
+    "@subsquid/util-internal" "^3.2.0"
     "@subsquid/util-internal-range" "^0.3.0"
 
 "@subsquid/util-internal-json-fix-unsafe-integers@^0.0.0":
@@ -2957,6 +2957,11 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
+
+fsevents@^2.3.2:
+  version "2.3.3"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
 function-bind@^1.1.2:
   version "1.1.2"

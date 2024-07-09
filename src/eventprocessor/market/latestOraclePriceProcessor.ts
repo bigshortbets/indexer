@@ -26,7 +26,6 @@ export class LatestOraclePriceProcessor implements EventProcessor {
     block: Block<any>,
     event: Event,
   ) {
-    console.log("Latest oracle price event");
     const receivedEvent = oracle.newFeedData.v2;
     if (receivedEvent.is(event)) {
       const decodedEvent = receivedEvent.decode(event);
