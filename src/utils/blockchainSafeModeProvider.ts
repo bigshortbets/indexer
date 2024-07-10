@@ -8,15 +8,24 @@ export class BlockchainSafeModeProvider {
     const provider = new HttpProvider(process.env.NODE_RPC_URL);
     BlockchainSafeModeProvider.api = await ApiPromise.create({ provider });
 
-    const signedBlock =
-      await BlockchainSafeModeProvider.api.rpc.chain.getBlock(blockhash);
+    const lastHeader =
+      await BlockchainSafeModeProvider.api.rpc.chain.getHeader();
+    let lastBlockHash = lastHeader.hash;
 
-    const isInSafeMode = await storage.enteredUntil.v2.get(signedBlock);
+    if (blockhash) {
+      lastBlockHash = blockhash;
+    }
 
-    const optionType = BlockchainSafeModeProvider.api.createType(
-      "Option<SafeMode>",
+    const isInSafeMode =
+      await BlockchainSafeModeProvider.api.rpc.state.getStorage(
+        "SafeMode.EnteredUntil",
+        lastBlockHash
+      );
+
+    const enteredUntil = BlockchainSafeModeProvider.api.createType(
+      "Option<u32>",
       isInSafeMode
     );
-    return optionType.unwrapOr(0).toString();
+    return enteredUntil.unwrapOr(null)?.toNumber();
   }
 }

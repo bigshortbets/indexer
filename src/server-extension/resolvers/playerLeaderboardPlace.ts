@@ -17,13 +17,15 @@ export class PlayerLeaderBoardResolver {
   constructor(private tx: () => Promise<EntityManager>) {}
 
   @Query(() => PlayerLeaderBoardMode)
-  async getLatestOraclePrice(
+  async getPlayerLeaderboardPlace(
     @Arg("userAddress") userAddress: string
   ): Promise<PlayerLeaderBoardMode> {
     const manager = await this.tx();
 
     const allUsers = await manager.getRepository(GeneralLeaderboard).find();
-
+    if (allUsers.length == 0) {
+      throw new Error("Leaderboard is empty");
+    }
     return new PlayerLeaderBoardMode({
       rankingPlace: await UserLeaderboardPlaceProvider.getUserPlace(
         allUsers,

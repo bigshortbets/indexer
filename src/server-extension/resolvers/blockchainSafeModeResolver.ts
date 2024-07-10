@@ -13,7 +13,7 @@ export class BlockchainSafeMode {
 @Resolver()
 export class BlockchainSafeModeResolver {
   @Query(() => BlockchainSafeMode)
-  async getLatestOraclePrice(
+  async getBlockchainSafeMode(
     @Arg("blockhash", { nullable: true }) blockhash: string
   ): Promise<BlockchainSafeMode> {
     return new BlockchainSafeMode({
