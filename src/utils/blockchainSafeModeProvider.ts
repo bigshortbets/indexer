@@ -19,12 +19,12 @@ export class BlockchainSafeModeProvider {
     const isInSafeMode =
       await BlockchainSafeModeProvider.api.rpc.state.getStorage(
         "SafeMode.EnteredUntil",
-        lastBlockHash
+        lastBlockHash,
       );
 
     const enteredUntil = BlockchainSafeModeProvider.api.createType(
       "Option<u32>",
-      isInSafeMode
+      isInSafeMode,
     );
     return enteredUntil.unwrapOr(null)?.toNumber();
   }
