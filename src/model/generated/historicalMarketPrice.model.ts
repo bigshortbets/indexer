@@ -3,8 +3,8 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, B
 import {Market} from "./market.model"
 
 @Entity_()
-export class MarketPrices {
-    constructor(props?: Partial<MarketPrices>) {
+export class HistoricalMarketPrice {
+    constructor(props?: Partial<HistoricalMarketPrice>) {
         Object.assign(this, props)
     }
 
