@@ -2,7 +2,7 @@ import { GeneralLeaderboard } from "../model";
 
 export async function getUserPlace(
   allUsers: GeneralLeaderboard[],
-  userAddress: string
+  userAddress: string,
 ): Promise<number> {
   const sortedUsers = allUsers.sort((a, b) => {
     return b.balanceChange.cmp(a.balanceChange);

@@ -14,7 +14,7 @@ export class BlockchainSafeMode {
 export class BlockchainSafeModeResolver {
   @Query(() => BlockchainSafeMode)
   async getBlockchainSafeMode(
-    @Arg("blockhash", { nullable: true }) blockhash: string
+    @Arg("blockhash", { nullable: true }) blockhash: string,
   ): Promise<BlockchainSafeMode> {
     return new BlockchainSafeMode({
       block: await BlockchainSafeModeProvider.getSafeMode(blockhash),

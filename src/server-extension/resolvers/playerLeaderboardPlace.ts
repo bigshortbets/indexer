@@ -18,7 +18,7 @@ export class PlayerLeaderBoardResolver {
 
   @Query(() => PlayerLeaderBoardMode)
   async getPlayerLeaderboardPlace(
-    @Arg("userAddress") userAddress: string
+    @Arg("userAddress") userAddress: string,
   ): Promise<PlayerLeaderBoardMode> {
     const manager = await this.tx();
 
