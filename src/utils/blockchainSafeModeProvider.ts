@@ -4,9 +4,9 @@ import { safeMode as storage } from "../types/storage";
 const { ApiPromise } = require("@polkadot/api");
 export class BlockchainSafeModeProvider {
   private static api: any;
-  public static async getSafeMode(blockhash?: string): Promise<BigInt> {
+  public static async getSafeMode(blockhash?: string): Promise<bigint> {
     const provider = new HttpProvider(process.env.NODE_RPC_URL);
-    BlockchainSafeModeProvider.api = await ApiPromise.create({ provider });
+    api = await ApiPromise.create({ provider });
 
     const lastHeader =
       await BlockchainSafeModeProvider.api.rpc.chain.getHeader();
@@ -19,12 +19,12 @@ export class BlockchainSafeModeProvider {
     const isInSafeMode =
       await BlockchainSafeModeProvider.api.rpc.state.getStorage(
         "SafeMode.EnteredUntil",
-        lastBlockHash,
+        lastBlockHash
       );
 
     const enteredUntil = BlockchainSafeModeProvider.api.createType(
       "Option<u32>",
-      isInSafeMode,
+      isInSafeMode
     );
     return enteredUntil.unwrapOr(null)?.toNumber();
   }

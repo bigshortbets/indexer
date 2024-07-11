@@ -3,8 +3,8 @@ import { BlockchainSafeModeProvider } from "../../utils/blockchainSafeModeProvid
 
 @ObjectType()
 export class BlockchainSafeMode {
-  @Field(() => String, { nullable: true })
-  block?: BigInt;
+  @Field(() => BigInt, { nullable: true })
+  block?: bigint;
   constructor(props: Partial<BlockchainSafeMode>) {
     Object.assign(this, props);
   }
@@ -14,7 +14,7 @@ export class BlockchainSafeMode {
 export class BlockchainSafeModeResolver {
   @Query(() => BlockchainSafeMode)
   async getBlockchainSafeMode(
-    @Arg("blockhash", { nullable: true }) blockhash: string,
+    @Arg("blockhash", { nullable: true }) blockhash: string
   ): Promise<BlockchainSafeMode> {
     return new BlockchainSafeMode({
       block: await BlockchainSafeModeProvider.getSafeMode(blockhash),

@@ -1,11 +1,11 @@
 import { Arg, Field, ObjectType, Query, Resolver } from "type-graphql";
-import { UserLeaderboardPlaceProvider } from "../../utils/userLeaderboardPlaceProvider";
+import { getUserPlace } from "../../utils/userLeaderboardPlaceProvider";
 import type { EntityManager } from "typeorm";
 import { GeneralLeaderboard } from "../../model";
 
 @ObjectType()
 export class PlayerLeaderBoardMode {
-  @Field(() => String, { nullable: true })
+  @Field(() => Number, { nullable: true })
   rankingPlace?: number;
   constructor(props: Partial<PlayerLeaderBoardMode>) {
     Object.assign(this, props);
@@ -18,7 +18,7 @@ export class PlayerLeaderBoardResolver {
 
   @Query(() => PlayerLeaderBoardMode)
   async getPlayerLeaderboardPlace(
-    @Arg("userAddress") userAddress: string,
+    @Arg("userAddress") userAddress: string
   ): Promise<PlayerLeaderBoardMode> {
     const manager = await this.tx();
 
@@ -27,10 +27,7 @@ export class PlayerLeaderBoardResolver {
       throw new Error("Leaderboard is empty");
     }
     return new PlayerLeaderBoardMode({
-      rankingPlace: await UserLeaderboardPlaceProvider.getUserPlace(
-        allUsers,
-        userAddress,
-      ),
+      rankingPlace: await getUserPlace(allUsers, userAddress),
     });
   }
 }
