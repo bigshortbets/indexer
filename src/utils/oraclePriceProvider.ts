@@ -1,23 +1,20 @@
-import { HttpProvider } from "@polkadot/api";
 import { convertStringValueToHexBigEndian } from "./encodersUtils";
-
-const { ApiPromise } = require("@polkadot/api");
+import { Provider } from "./provider";
 export class OraclePriceProvider {
-  private static api: any;
   public static async getLatestOraclePriceForMarketId(
     marketId: string,
   ): Promise<BigInt> {
-    const provider = new HttpProvider(process.env.NODE_RPC_URL);
-    OraclePriceProvider.api = await ApiPromise.create({ provider });
+    if (!Provider.api) {
+      await Provider.initializeApi();
+    }
+    const api = Provider.api;
+
     const value = convertStringValueToHexBigEndian(marketId);
-    const latestOraclePrice = await OraclePriceProvider.api.rpc.state.call(
+    const latestOraclePrice = await api.rpc.state.call(
       "MarketApi_oracle_price",
       value,
     );
-    const optionType = OraclePriceProvider.api.createType(
-      "Option<Balance>",
-      latestOraclePrice,
-    );
+    const optionType = api.createType("Option<Balance>", latestOraclePrice);
     return optionType.unwrapOr(0).toString();
   }
 }

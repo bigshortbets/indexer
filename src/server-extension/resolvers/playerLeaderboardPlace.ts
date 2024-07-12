@@ -22,7 +22,11 @@ export class PlayerLeaderBoardResolver {
   ): Promise<PlayerLeaderBoardMode> {
     const manager = await this.tx();
 
-    const allUsers = await manager.getRepository(GeneralLeaderboard).find();
+    const allUsers = await manager.getRepository(GeneralLeaderboard).find({
+      order: {
+        balanceChange: "DESC",
+      },
+    });
     if (allUsers.length == 0) {
       throw new Error("Leaderboard is empty");
     }
