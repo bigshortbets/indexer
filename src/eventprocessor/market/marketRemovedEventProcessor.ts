@@ -43,7 +43,8 @@ export class MarketRemovedEventProcessor implements EventProcessor {
       await (
         await em()
       ).query(
-        `DELETE FROM "user_balance" WHERE market_id = '${parsedEvent.marketId}';
+        `DELETE FROM "historical_market_price" WHERE market_id = '${parsedEvent.marketId}
+        DELETE FROM "user_balance" WHERE market_id = '${parsedEvent.marketId}';
         DELETE FROM "market_settlements" WHERE market_id = '${parsedEvent.marketId}';
         DELETE FROM "aggregated_orders_by_price" WHERE market_id = '${parsedEvent.marketId}';
                         DELETE FROM "position" WHERE market_id = '${parsedEvent.marketId}';

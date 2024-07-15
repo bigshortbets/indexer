@@ -23,6 +23,9 @@
   "pallets": {
     "Oracle": {
       "storage": ["Values"]
+    },
+    "SafeMode": {
+      "storage": ["EnteredUntil"]
     }
   }
 }
