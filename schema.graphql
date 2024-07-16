@@ -42,7 +42,7 @@ enum TransferType {
 
 type Market @entity {
   id: ID! @unique @index
-  ticker: String!
+  ticker: String! @index
   tickSize: BigDecimal!
   lifetime: BigInt!
   initialMargin: Int!
@@ -61,16 +61,16 @@ type Order @entity {
   price: BigDecimal!
   quantity: BigInt!
   side: OrderSide!
-  who: String
+  who: String @index
   blockHeight: BigInt!
-  timestamp: DateTime!
+  timestamp: DateTime! @index
   initialQuantity: BigInt!
-  status: OrderStatus!
+  status: OrderStatus! @index
   type: OrderType!
 }
 
 type Position @entity {
-  id: ID!
+  id: ID! @index
   market: Market!
   createPrice: BigDecimal!
   createPriceLong: BigDecimal!
@@ -78,19 +78,19 @@ type Position @entity {
   price: BigDecimal!
   quantity: BigInt!
   quantityLeft: BigInt!
-  long: String!
-  short: String!
+  long: String! @index
+  short: String! @index
   blockHeight: BigInt!
-  timestamp: DateTime!
-  status: PositionStatus
+  timestamp: DateTime! @index
+  status: PositionStatus @index
 }
 
 type AggregatedOrdersByPrice @entity {
   id: ID!
   price: BigDecimal!
   quantity: BigInt!
-  market: Market! @index
-  side: OrderSide!
+  market: Market!
+  side: OrderSide! @index
 }
 
 type Withdraw @entity {

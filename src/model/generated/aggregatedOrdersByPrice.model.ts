@@ -22,6 +22,7 @@ export class AggregatedOrdersByPrice {
     @ManyToOne_(() => Market, {nullable: true})
     market!: Market
 
+    @Index_()
     @Column_("varchar", {length: 5, nullable: false})
     side!: OrderSide
 }
