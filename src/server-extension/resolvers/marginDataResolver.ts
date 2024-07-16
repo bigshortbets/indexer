@@ -23,7 +23,10 @@ export class MarginDataResolver {
       throw new Error("MarketId or WalletAddress is empty");
     }
     return new MarginData({
-      MarginData: await MarginDataProvider.getMarginDataForMarket(marketId, walletAddress),
+      MarginData: await MarginDataProvider.getMarginDataForMarket(
+        marketId,
+        walletAddress,
+      ),
     });
   }
 }

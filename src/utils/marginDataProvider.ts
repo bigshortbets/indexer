@@ -1,5 +1,5 @@
 import { HttpProvider } from "@polkadot/api";
-import * as ss58 from "@subsquid/ss58-codec"; 
+import * as ss58 from "@subsquid/ss58-codec";
 import { convertStringValueToHexBigEndian } from "./encodersUtils";
 const { ApiPromise } = require("@polkadot/api");
 
@@ -8,7 +8,7 @@ export class MarginDataProvider {
 
   public static async getMarginDataForMarket(
     marketId: string,
-    walletAddress: string
+    walletAddress: string,
   ): Promise<string> {
     const provider = new HttpProvider(process.env.NODE_RPC_URL);
     MarginDataProvider.api = await ApiPromise.create({ provider });
@@ -20,24 +20,23 @@ export class MarginDataProvider {
 
     // Decode the wallet address using SS58 and ensure it's 32 bytes
     console.log(`Decoding wallet address: ${walletAddress}`);
-    let decodedWalletAddress = ss58.decode(walletAddress); 
+    let decodedWalletAddress = ss58.decode(walletAddress);
 
     // Convert the decoded address to a hex string without the '0x' prefix
-    let hexWalletAddress = Buffer.from(decodedWalletAddress.bytes).toString('hex');
+    let hexWalletAddress = Buffer.from(decodedWalletAddress.bytes).toString(
+      "hex",
+    );
     console.log(`Hex WalletAddress: ${hexWalletAddress}`);
-    const dataBytes = encodedMarketId + hexWalletAddress 
+    const dataBytes = encodedMarketId + hexWalletAddress;
     // Ensure the hexWalletAddress is used directly in the rpc call
     try {
       const marginData = await MarginDataProvider.api.rpc.state.call(
         "MarketApi_margin_data",
-        dataBytes
+        dataBytes,
       );
-      const margin = MarginDataProvider.api.createType(
+      const margin = MarginDataProvider.api.createType("Balance", marginData);
 
-        "Balance",
-        marginData
-      );
-      return marginData;
+      return margin;
     } catch (error) {
       throw error;
     }
