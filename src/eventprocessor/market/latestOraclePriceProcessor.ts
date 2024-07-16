@@ -1,6 +1,6 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { Market } from "../../model";
+import { HistoricalMarketPrice, Market } from "../../model";
 import {
   DataHandlerContext,
   Block,
@@ -58,8 +58,19 @@ export class LatestOraclePriceProcessor implements EventProcessor {
           continue;
         }
 
-        market.oraclePrice = BigDecimal(marketPrice.value, USDC_DECIMALS);
+        const priceValue = BigDecimal(marketPrice.value, USDC_DECIMALS);
+        market.oraclePrice = priceValue;
         await ctx.store.save(market);
+        const historicalPrice = new HistoricalMarketPrice({
+          // @ts-ignore
+          id: `${market.id}.${block.header.timestamp}`,
+          market: market,
+          price: priceValue,
+          // @ts-ignore
+          timestamp: new Date(block.header.timestamp),
+        });
+
+        await ctx.store.save(historicalPrice);
       }
     }
   }

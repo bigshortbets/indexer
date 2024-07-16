@@ -124,6 +124,6 @@ type GeneralLeaderboard @entity {
 type HistoricalMarketPrice @entity {
   id: ID!
   price: BigDecimal!
-  timestamp: DateTime!
+  timestamp: DateTime! @index
   market: Market!
 }
