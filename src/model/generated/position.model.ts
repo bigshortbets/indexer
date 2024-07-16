@@ -34,18 +34,22 @@ export class Position {
     @BigIntColumn_({nullable: false})
     quantityLeft!: bigint
 
+    @Index_()
     @StringColumn_({nullable: false})
     long!: string
 
+    @Index_()
     @StringColumn_({nullable: false})
     short!: string
 
     @BigIntColumn_({nullable: false})
     blockHeight!: bigint
 
+    @Index_()
     @DateTimeColumn_({nullable: false})
     timestamp!: Date
 
+    @Index_()
     @Column_("varchar", {length: 6, nullable: true})
     status!: PositionStatus | undefined | null
 }

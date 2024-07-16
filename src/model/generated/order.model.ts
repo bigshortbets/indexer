@@ -28,18 +28,21 @@ export class Order {
     @Column_("varchar", {length: 5, nullable: false})
     side!: OrderSide
 
+    @Index_()
     @StringColumn_({nullable: true})
     who!: string | undefined | null
 
     @BigIntColumn_({nullable: false})
     blockHeight!: bigint
 
+    @Index_()
     @DateTimeColumn_({nullable: false})
     timestamp!: Date
 
     @BigIntColumn_({nullable: false})
     initialQuantity!: bigint
 
+    @Index_()
     @Column_("varchar", {length: 23, nullable: false})
     status!: OrderStatus
 
