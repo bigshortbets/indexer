@@ -43,7 +43,7 @@ export class MarginDataProvider {
       if (requiredDepositOption) {
         return requiredDepositOption;
       }
-      console.log([margin, null]);
+
       return [margin, null];
     } catch (error) {
       throw error;
