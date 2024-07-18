@@ -8,7 +8,7 @@ export class MarginDataProvider {
 
   public static async getMarginDataForMarket(
     marketId: string,
-    walletAddress: string
+    walletAddress: string,
   ): Promise<[number, string | null]> {
     const provider = new HttpProvider(process.env.NODE_RPC_URL);
     MarginDataProvider.api = await ApiPromise.create({
@@ -25,19 +25,19 @@ export class MarginDataProvider {
     let decodedWalletAddress = ss58.decode(walletAddress);
 
     let hexWalletAddress = Buffer.from(decodedWalletAddress.bytes).toString(
-      "hex"
+      "hex",
     );
 
     const dataBytes = encodedMarketId + hexWalletAddress;
     try {
       const marginData = await MarginDataProvider.api.rpc.state.call(
         "MarketApi_margin_data",
-        dataBytes
+        dataBytes,
       );
 
       const result = MarginDataProvider.api.createType(
         "(Balance, Option<(Balance, LiquidationStatus)>)",
-        marginData
+        marginData,
       );
 
       const jsonData = (result.toJSON() as [number, [number, string]?]) ?? [];
