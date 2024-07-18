@@ -26,14 +26,14 @@ export class MarginDataResolver {
   @Query(() => MarginData)
   async getMarginData(
     @Arg("marketId", { nullable: false }) marketId: string,
-    @Arg("walletAddress", { nullable: false }) walletAddress: string
+    @Arg("walletAddress", { nullable: false }) walletAddress: string,
   ): Promise<MarginData> {
     if (marketId.length === 0 || walletAddress.length === 0) {
       throw new Error("MarketId or WalletAddress is empty");
     }
     const response = await MarginDataProvider.getMarginDataForMarket(
       marketId,
-      walletAddress
+      walletAddress,
     );
     return new MarginData({
       MarginData: {

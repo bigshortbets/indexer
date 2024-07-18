@@ -7,7 +7,7 @@ export const encodeUserValue = (inputUserValue: string) => {
   } else {
     const uint8ArrayUserValue = new Uint8Array(
       // @ts-ignore
-      hexUserValue.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+      hexUserValue.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
     );
     return ss58.codec(42).encode(uint8ArrayUserValue);
   }
