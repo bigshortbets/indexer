@@ -20,7 +20,7 @@ export class PositionMarkedToMarketEventProcessor implements EventProcessor {
     block: Block<any>,
     event: Event,
   ) {
-    console.log("Position marked to marked event");
+    console.log("Position marked to market event");
     const positionMarkedToMarketEvent = events.market.positionMarkedToMarket.v2;
     if (positionMarkedToMarketEvent.is(event)) {
       let parsedEvent = positionMarkedToMarketEvent.decode(event);
