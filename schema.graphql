@@ -121,9 +121,22 @@ type GeneralLeaderboard @entity {
   balanceChange: BigDecimal! @index
 }
 
-type HistoricalMarketPrice @entity {
+type OracleChartFeed15Min @entity {
   id: ID!
-  price: BigDecimal!
-  timestamp: DateTime! @index
+  closePrice: BigDecimal!
+  openPrice: BigDecimal!
+  lowPrice: BigDecimal!
+  highPrice: BigDecimal!
+  timestamp: Int! @index
+  market: Market!
+}
+
+type OracleChartFeed1H @entity {
+  id: ID!
+  closePrice: BigDecimal!
+  openPrice: BigDecimal!
+  lowPrice: BigDecimal!
+  highPrice: BigDecimal!
+  timestamp: Int! @index
   market: Market!
 }
