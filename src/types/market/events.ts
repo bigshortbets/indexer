@@ -179,3 +179,16 @@ export const positionClosed =  {
         })
     ),
 }
+
+export const marketClosed =  {
+    name: 'Market.MarketClosed',
+    /**
+     * Market has been closed
+     */
+    v7: new EventType(
+        'Market.MarketClosed',
+        sts.struct({
+            marketId: sts.bigint(),
+        })
+    ),
+}
