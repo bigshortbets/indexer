@@ -29,7 +29,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     const receivedEvent = oracle.newFeedData.v2;
     if (receivedEvent.is(event)) {
@@ -58,7 +58,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
         }
         if (marketPrice === undefined) {
           console.error(
-            `Price for market with market Id ${marketId} is not available.`
+            `Price for market with market Id ${marketId} is not available.`,
           );
           continue;
         }
@@ -77,14 +77,14 @@ export class LatestOraclePriceProcessor implements EventProcessor {
           Interval.FifteenMinutes,
           market,
           priceValue,
-          rounded15Min
+          rounded15Min,
         );
         await this.updateCandleData(
           ctx,
           Interval.OneHour,
           market,
           priceValue,
-          rounded1H
+          rounded1H,
         );
       }
     }
@@ -94,7 +94,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
     interval: Interval,
     market: Market,
     price: BigDecimal,
-    timestamp: number
+    timestamp: number,
   ) {
     let candle: any;
     switch (interval) {
