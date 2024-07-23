@@ -1,6 +1,6 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { HistoricalMarketPrice, Market } from "../../model";
+import { OracleChartFeed15Min, OracleChartFeed1H, Market } from "../../model";
 import {
   DataHandlerContext,
   Block,
@@ -13,6 +13,11 @@ import { USDC_DECIMALS } from "../../utils";
 
 type PriceData = { [key: string]: Set<bigint> };
 
+enum Interval {
+  FifteenMinutes,
+  OneHour,
+}
+
 export class LatestOraclePriceProcessor implements EventProcessor {
   private blockData: PriceData = {};
   private blockNumber = 0;
@@ -24,7 +29,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     const receivedEvent = oracle.newFeedData.v2;
     if (receivedEvent.is(event)) {
@@ -53,7 +58,7 @@ export class LatestOraclePriceProcessor implements EventProcessor {
         }
         if (marketPrice === undefined) {
           console.error(
-            `Price for market with market Id ${marketId} is not available.`,
+            `Price for market with market Id ${marketId} is not available.`
           );
           continue;
         }
@@ -61,17 +66,69 @@ export class LatestOraclePriceProcessor implements EventProcessor {
         const priceValue = BigDecimal(marketPrice.value, USDC_DECIMALS);
         market.oraclePrice = priceValue;
         await ctx.store.save(market);
-        const historicalPrice = new HistoricalMarketPrice({
-          // @ts-ignore
-          id: `${market.id}.${block.header.timestamp}`,
-          market: market,
-          price: priceValue,
-          // @ts-ignore
-          timestamp: new Date(block.header.timestamp),
-        });
 
-        await ctx.store.save(historicalPrice);
+        // @ts-ignore
+        const timestamp = block.header.timestamp;
+        const rounded15Min = Math.floor(timestamp / 900000) * 900000;
+        const rounded1H = Math.floor(timestamp / 3600000) * 3600000;
+
+        await this.updateCandleData(
+          ctx,
+          Interval.FifteenMinutes,
+          market,
+          priceValue,
+          rounded15Min
+        );
+        await this.updateCandleData(
+          ctx,
+          Interval.OneHour,
+          market,
+          priceValue,
+          rounded1H
+        );
       }
     }
+  }
+  private async updateCandleData(
+    ctx: DataHandlerContext<Store, any>,
+    interval: Interval,
+    market: Market,
+    price: BigDecimal,
+    timestamp: number
+  ) {
+    let candle: any;
+    switch (interval) {
+      case Interval.FifteenMinutes:
+        candle = await ctx.store.findOne(OracleChartFeed15Min, {
+          where: { market: { id: market.id }, timestamp: timestamp },
+          relations: { market: true },
+        });
+
+        break;
+      case Interval.OneHour:
+        candle = await ctx.store.findOne(OracleChartFeed1H, {
+          where: { market: { id: market.id }, timestamp: timestamp },
+          relations: { market: true },
+        });
+        break;
+      default:
+        throw new Error("Unsupported interval type");
+    }
+
+    if (!candle) {
+      candle = new OracleChartFeed15Min();
+      candle.id = `${market.id}.${timestamp}`;
+      candle.market = market;
+      candle.timestamp = timestamp;
+      candle.openPrice = price;
+      candle.lowPrice = price;
+      candle.highPrice = price;
+    } else {
+      if (price.lt(candle.lowPrice)) candle.lowPrice = price;
+      if (price.gt(candle.highPrice)) candle.highPrice = price;
+    }
+
+    candle.closePrice = price;
+    await ctx.store.save(candle);
   }
 }
