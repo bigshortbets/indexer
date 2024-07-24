@@ -127,7 +127,7 @@ type OracleChartFeed15Min @entity {
   openPrice: BigDecimal!
   lowPrice: BigDecimal!
   highPrice: BigDecimal!
-  timestamp: Int! @index
+  timestamp: BigInt! @index
   market: Market!
 }
 
@@ -137,6 +137,6 @@ type OracleChartFeed1H @entity {
   openPrice: BigDecimal!
   lowPrice: BigDecimal!
   highPrice: BigDecimal!
-  timestamp: Int! @index
+  timestamp: BigInt! @index
   market: Market!
 }

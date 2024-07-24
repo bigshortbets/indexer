@@ -1,5 +1,5 @@
 import {BigDecimal} from "@subsquid/big-decimal"
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigDecimalColumn as BigDecimalColumn_, IntColumn as IntColumn_, Index as Index_, ManyToOne as ManyToOne_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BigDecimalColumn as BigDecimalColumn_, BigIntColumn as BigIntColumn_, Index as Index_, ManyToOne as ManyToOne_} from "@subsquid/typeorm-store"
 import {Market} from "./market.model"
 
 @Entity_()
@@ -24,8 +24,8 @@ export class OracleChartFeed15Min {
     highPrice!: BigDecimal
 
     @Index_()
-    @IntColumn_({nullable: false})
-    timestamp!: number
+    @BigIntColumn_({nullable: false})
+    timestamp!: bigint
 
     @Index_()
     @ManyToOne_(() => Market, {nullable: true})
