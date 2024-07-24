@@ -19,9 +19,9 @@ export class MarketClosedEventProcessor implements EventProcessor {
     event: Event,
   ) {
     console.log("Market closed event");
-    const marketRemovedEvent = market.marketRemoved.v2;
-    if (marketRemovedEvent.is(event)) {
-      let parsedEvent = marketRemovedEvent.decode(event);
+    const marketClosedEvent = market.marketClosed.v7;
+    if (marketClosedEvent.is(event)) {
+      let parsedEvent = marketClosedEvent.decode(event);
       let market = await ctx.store.findOne(Market, {
         where: { id: parsedEvent.marketId.toString() },
       });
