@@ -3,6 +3,7 @@
   "specVersions": "./types.jsonl",
   "events": [
     "Market.MarketCreated",
+    "Market.MarketClosed",
     "Market.MarketRemoved",
     "Market.OrderCanceled",
     "Market.OrderCreated",

@@ -5,6 +5,7 @@ import { PositionCreatedEventProcessor } from "./market/postionCreatedEventProce
 import { OrderCanceledEventProcessor } from "./market/orderCanceledEventProcessor";
 import { OrderFilledEventProcessor } from "./market/orderFilledEventProcessor";
 import { OrderReducedEventProcessor } from "./market/orderReducedEventProcessor";
+import { MarketClosedEventProcessor } from "./market/marketClosedEventProcessor";
 import { MarketRemovedEventProcessor } from "./market/marketRemovedEventProcessor";
 import { PositionClosedEventProcessor } from "./market/positionClosedEventProcessor";
 import { PositionReducedEventProcessor } from "./market/positionReducedEventProcessor";
@@ -23,6 +24,7 @@ const processors: EventProcessor[] = [
   new OrderCanceledEventProcessor(),
   new OrderFilledEventProcessor(),
   new OrderReducedEventProcessor(),
+  new MarketClosedEventProcessor(),
   new MarketRemovedEventProcessor(),
   new PositionClosedEventProcessor(),
   new PositionReducedEventProcessor(),
