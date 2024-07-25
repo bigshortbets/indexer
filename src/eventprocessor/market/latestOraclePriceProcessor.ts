@@ -10,10 +10,7 @@ import { oracle } from "../../types/events";
 import { oracle as storage } from "../../types/storage";
 import { BigDecimal } from "@subsquid/big-decimal";
 import { USDC_DECIMALS } from "../../utils";
-import {
-  update15MinCandle,
-  update1HCandle,
-} from "../../utils/chartHelpers/timeframesBuilder";
+import { updateCandle } from "../../utils/chartHelpers/timeframesBuilder";
 
 type PriceData = { [key: string]: Set<bigint> };
 
@@ -73,8 +70,20 @@ export class LatestOraclePriceProcessor implements EventProcessor {
         const rounded1H =
           BigInt(Math.floor(timestamp / 3600000)) * BigInt(3600000);
 
-        await update15MinCandle(ctx, market, priceValue, rounded15Min);
-        await update1HCandle(ctx, market, priceValue, rounded1H);
+        await updateCandle(
+          ctx,
+          market,
+          priceValue,
+          rounded15Min,
+          OracleChartFeed15Min,
+        );
+        await updateCandle(
+          ctx,
+          market,
+          priceValue,
+          rounded1H,
+          OracleChartFeed1H,
+        );
       }
     }
   }
