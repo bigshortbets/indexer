@@ -4,8 +4,8 @@ import { MarginDataProvider } from "../../utils";
 
 @ObjectType()
 class MarginDataTuple {
-  @Field(() => Number)
-  balance!: number;
+  @Field(() => BigInt)
+  balance!: BigInt;
 
   @Field(() => String, { nullable: true })
   status!: string | null;
@@ -26,18 +26,19 @@ export class MarginDataResolver {
   @Query(() => MarginData)
   async getMarginData(
     @Arg("marketId", { nullable: false }) marketId: string,
-    @Arg("walletAddress", { nullable: false }) walletAddress: string,
+    @Arg("walletAddress", { nullable: false }) walletAddress: string
   ): Promise<MarginData> {
     if (marketId.length === 0 || walletAddress.length === 0) {
       throw new Error("MarketId or WalletAddress is empty");
     }
     const response = await MarginDataProvider.getMarginDataForMarket(
       marketId,
-      walletAddress,
+      walletAddress
     );
+    const balance = BigInt(response[0]).toString();
     return new MarginData({
       MarginData: {
-        balance: response[0],
+        balance: BigInt(balance),
         status: response[1],
       },
     });
