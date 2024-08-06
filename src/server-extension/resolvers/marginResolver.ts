@@ -1,11 +1,12 @@
 // src/server-extension/resolvers/marginResolver.ts
 import { Arg, Field, ObjectType, Query, Resolver } from "type-graphql";
-import { MarginProvider } from "../../utils";
+import { MarginProvider, USDC_DECIMALS } from "../../utils";
+import { BigDecimal } from "@subsquid/big-decimal";
 
 @ObjectType()
 export class MarginDataForMarket {
-  @Field(() => String, { nullable: false })
-  Margin!: string;
+  @Field(() => BigDecimal, { nullable: false })
+  Margin!: BigDecimal;
 
   constructor(props: Partial<MarginDataForMarket>) {
     Object.assign(this, props);
@@ -22,8 +23,12 @@ export class MarginResolver {
     if (marketId.length === 0 || walletAddress.length === 0) {
       throw new Error("MarketId or WalletAddress is empty");
     }
+    const marginForMarket = await MarginProvider.getMarginForMarket(
+      marketId,
+      walletAddress,
+    );
     return new MarginDataForMarket({
-      Margin: await MarginProvider.getMarginForMarket(marketId, walletAddress),
+      Margin: BigDecimal(marginForMarket, USDC_DECIMALS),
     });
   }
 }

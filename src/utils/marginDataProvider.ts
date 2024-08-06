@@ -9,7 +9,7 @@ export class MarginDataProvider {
   public static async getMarginDataForMarket(
     marketId: string,
     walletAddress: string,
-  ): Promise<[number, string | null]> {
+  ): Promise<[bigint, string | null]> {
     const provider = new HttpProvider(process.env.NODE_RPC_URL);
     MarginDataProvider.api = await ApiPromise.create({
       provider,
@@ -45,10 +45,10 @@ export class MarginDataProvider {
       const margin = jsonData[0];
       const requiredDepositOption = jsonData[1];
       if (requiredDepositOption) {
-        return requiredDepositOption;
+        return [BigInt(requiredDepositOption[0]), requiredDepositOption[1]];
       }
 
-      return [margin, null];
+      return [BigInt(margin), null];
     } catch (error) {
       throw error;
     }
