@@ -64,11 +64,9 @@ export class LatestOraclePriceProcessor implements EventProcessor {
         await ctx.store.save(market);
 
         // @ts-ignore
-        const timestamp = block.header.timestamp;
-        const rounded15Min =
-          BigInt(Math.floor(timestamp / 900000)) * BigInt(900000);
-        const rounded1H =
-          BigInt(Math.floor(timestamp / 3600000)) * BigInt(3600000);
+        const timestamp = Math.floor(block.header.timestamp / 1000);
+        const rounded15Min = BigInt(Math.floor(timestamp / 900)) * BigInt(900);
+        const rounded1H = BigInt(Math.floor(timestamp / 3600)) * BigInt(3600);
 
         await updateCandle(
           ctx,

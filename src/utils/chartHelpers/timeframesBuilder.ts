@@ -22,14 +22,14 @@ export async function updateCandle<T extends CandleType>(
     candle.id = `${market.id}.${timestamp}`;
     candle.market = market;
     candle.timestamp = timestamp;
-    candle.openPrice = price;
-    candle.lowPrice = price;
-    candle.highPrice = price;
+    candle.open = price;
+    candle.low = price;
+    candle.high = price;
   } else {
-    if (price.lt(candle.lowPrice)) candle.lowPrice = price;
-    if (price.gt(candle.highPrice)) candle.highPrice = price;
+    if (price.lt(candle.low)) candle.low = price;
+    if (price.gt(candle.high)) candle.high = price;
   }
 
-  candle.closePrice = price;
+  candle.close = price;
   await ctx.store.save(candle);
 }

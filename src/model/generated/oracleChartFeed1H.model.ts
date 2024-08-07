@@ -12,16 +12,16 @@ export class OracleChartFeed1H {
     id!: string
 
     @BigDecimalColumn_({nullable: false})
-    closePrice!: BigDecimal
+    close!: BigDecimal
 
     @BigDecimalColumn_({nullable: false})
-    openPrice!: BigDecimal
+    open!: BigDecimal
 
     @BigDecimalColumn_({nullable: false})
-    lowPrice!: BigDecimal
+    low!: BigDecimal
 
     @BigDecimalColumn_({nullable: false})
-    highPrice!: BigDecimal
+    high!: BigDecimal
 
     @Index_()
     @BigIntColumn_({nullable: false})
