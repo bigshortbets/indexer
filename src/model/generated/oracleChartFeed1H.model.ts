@@ -25,7 +25,7 @@ export class OracleChartFeed1H {
 
     @Index_()
     @BigIntColumn_({nullable: false})
-    timestamp!: bigint
+    time!: bigint
 
     @Index_()
     @ManyToOne_(() => Market, {nullable: true})

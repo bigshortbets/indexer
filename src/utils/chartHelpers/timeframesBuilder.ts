@@ -15,13 +15,13 @@ export async function updateCandle<T extends CandleType>(
   let candle: T | undefined;
 
   candle = await ctx.store.findOne(CandleClass, {
-    where: { market: { id: market.id }, timestamp: timestamp } as any,
+    where: { market: { id: market.id }, time: timestamp } as any,
   });
   if (!candle) {
     candle = new CandleClass();
     candle.id = `${market.id}.${timestamp}`;
     candle.market = market;
-    candle.timestamp = timestamp;
+    candle.time = timestamp;
     candle.open = price;
     candle.low = price;
     candle.high = price;

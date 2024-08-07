@@ -1,5 +1,5 @@
-module.exports = class Data1723012803700 {
-    name = 'Data1723012803700'
+module.exports = class Data1723020939960 {
+    name = 'Data1723020939960'
 
     async up(db) {
         await db.query(`CREATE TABLE "market" ("id" character varying NOT NULL, "ticker" text NOT NULL, "tick_size" numeric NOT NULL, "lifetime" numeric NOT NULL, "initial_margin" integer NOT NULL, "maintenance_margin" integer NOT NULL, "contract_unit" numeric NOT NULL, "block_height" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "daily_volume" numeric NOT NULL, "oracle_price" numeric, "status" character varying(5) NOT NULL, CONSTRAINT "PK_1e9a2963edfd331d92018e3abac" PRIMARY KEY ("id"))`)
@@ -28,11 +28,11 @@ module.exports = class Data1723012803700 {
         await db.query(`CREATE INDEX "IDX_99b139cd3e9dadefb8263133d7" ON "user_balance" ("market_id") `)
         await db.query(`CREATE TABLE "general_leaderboard" ("id" character varying NOT NULL, "balance_change" numeric NOT NULL, CONSTRAINT "PK_c5c71acd0600bd847910441dadd" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_3da0cfd74db44b12fe9013b691" ON "general_leaderboard" ("balance_change") `)
-        await db.query(`CREATE TABLE "oracle_chart_feed15_min" ("id" character varying NOT NULL, "close_price" numeric NOT NULL, "open_price" numeric NOT NULL, "low_price" numeric NOT NULL, "high_price" numeric NOT NULL, "timestamp" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_591b17c35b9b478db9bf54c9a1b" PRIMARY KEY ("id"))`)
-        await db.query(`CREATE INDEX "IDX_d0bbdb4761dacdb748a4e46340" ON "oracle_chart_feed15_min" ("timestamp") `)
+        await db.query(`CREATE TABLE "oracle_chart_feed15_min" ("id" character varying NOT NULL, "close" numeric NOT NULL, "open" numeric NOT NULL, "low" numeric NOT NULL, "high" numeric NOT NULL, "time" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_591b17c35b9b478db9bf54c9a1b" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_d14ddc1bdfc412a012a1f00828" ON "oracle_chart_feed15_min" ("time") `)
         await db.query(`CREATE INDEX "IDX_53eff9d9b6a72ddd5c9c492994" ON "oracle_chart_feed15_min" ("market_id") `)
-        await db.query(`CREATE TABLE "oracle_chart_feed1_h" ("id" character varying NOT NULL, "close_price" numeric NOT NULL, "open_price" numeric NOT NULL, "low_price" numeric NOT NULL, "high_price" numeric NOT NULL, "timestamp" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_53517738d9f7b831ebc2aa81806" PRIMARY KEY ("id"))`)
-        await db.query(`CREATE INDEX "IDX_c34e71995d4629b11c73fd358a" ON "oracle_chart_feed1_h" ("timestamp") `)
+        await db.query(`CREATE TABLE "oracle_chart_feed1_h" ("id" character varying NOT NULL, "close" numeric NOT NULL, "open" numeric NOT NULL, "low" numeric NOT NULL, "high" numeric NOT NULL, "time" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_53517738d9f7b831ebc2aa81806" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_7367c6bdc752699911f9c2c14e" ON "oracle_chart_feed1_h" ("time") `)
         await db.query(`CREATE INDEX "IDX_cf54ba665428f644bd83fb457f" ON "oracle_chart_feed1_h" ("market_id") `)
         await db.query(`ALTER TABLE "order" ADD CONSTRAINT "FK_d91cc35ada00c918781b7f0599d" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "position" ADD CONSTRAINT "FK_d744886149158961e1b796182f8" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
@@ -71,10 +71,10 @@ module.exports = class Data1723012803700 {
         await db.query(`DROP TABLE "general_leaderboard"`)
         await db.query(`DROP INDEX "public"."IDX_3da0cfd74db44b12fe9013b691"`)
         await db.query(`DROP TABLE "oracle_chart_feed15_min"`)
-        await db.query(`DROP INDEX "public"."IDX_d0bbdb4761dacdb748a4e46340"`)
+        await db.query(`DROP INDEX "public"."IDX_d14ddc1bdfc412a012a1f00828"`)
         await db.query(`DROP INDEX "public"."IDX_53eff9d9b6a72ddd5c9c492994"`)
         await db.query(`DROP TABLE "oracle_chart_feed1_h"`)
-        await db.query(`DROP INDEX "public"."IDX_c34e71995d4629b11c73fd358a"`)
+        await db.query(`DROP INDEX "public"."IDX_7367c6bdc752699911f9c2c14e"`)
         await db.query(`DROP INDEX "public"."IDX_cf54ba665428f644bd83fb457f"`)
         await db.query(`ALTER TABLE "order" DROP CONSTRAINT "FK_d91cc35ada00c918781b7f0599d"`)
         await db.query(`ALTER TABLE "position" DROP CONSTRAINT "FK_d744886149158961e1b796182f8"`)
