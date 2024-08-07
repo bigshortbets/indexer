@@ -123,20 +123,20 @@ type GeneralLeaderboard @entity {
 
 type OracleChartFeed15Min @entity {
   id: ID!
-  closePrice: BigDecimal!
-  openPrice: BigDecimal!
-  lowPrice: BigDecimal!
-  highPrice: BigDecimal!
+  close: BigDecimal!
+  open: BigDecimal!
+  low: BigDecimal!
+  high: BigDecimal!
   timestamp: BigInt! @index
   market: Market!
 }
 
 type OracleChartFeed1H @entity {
   id: ID!
-  closePrice: BigDecimal!
-  openPrice: BigDecimal!
-  lowPrice: BigDecimal!
-  highPrice: BigDecimal!
+  close: BigDecimal!
+  open: BigDecimal!
+  low: BigDecimal!
+  high: BigDecimal!
   timestamp: BigInt! @index
   market: Market!
 }
