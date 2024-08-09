@@ -1,6 +1,6 @@
 import { EventProcessor } from "../eventProcessor";
 import { Store } from "@subsquid/typeorm-store";
-import { HistoricalMarketPrice, Market } from "../../model";
+import { OracleChartFeed15Min, OracleChartFeed1H, Market } from "../../model";
 import {
   DataHandlerContext,
   Block,
@@ -10,6 +10,7 @@ import { oracle } from "../../types/events";
 import { oracle as storage } from "../../types/storage";
 import { BigDecimal } from "@subsquid/big-decimal";
 import { USDC_DECIMALS } from "../../utils";
+import { updateCandle } from "../../utils/chartHelpers/timeframesBuilder";
 
 type PriceData = { [key: string]: Set<bigint> };
 
@@ -61,16 +62,26 @@ export class LatestOraclePriceProcessor implements EventProcessor {
         const priceValue = BigDecimal(marketPrice.value, USDC_DECIMALS);
         market.oraclePrice = priceValue;
         await ctx.store.save(market);
-        const historicalPrice = new HistoricalMarketPrice({
-          // @ts-ignore
-          id: `${market.id}.${block.header.timestamp}`,
-          market: market,
-          price: priceValue,
-          // @ts-ignore
-          timestamp: new Date(block.header.timestamp),
-        });
 
-        await ctx.store.save(historicalPrice);
+        // @ts-ignore
+        const timestamp = Math.floor(block.header.timestamp / 1000);
+        const rounded15Min = BigInt(Math.floor(timestamp / 900)) * BigInt(900);
+        const rounded1H = BigInt(Math.floor(timestamp / 3600)) * BigInt(3600);
+
+        await updateCandle(
+          ctx,
+          market,
+          priceValue,
+          rounded15Min,
+          OracleChartFeed15Min,
+        );
+        await updateCandle(
+          ctx,
+          market,
+          priceValue,
+          rounded1H,
+          OracleChartFeed1H,
+        );
       }
     }
   }
