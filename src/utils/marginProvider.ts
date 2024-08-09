@@ -9,7 +9,7 @@ export class MarginProvider {
   public static async getMarginForMarket(
     marketId: string,
     walletAddress: string,
-  ): Promise<string> {
+  ): Promise<bigint> {
     const provider = new HttpProvider(process.env.NODE_RPC_URL);
     MarginProvider.api = await ApiPromise.create({ provider });
     // Convert marketId using convertStringValueToHexBigEndian
@@ -33,7 +33,7 @@ export class MarginProvider {
       console.log("Creating Balance type from margin");
       const margin = MarginProvider.api.createType("Balance", marginData);
 
-      return margin;
+      return BigInt(margin);
     } catch (error) {
       throw error;
     }

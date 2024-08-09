@@ -1,11 +1,12 @@
 // src/server-extension/resolvers/marginDataResolver.ts
 import { Arg, Field, ObjectType, Query, Resolver } from "type-graphql";
-import { MarginDataProvider } from "../../utils";
+import { MarginDataProvider, USDC_DECIMALS } from "../../utils";
+import { BigDecimal } from "@subsquid/big-decimal";
 
 @ObjectType()
 class MarginDataTuple {
-  @Field(() => Number)
-  balance!: number;
+  @Field(() => BigDecimal)
+  balance!: BigDecimal;
 
   @Field(() => String, { nullable: true })
   status!: string | null;
@@ -35,9 +36,11 @@ export class MarginDataResolver {
       marketId,
       walletAddress,
     );
+    const balance = BigDecimal(response[0], USDC_DECIMALS);
+
     return new MarginData({
       MarginData: {
-        balance: response[0],
+        balance: balance,
         status: response[1],
       },
     });
