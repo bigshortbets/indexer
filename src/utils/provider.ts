@@ -1,6 +1,6 @@
 import { HttpProvider } from "@polkadot/api";
 
-const { ApiPromise } = require("@polkadot/api");
+import { ApiPromise } from "@polkadot/api";
 export class Provider {
   static provider: any;
   static api: any;
