@@ -1,6 +1,5 @@
-import { HttpProvider } from "@polkadot/api";
-import { ApiPromise } from "@polkadot/api";
 import { Option, Tuple } from "@polkadot/types";
+import { Provider } from "./provider";
 
 interface DisplayName {
   info: {
@@ -11,19 +10,18 @@ interface DisplayName {
 type DisplayNameResponse = [DisplayName] | null;
 
 export class NicknameProvider {
-  private static api: any;
-
   public static async getNickname(
     walletAddress: string,
   ): Promise<string | undefined> {
     try {
-      const provider = new HttpProvider(process.env.NODE_RPC_URL);
-      NicknameProvider.api = await ApiPromise.create({ provider });
+      if (!Provider.api) {
+        await Provider.initializeApi();
+      }
+      const api = Provider.api;
 
-      const identityInfoCodec =
-        (await NicknameProvider.api.query.identity.identityOf(
-          walletAddress,
-        )) as Option<Tuple>;
+      const identityInfoCodec = (await api.query.identity.identityOf(
+        walletAddress,
+      )) as Option<Tuple>;
 
       const data = identityInfoCodec.toHuman() as DisplayNameResponse;
 

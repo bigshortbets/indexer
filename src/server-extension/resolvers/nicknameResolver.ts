@@ -19,7 +19,7 @@ export class NicknameResolver {
     @Arg("walletAddress", { nullable: false }) walletAddress: string,
   ): Promise<Nickname> {
     if (walletAddress.length === 0) {
-      throw new Error("MarketId or WalletAddress is empty");
+      throw new Error("Wallet Address is empty");
     }
 
     return new Nickname({
