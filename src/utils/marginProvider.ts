@@ -1,7 +1,7 @@
 import { HttpProvider } from "@polkadot/api";
 import * as ss58 from "@subsquid/ss58-codec";
 import { convertStringValueToHexBigEndian } from "./encodersUtils";
-const { ApiPromise } = require("@polkadot/api");
+import { ApiPromise } from "@polkadot/api";
 
 export class MarginProvider {
   private static api: any;
