@@ -140,3 +140,23 @@ type OracleChartFeed1H @entity {
   time: BigInt! @index
   market: Market!
 }
+
+type MarketChartFeed15Min @entity {
+  id: ID!
+  close: BigDecimal!
+  open: BigDecimal!
+  low: BigDecimal!
+  high: BigDecimal!
+  time: BigInt! @index
+  market: Market!
+}
+
+type MarketChartFeed1H @entity {
+  id: ID!
+  close: BigDecimal!
+  open: BigDecimal!
+  low: BigDecimal!
+  high: BigDecimal!
+  time: BigInt! @index
+  market: Market!
+}
