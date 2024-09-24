@@ -1,7 +1,7 @@
 import { EventProcessor } from "./eventProcessor";
 import { MarketCreatedEventProcessor } from "./market/marketCreatedEventProcessor";
 import { OrderCreatedEventProcessor } from "./market/orderCreatedEventProcessor";
-import { PositionCreatedEventProcessor } from "./market/postionCreatedEventProcessor";
+import { PositionCreatedEventProcessor } from "./market/positionCreatedEventProcessor.ts";
 import { OrderCanceledEventProcessor } from "./market/orderCanceledEventProcessor";
 import { OrderFilledEventProcessor } from "./market/orderFilledEventProcessor";
 import { OrderReducedEventProcessor } from "./market/orderReducedEventProcessor";
