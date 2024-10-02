@@ -50,7 +50,7 @@ type Market @entity {
   contractUnit: BigDecimal!
   blockHeight: BigInt!
   timestamp: DateTime!
-  dailyVolume: BigInt!
+  dailyVolume: BigDecimal!
   oraclePrice: BigDecimal
   status: MarketStatus!
 }

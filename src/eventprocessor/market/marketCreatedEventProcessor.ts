@@ -39,7 +39,7 @@ export class MarketCreatedEventProcessor implements EventProcessor {
         blockHeight: BigInt(block.header.height),
         // @ts-ignore
         timestamp: new Date(block.header.timestamp),
-        dailyVolume: BigInt(0),
+        dailyVolume: BigDecimal(0, decodedEvent.contractUnit.decimals),
         status: MarketStatus.OPEN,
       });
       await ctx.store.save(createdMarket);
