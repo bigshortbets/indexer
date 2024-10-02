@@ -36,8 +36,8 @@ export class Market {
     @DateTimeColumn_({nullable: false})
     timestamp!: Date
 
-    @BigIntColumn_({nullable: false})
-    dailyVolume!: bigint
+    @BigDecimalColumn_({nullable: false})
+    dailyVolume!: BigDecimal
 
     @BigDecimalColumn_({nullable: true})
     oraclePrice!: BigDecimal | undefined | null
