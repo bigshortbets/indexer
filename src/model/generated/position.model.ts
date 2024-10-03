@@ -52,4 +52,7 @@ export class Position {
     @Index_()
     @Column_("varchar", {length: 6, nullable: true})
     status!: PositionStatus | undefined | null
+
+    @StringColumn_({array: true, nullable: true})
+    orders!: (string)[] | undefined | null
 }

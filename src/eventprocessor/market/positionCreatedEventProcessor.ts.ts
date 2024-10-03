@@ -28,7 +28,12 @@ export class PositionCreatedEventProcessor implements EventProcessor {
     block: Block<any>,
     event: Event,
   ) {
-    console.log("Position created event");
+    const orderIds = [];
+    for (const event of block.events) {
+      if (event.name === "Market.OrderFilled") {
+        orderIds.push(event.args.orderId);
+      }
+    }
     const positionCreatedEvent = events.market.positionCreated.v2;
     if (positionCreatedEvent.is(event)) {
       let parsedEvent = positionCreatedEvent.decode(event);
@@ -50,6 +55,7 @@ export class PositionCreatedEventProcessor implements EventProcessor {
           createPriceLong: price,
           createPriceShort: price,
           price: price, // temporary - set in the next event
+          orders: orderIds,
         });
         await ctx.store.save(position);
 

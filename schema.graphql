@@ -83,6 +83,7 @@ type Position @entity {
   blockHeight: BigInt!
   timestamp: DateTime! @index
   status: PositionStatus @index
+  orders: [String!]
 }
 
 type AggregatedOrdersByPrice @entity {
