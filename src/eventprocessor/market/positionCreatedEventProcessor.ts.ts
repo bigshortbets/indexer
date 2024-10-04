@@ -27,20 +27,30 @@ export class PositionCreatedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event,
+    event: Event
   ) {
     let buyOrder;
     let sellOrder;
 
-    for (const call of block.calls) {
-      if (
-        call.name === "Market.create_position" ||
-        call.name === "Market.liquidate_position"
-      ) {
-        buyOrder = await ctx.store.get(Order, call.args.buyerId);
-        sellOrder = await ctx.store.get(Order, call.args.sellerId);
-      }
+    console.log("EVENT: ");
+    console.log(event);
+    console.log("BLOCK: ");
+    console.log(block);
+    console.log("CALLS:");
+    console.log(block.calls);
+
+    console.log("GET CALL");
+    console.log(event.getCall());
+    const call = event.getCall();
+
+    if (
+      call.name === "Market.create_position" ||
+      call.name === "Market.liquidate_position"
+    ) {
+      buyOrder = await ctx.store.get(Order, call.args.buyerId);
+      sellOrder = await ctx.store.get(Order, call.args.sellerId);
     }
+
     const positionCreatedEvent = events.market.positionCreated.v2;
     if (positionCreatedEvent.is(event)) {
       let parsedEvent = positionCreatedEvent.decode(event);
@@ -77,7 +87,7 @@ export class PositionCreatedEventProcessor implements EventProcessor {
           market,
           price,
           rounded15Min,
-          MarketChartFeed15Min,
+          MarketChartFeed15Min
         );
         await updateCandle(ctx, market, price, rounded1H, MarketChartFeed1H);
       } else {
