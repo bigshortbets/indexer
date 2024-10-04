@@ -27,7 +27,7 @@ export class PositionCreatedEventProcessor implements EventProcessor {
   async process(
     ctx: DataHandlerContext<Store, any>,
     block: Block<any>,
-    event: Event
+    event: Event,
   ) {
     let buyOrder;
     let sellOrder;
@@ -87,7 +87,7 @@ export class PositionCreatedEventProcessor implements EventProcessor {
           market,
           price,
           rounded15Min,
-          MarketChartFeed15Min
+          MarketChartFeed15Min,
         );
         await updateCandle(ctx, market, price, rounded1H, MarketChartFeed1H);
       } else {
