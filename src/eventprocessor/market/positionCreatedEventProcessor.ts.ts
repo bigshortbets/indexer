@@ -32,15 +32,6 @@ export class PositionCreatedEventProcessor implements EventProcessor {
     let buyOrder;
     let sellOrder;
 
-    console.log("EVENT: ");
-    console.log(event);
-    console.log("BLOCK: ");
-    console.log(block);
-    console.log("CALLS:");
-    console.log(block.calls);
-
-    console.log("GET CALL");
-    console.log(event.getCall());
     const call = event.getCall();
 
     if (
