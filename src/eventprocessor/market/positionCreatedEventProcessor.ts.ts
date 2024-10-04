@@ -6,6 +6,7 @@ import {
   Market,
   Position,
   PositionStatus,
+  Order,
 } from "../../model";
 import * as events from "../../types/events";
 import {
@@ -28,10 +29,16 @@ export class PositionCreatedEventProcessor implements EventProcessor {
     block: Block<any>,
     event: Event,
   ) {
-    const orderIds = [];
-    for (const event of block.events) {
-      if (event.name === "Market.OrderFilled") {
-        orderIds.push(event.args.orderId);
+    let buyOrder;
+    let sellOrder;
+
+    for (const call of block.calls) {
+      if (
+        call.name === "Market.create_position" ||
+        call.name === "Market.liquidate_position"
+      ) {
+        buyOrder = await ctx.store.get(Order, call.args.buyerId);
+        sellOrder = await ctx.store.get(Order, call.args.sellerId);
       }
     }
     const positionCreatedEvent = events.market.positionCreated.v2;
@@ -55,7 +62,8 @@ export class PositionCreatedEventProcessor implements EventProcessor {
           createPriceLong: price,
           createPriceShort: price,
           price: price, // temporary - set in the next event
-          orders: orderIds,
+          buyOrder: buyOrder,
+          sellOrder: sellOrder,
         });
         await ctx.store.save(position);
 
