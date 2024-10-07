@@ -34,10 +34,7 @@ export class PositionCreatedEventProcessor implements EventProcessor {
 
     const call = event.getCall();
 
-    if (
-      call.name === "Market.create_position" ||
-      call.name === "Market.liquidate_position"
-    ) {
+    if (call.name === "Market.create_position") {
       buyOrder = await ctx.store.get(Order, call.args.buyerId);
       sellOrder = await ctx.store.get(Order, call.args.sellerId);
     }
@@ -47,6 +44,20 @@ export class PositionCreatedEventProcessor implements EventProcessor {
       let parsedEvent = positionCreatedEvent.decode(event);
       let market = await ctx.store.get(Market, parsedEvent.market.toString());
       if (market) {
+        if (call.name === "Market.liquidate_position") {
+          for (const callEvent of call.events) {
+            if (callEvent.name === "Market.OrderCreated") {
+              if (callEvent.args.side.__kind === "Long") {
+                buyOrder = await ctx.store.get(Order, callEvent.args.orderId);
+                sellOrder = await ctx.store.get(Order, call.args.orderId);
+              } else {
+                buyOrder = await ctx.store.get(Order, call.args.orderId);
+                sellOrder = await ctx.store.get(Order, callEvent.args.orderId);
+              }
+            }
+          }
+        }
+
         const price = BigDecimal(parsedEvent.price, USDC_DECIMALS);
         let position = new Position({
           id: parsedEvent.positionId.toString(),
