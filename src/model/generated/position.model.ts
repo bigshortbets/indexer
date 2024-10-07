@@ -2,6 +2,7 @@ import {BigDecimal} from "@subsquid/big-decimal"
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, BigDecimalColumn as BigDecimalColumn_, BigIntColumn as BigIntColumn_, StringColumn as StringColumn_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
 import {Market} from "./market.model"
 import {PositionStatus} from "./_positionStatus"
+import {Order} from "./order.model"
 
 @Entity_()
 export class Position {
@@ -52,4 +53,12 @@ export class Position {
     @Index_()
     @Column_("varchar", {length: 6, nullable: true})
     status!: PositionStatus | undefined | null
+
+    @Index_()
+    @ManyToOne_(() => Order, {nullable: true})
+    buyOrder!: Order
+
+    @Index_()
+    @ManyToOne_(() => Order, {nullable: true})
+    sellOrder!: Order
 }

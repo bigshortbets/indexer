@@ -6,6 +6,7 @@ import {
   Market,
   Position,
   PositionStatus,
+  Order,
 } from "../../model";
 import * as events from "../../types/events";
 import {
@@ -28,12 +29,41 @@ export class PositionCreatedEventProcessor implements EventProcessor {
     block: Block<any>,
     event: Event,
   ) {
-    console.log("Position created event");
+    let buyOrder;
+    let sellOrder;
+
     const positionCreatedEvent = events.market.positionCreated.v2;
     if (positionCreatedEvent.is(event)) {
       let parsedEvent = positionCreatedEvent.decode(event);
       let market = await ctx.store.get(Market, parsedEvent.market.toString());
       if (market) {
+        const call = event.getCall();
+
+        if (call.name === "Market.create_position") {
+          buyOrder = await ctx.store.get(Order, call.args.buyerId);
+          sellOrder = await ctx.store.get(Order, call.args.sellerId);
+        }
+        if (call.name === "Market.liquidate_position") {
+          const orderCreatedEvent = call.events.find(
+            (event) => event.name === "Market.OrderCreated",
+          );
+
+          if (orderCreatedEvent) {
+            if (orderCreatedEvent.args.side.__kind === "Long") {
+              buyOrder = await ctx.store.get(
+                Order,
+                orderCreatedEvent.args.orderId,
+              );
+              sellOrder = await ctx.store.get(Order, call.args.orderId);
+            } else {
+              buyOrder = await ctx.store.get(Order, call.args.orderId);
+              sellOrder = await ctx.store.get(
+                Order,
+                orderCreatedEvent.args.orderId,
+              );
+            }
+          }
+        }
         const price = BigDecimal(parsedEvent.price, USDC_DECIMALS);
         let position = new Position({
           id: parsedEvent.positionId.toString(),
@@ -50,6 +80,8 @@ export class PositionCreatedEventProcessor implements EventProcessor {
           createPriceLong: price,
           createPriceShort: price,
           price: price, // temporary - set in the next event
+          buyOrder: buyOrder,
+          sellOrder: sellOrder,
         });
         await ctx.store.save(position);
 

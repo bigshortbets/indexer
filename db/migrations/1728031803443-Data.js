@@ -1,5 +1,5 @@
-module.exports = class Data1723020939960 {
-    name = 'Data1723020939960'
+module.exports = class Data1728031803443 {
+    name = 'Data1728031803443'
 
     async up(db) {
         await db.query(`CREATE TABLE "market" ("id" character varying NOT NULL, "ticker" text NOT NULL, "tick_size" numeric NOT NULL, "lifetime" numeric NOT NULL, "initial_margin" integer NOT NULL, "maintenance_margin" integer NOT NULL, "contract_unit" numeric NOT NULL, "block_height" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "daily_volume" numeric NOT NULL, "oracle_price" numeric, "status" character varying(5) NOT NULL, CONSTRAINT "PK_1e9a2963edfd331d92018e3abac" PRIMARY KEY ("id"))`)
@@ -9,12 +9,14 @@ module.exports = class Data1723020939960 {
         await db.query(`CREATE INDEX "IDX_ee64b5730bbb93f419da883b63" ON "order" ("who") `)
         await db.query(`CREATE INDEX "IDX_bb489c1da3a3c51bcdff48a58d" ON "order" ("timestamp") `)
         await db.query(`CREATE INDEX "IDX_7a9573d6a1fb982772a9123320" ON "order" ("status") `)
-        await db.query(`CREATE TABLE "position" ("id" character varying NOT NULL, "create_price" numeric NOT NULL, "create_price_long" numeric NOT NULL, "create_price_short" numeric NOT NULL, "price" numeric NOT NULL, "quantity" numeric NOT NULL, "quantity_left" numeric NOT NULL, "long" text NOT NULL, "short" text NOT NULL, "block_height" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "status" character varying(6), "market_id" character varying, CONSTRAINT "PK_b7f483581562b4dc62ae1a5b7e2" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "position" ("id" character varying NOT NULL, "create_price" numeric NOT NULL, "create_price_long" numeric NOT NULL, "create_price_short" numeric NOT NULL, "price" numeric NOT NULL, "quantity" numeric NOT NULL, "quantity_left" numeric NOT NULL, "long" text NOT NULL, "short" text NOT NULL, "block_height" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "status" character varying(6), "market_id" character varying, "buy_order_id" character varying, "sell_order_id" character varying, CONSTRAINT "PK_b7f483581562b4dc62ae1a5b7e2" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_d744886149158961e1b796182f" ON "position" ("market_id") `)
         await db.query(`CREATE INDEX "IDX_5cac3506e32e55950d2696a526" ON "position" ("long") `)
         await db.query(`CREATE INDEX "IDX_68b8c7b0392536291552da9eaf" ON "position" ("short") `)
         await db.query(`CREATE INDEX "IDX_9d6454e1ee6dcd7b6b3e653a08" ON "position" ("timestamp") `)
         await db.query(`CREATE INDEX "IDX_d38e90b7449b4bd8bbbf5d518d" ON "position" ("status") `)
+        await db.query(`CREATE INDEX "IDX_1419bb88426f0ccfd5612629a8" ON "position" ("buy_order_id") `)
+        await db.query(`CREATE INDEX "IDX_ec2b4481913c9237180ddf0757" ON "position" ("sell_order_id") `)
         await db.query(`CREATE TABLE "aggregated_orders_by_price" ("id" character varying NOT NULL, "price" numeric NOT NULL, "quantity" numeric NOT NULL, "side" character varying(5) NOT NULL, "market_id" character varying, CONSTRAINT "PK_43d8c277d4b42f0ecd9e93d1d76" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_6a3c7cf051dee6be40f560f2f0" ON "aggregated_orders_by_price" ("market_id") `)
         await db.query(`CREATE INDEX "IDX_c12a3b5f132452b40424dd8caf" ON "aggregated_orders_by_price" ("side") `)
@@ -34,13 +36,23 @@ module.exports = class Data1723020939960 {
         await db.query(`CREATE TABLE "oracle_chart_feed1_h" ("id" character varying NOT NULL, "close" numeric NOT NULL, "open" numeric NOT NULL, "low" numeric NOT NULL, "high" numeric NOT NULL, "time" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_53517738d9f7b831ebc2aa81806" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_7367c6bdc752699911f9c2c14e" ON "oracle_chart_feed1_h" ("time") `)
         await db.query(`CREATE INDEX "IDX_cf54ba665428f644bd83fb457f" ON "oracle_chart_feed1_h" ("market_id") `)
+        await db.query(`CREATE TABLE "market_chart_feed15_min" ("id" character varying NOT NULL, "close" numeric NOT NULL, "open" numeric NOT NULL, "low" numeric NOT NULL, "high" numeric NOT NULL, "time" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_7d7a3943f077c5f996fb8a2910f" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_ac38c3f5537e678079a47bf200" ON "market_chart_feed15_min" ("time") `)
+        await db.query(`CREATE INDEX "IDX_f74646c36ad932b6dfd28d174b" ON "market_chart_feed15_min" ("market_id") `)
+        await db.query(`CREATE TABLE "market_chart_feed1_h" ("id" character varying NOT NULL, "close" numeric NOT NULL, "open" numeric NOT NULL, "low" numeric NOT NULL, "high" numeric NOT NULL, "time" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_a4f89643ebe16ed81fb2e367fdd" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_0cf66d0b4f5d294d055c2d1279" ON "market_chart_feed1_h" ("time") `)
+        await db.query(`CREATE INDEX "IDX_f29cf346cafe5fa232defb800f" ON "market_chart_feed1_h" ("market_id") `)
         await db.query(`ALTER TABLE "order" ADD CONSTRAINT "FK_d91cc35ada00c918781b7f0599d" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "position" ADD CONSTRAINT "FK_d744886149158961e1b796182f8" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "position" ADD CONSTRAINT "FK_1419bb88426f0ccfd5612629a88" FOREIGN KEY ("buy_order_id") REFERENCES "order"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "position" ADD CONSTRAINT "FK_ec2b4481913c9237180ddf07578" FOREIGN KEY ("sell_order_id") REFERENCES "order"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "aggregated_orders_by_price" ADD CONSTRAINT "FK_6a3c7cf051dee6be40f560f2f07" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "market_settlements" ADD CONSTRAINT "FK_7576b8515e52f177ca4797d594f" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "user_balance" ADD CONSTRAINT "FK_99b139cd3e9dadefb8263133d7c" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "oracle_chart_feed15_min" ADD CONSTRAINT "FK_53eff9d9b6a72ddd5c9c4929947" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "oracle_chart_feed1_h" ADD CONSTRAINT "FK_cf54ba665428f644bd83fb457f7" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "market_chart_feed15_min" ADD CONSTRAINT "FK_f74646c36ad932b6dfd28d174b2" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "market_chart_feed1_h" ADD CONSTRAINT "FK_f29cf346cafe5fa232defb800f4" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     }
 
     async down(db) {
@@ -57,6 +69,8 @@ module.exports = class Data1723020939960 {
         await db.query(`DROP INDEX "public"."IDX_68b8c7b0392536291552da9eaf"`)
         await db.query(`DROP INDEX "public"."IDX_9d6454e1ee6dcd7b6b3e653a08"`)
         await db.query(`DROP INDEX "public"."IDX_d38e90b7449b4bd8bbbf5d518d"`)
+        await db.query(`DROP INDEX "public"."IDX_1419bb88426f0ccfd5612629a8"`)
+        await db.query(`DROP INDEX "public"."IDX_ec2b4481913c9237180ddf0757"`)
         await db.query(`DROP TABLE "aggregated_orders_by_price"`)
         await db.query(`DROP INDEX "public"."IDX_6a3c7cf051dee6be40f560f2f0"`)
         await db.query(`DROP INDEX "public"."IDX_c12a3b5f132452b40424dd8caf"`)
@@ -76,12 +90,22 @@ module.exports = class Data1723020939960 {
         await db.query(`DROP TABLE "oracle_chart_feed1_h"`)
         await db.query(`DROP INDEX "public"."IDX_7367c6bdc752699911f9c2c14e"`)
         await db.query(`DROP INDEX "public"."IDX_cf54ba665428f644bd83fb457f"`)
+        await db.query(`DROP TABLE "market_chart_feed15_min"`)
+        await db.query(`DROP INDEX "public"."IDX_ac38c3f5537e678079a47bf200"`)
+        await db.query(`DROP INDEX "public"."IDX_f74646c36ad932b6dfd28d174b"`)
+        await db.query(`DROP TABLE "market_chart_feed1_h"`)
+        await db.query(`DROP INDEX "public"."IDX_0cf66d0b4f5d294d055c2d1279"`)
+        await db.query(`DROP INDEX "public"."IDX_f29cf346cafe5fa232defb800f"`)
         await db.query(`ALTER TABLE "order" DROP CONSTRAINT "FK_d91cc35ada00c918781b7f0599d"`)
         await db.query(`ALTER TABLE "position" DROP CONSTRAINT "FK_d744886149158961e1b796182f8"`)
+        await db.query(`ALTER TABLE "position" DROP CONSTRAINT "FK_1419bb88426f0ccfd5612629a88"`)
+        await db.query(`ALTER TABLE "position" DROP CONSTRAINT "FK_ec2b4481913c9237180ddf07578"`)
         await db.query(`ALTER TABLE "aggregated_orders_by_price" DROP CONSTRAINT "FK_6a3c7cf051dee6be40f560f2f07"`)
         await db.query(`ALTER TABLE "market_settlements" DROP CONSTRAINT "FK_7576b8515e52f177ca4797d594f"`)
         await db.query(`ALTER TABLE "user_balance" DROP CONSTRAINT "FK_99b139cd3e9dadefb8263133d7c"`)
         await db.query(`ALTER TABLE "oracle_chart_feed15_min" DROP CONSTRAINT "FK_53eff9d9b6a72ddd5c9c4929947"`)
         await db.query(`ALTER TABLE "oracle_chart_feed1_h" DROP CONSTRAINT "FK_cf54ba665428f644bd83fb457f7"`)
+        await db.query(`ALTER TABLE "market_chart_feed15_min" DROP CONSTRAINT "FK_f74646c36ad932b6dfd28d174b2"`)
+        await db.query(`ALTER TABLE "market_chart_feed1_h" DROP CONSTRAINT "FK_f29cf346cafe5fa232defb800f4"`)
     }
 }
