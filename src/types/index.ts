@@ -1,3 +1,5 @@
 export * as v2 from './v2'
+export * as v6 from './v6'
 export * as events from './events'
+export * as calls from './calls'
 export * as storage from './storage'
